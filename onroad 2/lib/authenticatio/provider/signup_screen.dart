@@ -7,7 +7,7 @@ import 'package:onroad/global/global.dart';
 import 'package:onroad/global/uplod.dart';
 import 'package:onroad/mainScreens/main_screens.dart';
 import 'package:onroad/widgets/progress_dialog.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+//import 'package:firebase_storage/firebase_storage.dart';
 
 
 class SignUpScreen extends StatefulWidget {
@@ -35,7 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   {
     if(fnameController.text.length < 3)
     {
-      Fluttertoast.showToast(msg: "name must be atleast 3 Characters.");
+      Fluttertoast.showToast(msg: "name must be at least 3 Characters.");
     }
     else if(!emailController.text.contains("@"))
     {
@@ -47,7 +47,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
     else if(passwordController.text.length < 6)
     {
-      Fluttertoast.showToast(msg: "Password must be atleast 6 Characters.");
+      Fluttertoast.showToast(msg: "Password must be at least 6 Characters.");
     }
 
     else if(passwordController.text != confirmpasswordController.text)
@@ -85,6 +85,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     ).user;
 
     if(firebaseUser != null)
+
     {
       Map driverMap =
       {
@@ -95,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         "phone": phoneController.text.trim(),
       };
 
-      DatabaseReference driversRef = FirebaseDatabase.instance.ref().child("drivers");
+      DatabaseReference driversRef = FirebaseDatabase.instance.ref().child("provider");
       driversRef.child(firebaseUser.uid).set(driverMap);
 
       currentFirebaseUser = firebaseUser;

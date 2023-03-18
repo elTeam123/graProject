@@ -4,13 +4,15 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onroad/authenticatio/provider/signup_screen.dart';
 import 'package:onroad/global/global.dart';
 import 'package:onroad/mainScreens/main_screens.dart';
-import 'package:onroad/splashScreen/splash_Screen.dart';
+//import 'package:onroad/splashScreen/splash_Screen.dart';
 import 'package:onroad/widgets/progress_dialog.dart';
 
 
 
 class LoginScreen extends StatefulWidget 
 {
+
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
