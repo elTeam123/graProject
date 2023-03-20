@@ -45,7 +45,7 @@ class _LogInPageState extends State<LogInPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    children: 
+                    children:
                     [
                        Padding(
                       padding: const EdgeInsets.only(top: 35),
@@ -64,7 +64,7 @@ class _LogInPageState extends State<LogInPage> {
                         color: Colors.black,
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
-                  
+
                             ),
                           ),
                         ),
@@ -72,7 +72,7 @@ class _LogInPageState extends State<LogInPage> {
                         height: 22,
                       ),
                        Row(
-                        children: 
+                        children:
                         [
                            Container(
                           padding: const EdgeInsets.symmetric(
@@ -95,7 +95,7 @@ class _LogInPageState extends State<LogInPage> {
                             ),
                           ),
                         ),
-                           SizedBox(
+                           const SizedBox(
                             width: 7,
                            ),
                            Container(
@@ -133,12 +133,12 @@ class _LogInPageState extends State<LogInPage> {
                       ),
                          ElevatedButton(
                      onPressed: () async {
-                  
+
                       setState(() {
                      showLoading = true;
                       });
                       await FirebaseAuth.instance.verifyPhoneNumber(
-                  
+
                   phoneNumber: phoneController.text,
                   verificationCompleted: (PhoneAuthCredential credential) {},
                   verificationFailed: (FirebaseAuthException e) {
@@ -157,19 +157,12 @@ class _LogInPageState extends State<LogInPage> {
                   },
                   timeout: const Duration(seconds: 10),
                   codeAutoRetrievalTimeout: (String verificationId) {
-                  
+
                     Navigator.of(context).push(PageRouteBuilder(pageBuilder: (_,__,___) => OTPPage(isTimeOut2: true ,verificationId:verificationId)));
-                  
+
                           },
                         );
                       },
-                  child: const Text(
-                  'Next',
-                  style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                  ),
-                  ),
                   style: ElevatedButton.styleFrom(
                   elevation: 2,
                   minimumSize: const Size(110, 50), backgroundColor: const Color.fromARGB(
@@ -180,9 +173,16 @@ class _LogInPageState extends State<LogInPage> {
                     ),
                     shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
-                  
+
                     ),
                     ),
+                  child: const Text(
+                  'Next',
+                  style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  ),
+                  ),
                     ),
                       Text(verificationFailedMessage),
                     ],

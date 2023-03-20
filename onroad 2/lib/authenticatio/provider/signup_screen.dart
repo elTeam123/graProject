@@ -7,7 +7,7 @@ import 'package:onroad/global/global.dart';
 import 'package:onroad/global/uplod.dart';
 import 'package:onroad/mainScreens/main_screens.dart';
 import 'package:onroad/widgets/progress_dialog.dart';
-//import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 
 class SignUpScreen extends StatefulWidget {
@@ -101,7 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       currentFirebaseUser = firebaseUser;
       Fluttertoast.showToast(msg: "Account has been Created.");
-      Navigator.push(context, MaterialPageRoute(builder: (c)=> MainScreen()));
+      Navigator.push(context, MaterialPageRoute(builder: (c)=> const MainScreen()));
     }
     else
     {
@@ -109,9 +109,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       Fluttertoast.showToast(msg: "Account has not been Created.");
     }
   }
-
-
-
 
 
   @override
@@ -128,16 +125,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Column(
               children: 
               [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: const Image(
+                const Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Image(
                     height: 170.0,
                     image: AssetImage(
                       'images/signup.png',
                     ),
                   ),
                 ),
-                Text(
+                const Text(
                   'Application policy',
                   style: TextStyle(
                       fontFamily: 'Signatra',
@@ -147,7 +144,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(
                   height: 3.0,
                 ),
-                 Text(
+                 const Text(
                   'To ensure the safety of users',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
@@ -156,7 +153,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       color: Color.fromARGB(255, 146, 143, 143),
                   ),
                 ),
-                Text(
+                const Text(
                   'Please upload a picture of the card',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
@@ -173,7 +170,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: 
                         [
-                        Container(
+                        SizedBox(
                          height: 52.0,
                           width: 145.0,
                            child: TextFormField(
@@ -198,14 +195,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         border: OutlineInputBorder(
                       
                             borderRadius: BorderRadius.circular(30),
-                            borderSide:BorderSide(
+                            borderSide:const BorderSide(
                               color: Colors.green,
                       
                             )
                         ),
                            focusedBorder:OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
-                                borderSide:BorderSide(
+                                borderSide:const BorderSide(
                                   color: Colors.green,
                       
                                 )
@@ -216,7 +213,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         const SizedBox(
                             width: 10.0,
                           ),
-                        Container(
+                        SizedBox(
                          height: 52.0,
                           width: 145.0,
                           child: TextFormField(
@@ -241,14 +238,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         border: OutlineInputBorder(
                       
                             borderRadius: BorderRadius.circular(30),
-                            borderSide:BorderSide(
+                            borderSide:const BorderSide(
                               color: Colors.green,
                       
                             )
                         ),
                            focusedBorder:OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
-                                borderSide:BorderSide(
+                                borderSide:const BorderSide(
                                   color: Colors.green,
                       
                                 )
@@ -262,10 +259,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(
                   height: 15.0,
                 ),
-                Container(
+                SizedBox(
                   height: 52.0,
                   width: 300.0,
-          
                   child: TextFormField(
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
@@ -288,7 +284,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       border: OutlineInputBorder(
           
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:BorderSide(
+                          borderSide:const BorderSide(
                             color: Colors.green,
           
                           )
@@ -296,7 +292,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       focusedBorder:  OutlineInputBorder(
           
                               borderRadius: BorderRadius.circular(30),
-                              borderSide:BorderSide(
+                              borderSide:const BorderSide(
                                 color: Colors.green,
           
                               )
@@ -307,7 +303,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(
                   height: 15.0,
                 ),
-                Container(
+                SizedBox(
                   height: 52.0,
                   width: 300.0,
                   child: TextFormField(
@@ -332,7 +328,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       border: OutlineInputBorder(
           
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:BorderSide(
+                          borderSide:const BorderSide(
                             color: Colors.green,
           
                           )
@@ -340,7 +336,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       focusedBorder:  OutlineInputBorder(
           
                               borderRadius: BorderRadius.circular(30),
-                              borderSide:BorderSide(
+                              borderSide:const BorderSide(
                                 color: Colors.green,
           
                               )
@@ -351,7 +347,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                Container(
+                SizedBox(
                  height: 52.0,
                   width: 300.0,
                   child: TextFormField(
@@ -388,7 +384,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       border: OutlineInputBorder(
           
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:BorderSide(
+                          borderSide:const BorderSide(
                             color: Colors.green,
           
                           )
@@ -396,7 +392,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       focusedBorder:  OutlineInputBorder(
           
                               borderRadius: BorderRadius.circular(30),
-                              borderSide:BorderSide(
+                              borderSide:const BorderSide(
                                 color: Colors.green,
           
                               )
@@ -407,7 +403,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                Container(
+                SizedBox(
                  height: 52.0,
                   width: 300.0,
                   child: TextFormField(
@@ -443,13 +439,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:BorderSide(
+                          borderSide:const BorderSide(
                             color: Colors.green,
                           )
                          ),
                              focusedBorder:  OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
-                              borderSide:BorderSide(
+                              borderSide:const BorderSide(
                                 color: Colors.green,
                               )
                           ),
@@ -459,7 +455,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(
                   height: 15.0,
                 ),
-                Container(
+                SizedBox(
                   height: 52.0,
                   width: 300,
                   child: ElevatedButton.icon( 

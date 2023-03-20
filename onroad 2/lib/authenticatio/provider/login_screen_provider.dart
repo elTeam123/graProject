@@ -7,97 +7,73 @@ import 'package:onroad/mainScreens/main_screens.dart';
 //import 'package:onroad/splashScreen/splash_Screen.dart';
 import 'package:onroad/widgets/progress_dialog.dart';
 
-
-
-class LoginScreen extends StatefulWidget 
-{
-
-
+class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-
-
 class _LoginScreenState extends State<LoginScreen> {
-
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
-
   var formKey = GlobalKey<FormState>();
 
-  bool pass =true;
-  
+  bool pass = true;
 
-
-  validateForm()
-  {
-    if(!emailController.text.contains("@"))
-    {
+  validateForm() {
+    if (!emailController.text.contains("@")) {
       Fluttertoast.showToast(msg: "Email address is not Valid.");
-    }
-    else if(passwordController.text.isEmpty)
-    {
+    } else if (passwordController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Password is required.");
-    }
-    else
-    {
+    } else {
       loginDriverNow();
     }
   }
 
-  loginDriverNow() async
-  {
+  loginDriverNow() async {
     showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (BuildContext c)
-        {
-          return ProgressDialog(message: "Processing, Please wait...",);
-        }
-    );
+        builder: (BuildContext c) {
+          return ProgressDialog(
+            message: "Processing, Please wait...",
+          );
+        });
 
-    final User? firebaseUser = (
-        await fAuth.signInWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
-        ).catchError((msg){
-          Navigator.pop(context);
-          Fluttertoast.showToast(msg: "Error: " + msg.toString());
-        })
-    ).user;
+    final User? firebaseUser = (await fAuth
+            .signInWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    )
+            .catchError((msg) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Error: " + msg.toString());
+    }))
+        .user;
 
-    if(firebaseUser != null)
-    {
+    if (firebaseUser != null) {
       currentFirebaseUser = firebaseUser;
       Fluttertoast.showToast(msg: "Login Successful.");
-      Navigator.push(context, MaterialPageRoute(builder: (c)=> const MainScreen()));
-    }
-    else
-    {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (c) => const MainScreen()));
+    } else {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "Error Occurred during Login.");
     }
   }
 
-
-
-
-
-  
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(
+            20.0,
+          ),
           child: Center(
             child: SingleChildScrollView(
               child: Form(
-                key:formKey,
+                key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -108,20 +84,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         'images/Login.png',
                       ),
                     ),
-
                     const SizedBox(
                       height: 15,
                     ),
                     Container(
                       height: 55.0,
                       width: 300.0,
-                      
                       child: TextFormField(
                         controller: emailController,
-                        validator: (value)
-                        {
-                          if (value!.isEmpty)
-                          {
+                        validator: (value) {
+                          if (value!.isEmpty) {
                             return 'Email must not be empty';
                           }
                           return null;
@@ -139,20 +111,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
-                              borderSide:BorderSide(
+                              borderSide: const BorderSide(
                                 color: Colors.green,
-                              )
-                          ),
-                          focusedBorder:  OutlineInputBorder(
-
+                              )),
+                          focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
-                              borderSide:BorderSide(
+                              borderSide: const BorderSide(
                                 color: Colors.green,
-
-                              )
-                          ),
+                              )),
                         ),
-
                       ),
                     ),
                     const SizedBox(
@@ -182,34 +149,27 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.green,
                           ),
                           suffixIcon: IconButton(
-                            onPressed: ()
-                            {
-
+                            onPressed: () {
                               setState(() {
                                 pass = !pass;
                               });
-
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.visibility,
                               color: Colors.green,
                             ),
                           ),
-
                           border: OutlineInputBorder(
-
-                            borderRadius: BorderRadius.circular(30),
-                              borderSide:BorderSide(
-                              color: Colors.green,
-                              width: 3,
-                            )
-                          ),
-                          focusedBorder:  OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
-                              borderSide:BorderSide(
+                              borderSide: const BorderSide(
                                 color: Colors.green,
-                              )
-                          ),
+                                width: 3,
+                              )),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: const BorderSide(
+                                color: Colors.green,
+                              )),
                         ),
                       ),
                     ),
@@ -231,11 +191,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: 300,
                       height: 55.0,
                       child: MaterialButton(
-                        onPressed: ()
-                        {
-
-                         validateForm();
-
+                        onPressed: () {
+                          validateForm();
                         },
                         child: const Text(
                           'Login',
@@ -256,16 +213,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         const Text('Dont have an account?'),
                         TextButton(
-                          onPressed: () 
-                          {
-                            Navigator.push(context, MaterialPageRoute(builder: (c)=> SignUpScreen()));
-
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (c) => const SignUpScreen()));
                           },
                           child: const Text(
                             'SignUp Here',
-                            style:TextStyle(
+                            style: TextStyle(
                               color: Colors.green,
-                            ) ,
+                            ),
                           ),
                         ),
                       ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onroad/authenticatio/provider/signup_screen.dart';
+import 'package:onroad/authenticatio/user/signup_user.dart';
 import 'package:onroad/authenticatio/user/user_login.dart';
 
 
@@ -21,13 +22,13 @@ class _UserProviderState extends State<UserProvider> {
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: 
+              children:
               [
             //   IconButton(
             //   onPressed: (){},
             //   icon: Icon(
-            //   Icons.arrow_left_outlined, 
-            //   color:Colors.black, 
+            //   Icons.arrow_left_outlined,
+            //   color:Colors.black,
             //   ),
             // ),
                Image.asset('images/1.png'),
@@ -72,16 +73,16 @@ class _UserProviderState extends State<UserProvider> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: 
+                    children:
                     [
                       Container(
                     height: 50,
                      width: 130,
-                    child: ElevatedButton( 
+                    child: ElevatedButton(
                       onPressed: ()
                       {
-                         Navigator.push(context, MaterialPageRoute(builder: (c)=>  LogInPage()));
-                       
+                         Navigator.push(context, MaterialPageRoute(builder: (c)=>  const SignUpScreenUser()));
+
                       },
                        child: const Text(
                         'User',
@@ -103,10 +104,10 @@ class _UserProviderState extends State<UserProvider> {
                       Container(
                     height: 50,
                     width: 130,
-                    child: ElevatedButton( 
+                    child: ElevatedButton(
                       onPressed: ()
                       {
-                         Navigator.push(context, MaterialPageRoute(builder: (c)=> SignUpScreen()));
+                         Navigator.push(context, MaterialPageRoute(builder: (c)=> const SignUpScreen()));
                       },
                        child: const Text(
                         'Service',
@@ -132,4 +133,3 @@ class _UserProviderState extends State<UserProvider> {
     );
   }
 }
-  

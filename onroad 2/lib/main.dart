@@ -7,8 +7,8 @@ void main() async
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
      runApp(
-      MyApp(
-        child:const MaterialApp(
+      const MyApp(
+        child:MaterialApp(
       debugShowCheckedModeBanner: false,
       home:MySplasScreen(),
 
@@ -21,7 +21,7 @@ class MyApp extends StatefulWidget
   
    final Widget? child;
 
-  MyApp({this.child});
+  const MyApp({super.key, this.child});
 
   static void restartApp(BuildContext context)
   {

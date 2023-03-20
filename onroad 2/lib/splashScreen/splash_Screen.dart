@@ -77,7 +77,7 @@ class _MySplasScreenState extends State<MySplasScreen> {
                  const SizedBox(
                   height: 150.0,
                  ),
-                Container(
+                SizedBox(
                   height: 50,
                   child: ElevatedButton.icon( 
                     onPressed: ()
