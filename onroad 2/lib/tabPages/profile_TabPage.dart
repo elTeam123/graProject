@@ -11,8 +11,6 @@ class ProfileTabPage extends StatefulWidget {
   State<ProfileTabPage> createState() => _ProfileTabPageState();
 }
 
-
-
 class _ProfileTabPageState extends State<ProfileTabPage> {
   @override
   Widget build(BuildContext context) {
@@ -21,10 +19,10 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
         child: const Text(
           "Sign Out",
         ),
-        onPressed: ()
-        {
+        onPressed: () {
           fAuth.signOut();
-          Navigator.push(context, MaterialPageRoute(builder: (c)=> LoginScreen()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (c) => LoginScreen()));
         },
       ),
     );

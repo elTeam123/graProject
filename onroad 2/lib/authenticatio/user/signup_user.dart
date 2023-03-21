@@ -49,8 +49,6 @@ class _SignUpScreenUser extends State<SignUpScreenUser> {
         });
   }
 
-  void user() {}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,16 +78,12 @@ class _SignUpScreenUser extends State<SignUpScreenUser> {
                     fontSize: 50,
                   ),
                 ),
-
                 const SizedBox(
                   height: 3.0,
                 ),
-
-
                 const SizedBox(
                   height: 80.0,
                 ),
-
                 SizedBox(
                   height: 52.0,
                   width: 300.0,
@@ -113,29 +107,21 @@ class _SignUpScreenUser extends State<SignUpScreenUser> {
                         color: Colors.green,
                       ),
                       border: OutlineInputBorder(
-
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:const BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.green,
-
-                          )
-                      ),
-                      focusedBorder:  OutlineInputBorder(
-
+                          )),
+                      focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:const BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.green,
-
-                          )
-                      ),
+                          )),
                     ),
                   ),
                 ),
-
                 const SizedBox(
                   height: 20.0,
                 ),
-
                 SizedBox(
                   height: 52.0,
                   width: 300.0,
@@ -159,25 +145,18 @@ class _SignUpScreenUser extends State<SignUpScreenUser> {
                         color: Colors.green,
                       ),
                       border: OutlineInputBorder(
-
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:const BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.green,
-
-                          )
-                      ),
-                      focusedBorder:  OutlineInputBorder(
-
+                          )),
+                      focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:const BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.green,
-
-                          )
-                      ),
+                          )),
                     ),
                   ),
                 ),
-
                 const SizedBox(
                   height: 20.0,
                 ),
@@ -217,7 +196,6 @@ class _SignUpScreenUser extends State<SignUpScreenUser> {
                     ),
                   ),
                 ),
-
                 const SizedBox(
                   height: 80.0,
                 ),
@@ -238,6 +216,10 @@ class _SignUpScreenUser extends State<SignUpScreenUser> {
                   child: MaterialButton(
                     onPressed: () {
                       validateForm();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (c) => const MainScreen()));
                     },
                     child: const Text(
                       'Create Account',

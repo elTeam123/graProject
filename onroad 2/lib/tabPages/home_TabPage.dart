@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomeTabPage extends StatefulWidget {
@@ -16,6 +17,43 @@ class _HomeTabPageState extends State<HomeTabPage> {
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
+  //جزء هتاكد منو بتاع السيرش عن المكان
+/////////////////////////////
+  //جزء تحديد الموقع
+  Position? userCurrentPosition;
+  var geolocator = Geolocator();
+
+  LocationPermission? _locationPremission;
+
+  checkIfLocationPermissionAllowed() async {
+    _locationPremission = await Geolocator.requestPermission();
+    if (_locationPremission == LocationPermission.denied) {
+      _locationPremission = await Geolocator.requestPermission();
+    }
+  }
+
+  locateUserPosition() async {
+    Position cPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    userCurrentPosition = cPosition;
+
+    LatLng latLngPosition =
+        LatLng(userCurrentPosition!.latitude, userCurrentPosition!.longitude);
+
+    CameraPosition cameraPosition =
+        CameraPosition(target: latLngPosition, zoom: 14);
+
+    newGoogleMapController!.animateCamera(
+      CameraUpdate.newCameraPosition(cameraPosition),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfLocationPermissionAllowed();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +63,14 @@ class _HomeTabPageState extends State<HomeTabPage> {
           GoogleMap(
             mapType: MapType.normal,
             myLocationEnabled: true,
+            zoomControlsEnabled: true,
+            zoomGesturesEnabled: true,
             initialCameraPosition: _kGooglePlex,
-           onMapCreated: (GoogleMapController controller)
-           {
-             _controllerGoogleMap.complete(controller);
-           },
+            onMapCreated: (GoogleMapController controller) {
+              _controllerGoogleMap.complete(controller);
+              newGoogleMapController = controller;
+              locateUserPosition();
+            },
           ),
         ],
       ),
