@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onroad/authenticatio/provider/signup_screen.dart';
 import 'package:onroad/authenticatio/user/signup_user.dart';
+import 'package:onroad/authenticatio/user/test.dart';
 import 'package:onroad/authenticatio/user/user_login.dart';
 
 
@@ -81,7 +82,7 @@ class _UserProviderState extends State<UserProvider> {
                     child: ElevatedButton(
                       onPressed: ()
                       {
-                         Navigator.push(context, MaterialPageRoute(builder: (c)=>  const SignUpScreenUser()));
+                         Navigator.push(context, MaterialPageRoute(builder: (c)=>  PhoneAuthScreen()));
 
                       },
                        child: const Text(

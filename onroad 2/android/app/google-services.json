@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "442300635566",
-    "project_id": "on-road-app-3f01a",
-    "storage_bucket": "on-road-app-3f01a.appspot.com"
+    "project_number": "451086418906",
+    "project_id": "on-road-97c8c",
+    "storage_bucket": "on-road-97c8c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:442300635566:android:ce81be29011d490492903f",
+        "mobilesdk_app_id": "1:451086418906:android:ddf5e2072ee8727f5476e3",
         "android_client_info": {
           "package_name": "com.mohamedsalah.onroad"
         }
       },
       "oauth_client": [
         {
-          "client_id": "442300635566-m4ps5uk7s8iehvjakeftcu38q9fr7ara.apps.googleusercontent.com",
+          "client_id": "451086418906-ernr5u5q15rb2sci473q7bbp257kum6g.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBv4wrj82562YnJv6JhSyvnduyIt7Wi0Tc"
+          "current_key": "AIzaSyAvubjvqHccd1EdMREouFJQGyJlUId2uN8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "442300635566-m4ps5uk7s8iehvjakeftcu38q9fr7ara.apps.googleusercontent.com",
+              "client_id": "451086418906-ernr5u5q15rb2sci473q7bbp257kum6g.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
