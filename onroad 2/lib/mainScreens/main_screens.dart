@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:onroad/tabPages/Home_TabPage.dart';
+import 'package:onroad/tabPages/Notifications.dart';
 import 'package:onroad/tabPages/Profile_TabPage.dart';
 import 'package:onroad/tabPages/Ratings_TabPage.dart';
 
@@ -26,7 +28,7 @@ class _MainScreenState extends State<MainScreen>
   void initState() {
     super.initState();
 
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -39,31 +41,44 @@ class _MainScreenState extends State<MainScreen>
           HomeTabPage(),
           RatingsTabPage(),
           ProfileTabPage(),
+          Notifications(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
+      bottomNavigationBar: Container(
+        color: Colors.white60,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 13,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: "serves",
+          child: GNav(
+            backgroundColor: Colors.white60,
+            color: Colors.black,
+            activeColor: Colors.black,
+            tabBackgroundColor: Colors.green,
+            gap: 8,
+            onTabChange: onItemClicked,
+            padding: const EdgeInsets.all(16),
+            tabs: const [
+              GButton(
+                icon: Icons.home,
+                text: 'Home',
+              ),
+              GButton(
+                icon: Icons.miscellaneous_services_rounded,
+                text: 'Services',
+              ),
+              GButton(
+                icon: Icons.notifications,
+                text: 'Notifications',
+              ),
+              GButton(
+                icon: Icons.person_rounded,
+                text: 'Profile',
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "profile",
-          ),
-        ],
-        unselectedItemColor: const Color.fromARGB(255, 79, 115, 17),
-        selectedItemColor: Colors.black,
-        backgroundColor: Colors.white70,
-        type: BottomNavigationBarType.fixed,
-        selectedLabelStyle: const TextStyle(fontSize: 14),
-        showUnselectedLabels: true,
-        currentIndex: selectedIndex,
-        onTap: onItemClicked,
+        ),
       ),
     );
   }

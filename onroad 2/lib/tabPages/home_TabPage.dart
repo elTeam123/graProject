@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:onroad/assistants/assistant_methods.dart';
 
 class HomeTabPage extends StatefulWidget {
   const HomeTabPage({super.key});
@@ -47,6 +48,8 @@ class _HomeTabPageState extends State<HomeTabPage> {
     newGoogleMapController!.animateCamera(
       CameraUpdate.newCameraPosition(cameraPosition),
     );
+    String humanReadableAddress = await AssistantMethods.searchAddressForGeographicCoDrdinates(userCurrentPosition!);
+     print('this is your address='+ humanReadableAddress);
   }
 
   @override

@@ -1,11 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:onroad/authenticatio/provider/login_screen_provider.dart';
-import 'package:onroad/authenticatio/provider/signup_screen.dart';
 import 'package:onroad/authenticatio/user/user_or_providr.dart';
 import 'package:onroad/global/global.dart';
-
 import '../mainScreens/main_screens.dart';
 
 class MySplasScreen extends StatefulWidget 
@@ -20,21 +16,21 @@ class MySplasScreen extends StatefulWidget
 class _MySplasScreenState extends State<MySplasScreen> {
 
 
-  // startTimer()
-  // {
-  //   Timer(const Duration(seconds: 0), () async
-  //   {
-  //     if(await fAuth.currentUser != null)
-  //     {
-  //       currentFirebaseUser = fAuth.currentUser;
-  //       Navigator.push(context, MaterialPageRoute(builder: (c)=> MainScreen()));
-  //     }
-  //     else
-  //     {
-  //       Navigator.push(context, MaterialPageRoute(builder: (c)=> LoginScreen()));
-  //     }
-  //   });
-  // }
+  startTimer()
+  {
+    Timer(const Duration(seconds: 0), () async
+    {
+      if(await fAuth.currentUser != null)
+      {
+        currentFirebaseUser = fAuth.currentUser;
+        Navigator.push(context, MaterialPageRoute(builder: (c)=> const MainScreen()));
+      }
+      else
+      {
+        Navigator.push(context, MaterialPageRoute(builder: (c)=> const UserProvider()));
+      }
+    });
+  }
 
 
   // @override
@@ -82,7 +78,7 @@ class _MySplasScreenState extends State<MySplasScreen> {
                   child: ElevatedButton.icon( 
                     onPressed: ()
                     {
-                     Navigator.push(context, MaterialPageRoute(builder: (c)=> UserProvider()));
+                     Navigator.push(context, MaterialPageRoute(builder: (c)=> const UserProvider()));
                     },
                      icon: const Icon(Icons.arrow_right_outlined),
                       
