@@ -18,7 +18,7 @@ class _MySplasScreenState extends State<MySplasScreen> {
 
   startTimer()
   {
-    Timer(const Duration(seconds: 0), () async
+    Timer(const Duration(seconds: 5), () async
     {
       if(await fAuth.currentUser != null)
       {
@@ -27,18 +27,18 @@ class _MySplasScreenState extends State<MySplasScreen> {
       }
       else
       {
+        // ignore: use_build_context_synchronously
         Navigator.push(context, MaterialPageRoute(builder: (c)=> const UserProvider()));
       }
     });
   }
 
 
-  // @override
-  // void initState() {
-  //   super.initState();
-    
-  //   startTimer();
-  // }
+   @override
+   void initState() {
+     super.initState();
+     startTimer();
+   }
 
 
   

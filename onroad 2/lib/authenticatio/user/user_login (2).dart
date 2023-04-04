@@ -4,8 +4,7 @@ import 'package:onroad/authenticatio/user/otp.dart';
 
 class MyPhone extends StatefulWidget {
   const MyPhone({Key? key}) : super(key: key);
-
-  static String Verify = '';
+  static String verify = '';
 
   @override
   State<MyPhone> createState() => _MyPhoneState();
@@ -120,27 +119,28 @@ class _MyPhoneState extends State<MyPhone> {
                 height: 20,
               ),
               SizedBox(
-                  height: 52.0,
-                  width: 300.0,
+                height: 52.0,
+                width: 300.0,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 79, 115, 17),
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30))),
+                    backgroundColor: const Color.fromARGB(255, 79, 115, 17),
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
                   onPressed: () async {
                     await FirebaseAuth.instance.verifyPhoneNumber(
-                      phoneNumber: '${countryController.text + phone}',
+                      phoneNumber: countryController.text + phone,
                       verificationCompleted:
                           (PhoneAuthCredential credential) {},
                       verificationFailed: (FirebaseAuthException e) {},
                       codeSent: (String verificationId, int? resendToken) {
-                        MyPhone.Verify = verificationId;
+                        MyPhone.verify = verificationId;
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (c) => const MyVerify()));
-
                       },
                       codeAutoRetrievalTimeout: (String verificationId) {},
                     );

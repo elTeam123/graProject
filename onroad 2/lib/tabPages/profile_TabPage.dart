@@ -4,6 +4,8 @@ import 'package:onroad/authenticatio/provider/login_screen_provider.dart';
 import 'package:onroad/global/global.dart';
 import 'package:onroad/splashScreen/splash_Screen.dart';
 
+import '../authenticatio/user/user_or_providr.dart';
+
 class ProfileTabPage extends StatefulWidget {
   const ProfileTabPage({super.key});
 
@@ -22,7 +24,7 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
         onPressed: () {
           fAuth.signOut();
           Navigator.push(
-              context, MaterialPageRoute(builder: (c) => LoginScreen()));
+              context, MaterialPageRoute(builder: (c) => const UserProvider()));
         },
       ),
     );
