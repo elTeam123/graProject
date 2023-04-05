@@ -2,47 +2,43 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:onroad/authenticatio/user/user_or_providr.dart';
 import 'package:onroad/global/global.dart';
-import '../mainScreens/main_screens.dart';
+import 'package:onroad/mainScreens/main_screens.dart';
 
-class MySplasScreen extends StatefulWidget 
-{
+class MySplasScreen extends StatefulWidget {
   const MySplasScreen({super.key});
 
   @override
   State<MySplasScreen> createState() => _MySplasScreenState();
 }
 
-
 class _MySplasScreenState extends State<MySplasScreen> {
-
-
-  startTimer()
-  {
-    Timer(const Duration(seconds: 5), () async
-    {
-      if(await fAuth.currentUser != null)
-      {
+  startTimer() {
+    Timer(const Duration(seconds:2), () async {
+      if (await fAuth.currentUser != null) {
         currentFirebaseUser = fAuth.currentUser;
-        Navigator.push(context, MaterialPageRoute(builder: (c)=> const MainScreen()));
-      }
-      else
-      {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (c) => const MainScreen(),
+          ),
+        );
+      } else {
         // ignore: use_build_context_synchronously
-        Navigator.push(context, MaterialPageRoute(builder: (c)=> const UserProvider()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (c) => const UserProvider(),
+          ),
+        );
       }
     });
   }
 
-
-   @override
-   void initState() {
-     super.initState();
-     startTimer();
-   }
-
-
-  
-
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,54 +49,17 @@ class _MySplasScreenState extends State<MySplasScreen> {
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'OR',
-                  style: TextStyle(
-                    fontSize: 180.0,
-                    fontFamily: 'Brand Bold',
-                     color: Color.fromARGB(255, 79, 115, 17),
+              children: const [
+                Image(
+                  height: 400,
+                  image: AssetImage(
+                    'images/logo.png',
                   ),
-                ),
-                const Text(
-                  'ON ROAD',
-                  style: TextStyle(
-                    fontSize: 40.0,
-                    fontFamily: 'Signatra',
-                     color: Colors.grey,
-                  ),
-                ),
-                 const SizedBox(
-                  height: 150.0,
-                 ),
-                SizedBox(
-                  height: 50,
-                  child: ElevatedButton.icon( 
-                    onPressed: ()
-                    {
-                     Navigator.push(context, MaterialPageRoute(builder: (c)=> const UserProvider()));
-                    },
-                     icon: const Icon(Icons.arrow_right_outlined),
-                      
-                     label:  const Text(
-                      'Start Now',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                     ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 79, 115, 17),
-                        padding: const EdgeInsets.symmetric(horizontal: 75.0),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        elevation: 6,
-                      ),
-                      ),
                 ),
               ],
             ),
-          ), 
           ),
+        ),
       ),
     );
   }

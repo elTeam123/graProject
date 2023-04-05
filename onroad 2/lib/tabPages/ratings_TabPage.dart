@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 
-class RatingsTabPage extends StatefulWidget {
-  const RatingsTabPage({super.key});
+class Notifications extends StatefulWidget {
+  const Notifications({super.key});
 
   @override
-  State<RatingsTabPage> createState() => _RatingsTabPageState();
+  State<Notifications> createState() => _NotificationsState();
 }
 
-class _RatingsTabPageState extends State<RatingsTabPage> {
+class _NotificationsState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
-    return  const Center(
-      child: Text('RatingsTabPage'),
-    );
+    return const Center(child: Text('Notifications')) ;
   }
 }

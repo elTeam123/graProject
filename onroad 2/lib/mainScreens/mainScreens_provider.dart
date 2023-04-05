@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:onroad/tabPages/Home_TabPage.dart';
+import 'package:onroad/tabPages/Ratings_TabPage.dart';
 import 'package:onroad/tabPages/profile/profile_TabPage.dart';
 import 'package:onroad/tabPages/ratings_TabPage.dart';
-
+import 'package:onroad/tabPages/services_TabPage.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -39,8 +40,8 @@ class _MainScreenState extends State<MainScreen>
         controller: tabController,
         children: const [
           HomeTabPage(),
-          Notifications(),
           ProfileTabPage(),
+          ServicesTabPage(),
         ],
       ),
       bottomNavigationBar: Container(
@@ -63,11 +64,11 @@ class _MainScreenState extends State<MainScreen>
                 icon: Icons.home,
                 text: 'Home',
               ),
-
               GButton(
-                icon: Icons.notifications,
-                text: 'Notifications',
+                icon: Icons.miscellaneous_services_rounded,
+                text: 'Services',
               ),
+
               GButton(
                 icon: Icons.person_rounded,
                 text: 'Profile',

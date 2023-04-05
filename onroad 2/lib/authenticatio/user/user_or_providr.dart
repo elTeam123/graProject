@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:onroad/authenticatio/provider/signup_screen.dart';
-import 'package:onroad/authenticatio/user/signup_user.dart';
 import 'package:onroad/authenticatio/user/user_login%20(2).dart';
-
-import '../../mainScreens/main_screens.dart';
-import '../../tabPages/Home_TabPage.dart';
 import '../provider/login_screen_provider.dart';
-
 class UserProvider extends StatefulWidget {
   const UserProvider({super.key});
 

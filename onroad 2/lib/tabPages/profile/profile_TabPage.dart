@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:onroad/mainScreens/main_screens.dart';
 import 'package:onroad/tabPages/profile/editprofile.dart';
 import '../../authenticatio/provider/login_screen_provider.dart';
 import '../../global/global.dart';
@@ -11,12 +11,20 @@ class ProfileTabPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 79, 115, 17),
+        backgroundColor: Colors.grey[50],
+        elevation: 0.0,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (c) => const MainScreen(),
+              ),
+            );
+          },
           icon: const Icon(
-            Icons.chevron_left_outlined,
-            size: 35.0,
+            Icons.arrow_back_ios,
+            color: Colors.black,
           ),
         ),
         title: const Text(
@@ -25,6 +33,7 @@ class ProfileTabPage extends StatelessWidget {
             fontSize: 20.0,
             fontFamily: 'Brand Bold',
             fontWeight: FontWeight.w500,
+            color: Colors.black,
           ),
         ),
         centerTitle: true,
@@ -33,6 +42,7 @@ class ProfileTabPage extends StatelessWidget {
             onPressed: () {},
             icon: const Icon(
               Icons.dark_mode_outlined,
+              color: Colors.black,
             ),
           )
         ],
@@ -46,48 +56,24 @@ class ProfileTabPage extends StatelessWidget {
             width: double.infinity,
             child: Column(
               children: [
-                Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                            color: Colors.black.withOpacity(0.1),
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
+                Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        spreadRadius: 2,
+                        blurRadius: 15,
+                        color: Colors.black.withOpacity(0.1),
+                        offset: const Offset(0, 10),
                       ),
-                      child: const CircleAvatar(
-                        radius: 60,
-                        backgroundImage: AssetImage(
-                          'images/signup.png',
-                        ),
-                      ),
+                    ],
+                  ),
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundImage: const AssetImage(
+                      'images/user.png',
                     ),
-                    Positioned(
-                      bottom: 0.0,
-                      right: 0.0,
-                      child: Container(
-                        height: 40.0,
-                        width: 45.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25.0),
-                          color: Colors.green.withOpacity(.8),
-                        ),
-                        child: MaterialButton(
-                          onPressed: () {
-
-                          },
-                          child: const Icon(
-                            Icons.edit_rounded,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                    backgroundColor: Colors.grey.withOpacity(0.01),
+                  ),
                 ),
                 const SizedBox(
                   height: 5.0,
@@ -232,18 +218,11 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(
             30.0,
           ),
-          color: Colors.green.withOpacity(
-            0.3,
-          ),
+          color: Colors.grey[200],
         ),
         child: Icon(
           (icon),
-          color: const Color.fromARGB(
-            255,
-            79,
-            115,
-            17,
-          ),
+          color: Colors.black,
         ),
       ),
       title: Text(
@@ -263,22 +242,14 @@ class ProfileMenuWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(
                   30.0,
                 ),
-                color: Colors.green.withOpacity(
-                  0.3,
-                ),
+                color: Colors.grey[200],
               ),
               child: const Icon(
                 Icons.arrow_forward_ios_outlined,
-                color: Color.fromARGB(
-                  255,
-                  79,
-                  115,
-                  17,
-                ),
+                color: Colors.black,
               ),
             )
           : null,
     );
   }
 }
-
