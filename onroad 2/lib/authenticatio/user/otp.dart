@@ -120,7 +120,7 @@ class _MyVerifyState extends State<MyVerify> {
                     try {
                       PhoneAuthCredential credential =
                           PhoneAuthProvider.credential(
-                              verificationId: MyPhone.verify, smsCode: code);
+                              verificationId: MyPhone.Verify, smsCode: code);
 
                       // Sign the user in (or link) with the credential
                       await auth.signInWithCredential(credential);

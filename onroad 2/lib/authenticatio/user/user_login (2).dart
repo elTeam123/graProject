@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onroad/authenticatio/user/otp.dart';
 
 class MyPhone extends StatefulWidget {
   const MyPhone({Key? key}) : super(key: key);
-  static String verify = '';
+
+  static String Verify = '';
 
   @override
   State<MyPhone> createState() => _MyPhoneState();
@@ -17,8 +19,30 @@ class _MyPhoneState extends State<MyPhone> {
   @override
   void initState() {
     // TODO: implement initState
-    countryController.text = "+20";
+    countryController.text = "+2";
     super.initState();
+  }
+
+
+  void showProgressIndicator(BuildContext context) {
+    AlertDialog alertDialog = AlertDialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      content: Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+        ),
+      ),
+    );
+
+    showDialog(
+      barrierColor: Colors.white.withOpacity(0),
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return alertDialog;
+      },
+    );
   }
 
   @override
@@ -103,15 +127,15 @@ class _MyPhoneState extends State<MyPhone> {
                     ),
                     Expanded(
                         child: TextField(
-                      onChanged: (value) {
-                        phone = value;
-                      },
-                      keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Phone",
-                      ),
-                    ))
+                          onChanged: (value) {
+                            phone = value;
+                          },
+                          keyboardType: TextInputType.phone,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Phone",
+                          ),
+                        ))
                   ],
                 ),
               ),
@@ -123,27 +147,31 @@ class _MyPhoneState extends State<MyPhone> {
                 width: 300.0,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 79, 115, 17),
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
+                      backgroundColor: const Color.fromARGB(255, 79, 115, 17),
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30))),
                   onPressed: () async {
                     await FirebaseAuth.instance.verifyPhoneNumber(
-                      phoneNumber: countryController.text + phone,
+                      phoneNumber: '${countryController.text + phone}',
                       verificationCompleted:
-                          (PhoneAuthCredential credential) {},
-                      verificationFailed: (FirebaseAuthException e) {},
+                          (PhoneAuthCredential phoneAuthCredential) {
+                        FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+                      },
+                      verificationFailed: (FirebaseAuthException authException) {
+                        Fluttertoast.showToast(msg: "Error: ${authException.message}");
+                      },
                       codeSent: (String verificationId, int? resendToken) {
-                        MyPhone.verify = verificationId;
+                        MyPhone.Verify = verificationId;
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (c) => const MyVerify()));
+
                       },
                       codeAutoRetrievalTimeout: (String verificationId) {},
                     );
+                    showProgressIndicator(context);
                   },
                   child: const Text(
                     "Send the code",

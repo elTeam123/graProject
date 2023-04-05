@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onroad/authenticatio/user/user_or_providr.dart';
 import 'package:onroad/mainScreens/main_screens.dart';
 import 'package:onroad/tabPages/profile/editprofile.dart';
 import '../../authenticatio/provider/login_screen_provider.dart';
@@ -177,7 +178,7 @@ class ProfileTabPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (c) => LoginScreen(),
+                        builder: (c) => const UserProvider(),
                       ),
                     );
                   },
