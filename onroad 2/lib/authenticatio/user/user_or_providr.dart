@@ -4,6 +4,7 @@ import 'package:onroad/authenticatio/user/signup_user.dart';
 import 'package:onroad/authenticatio/user/user_login%20(2).dart';
 
 import '../../mainScreens/main_screens.dart';
+import '../../tabPages/Home_TabPage.dart';
 import '../provider/login_screen_provider.dart';
 
 class UserProvider extends StatefulWidget {
@@ -109,9 +110,11 @@ class _UserProviderState extends State<UserProvider> {
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (c) => LoginScreen()));
+                            context,
+                            MaterialPageRoute(
+                              builder: (c) => LoginScreen(),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:

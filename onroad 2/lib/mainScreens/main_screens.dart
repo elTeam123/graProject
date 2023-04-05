@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:onroad/tabPages/Home_TabPage.dart';
 import 'package:onroad/tabPages/Notifications.dart';
-import 'package:onroad/tabPages/Profile_TabPage.dart';
 import 'package:onroad/tabPages/Ratings_TabPage.dart';
+import 'package:onroad/tabPages/profile/profile_TabPage.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -40,8 +40,8 @@ class _MainScreenState extends State<MainScreen>
         children: const [
           HomeTabPage(),
           RatingsTabPage(),
-          ProfileTabPage(),
           Notifications(),
+          ProfileTabPage(),
         ],
       ),
       bottomNavigationBar: Container(
