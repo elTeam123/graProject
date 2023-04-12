@@ -21,7 +21,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
               showBottomSheet(
                 context: context,
                 backgroundColor:Colors.white,
-                shape:RoundedRectangleBorder(
+                shape:const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30) ,),
                 ) ,
                 builder:(BuildContext context){
@@ -30,7 +30,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          Image.asset('images/line.png' , height: 45, color: Colors.grey,),
+                          Image.asset('images/line.jpg' , height: 45, color: Colors.grey,),
                           MaterialButton(
                             onPressed: (){
                               Navigator.pop(context);
@@ -49,7 +49,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                                     child: Image(
                                       height: 60,
                                       image: AssetImage(
-                                        'images/11.png',
+                                        'images/11.jpg',
                                       ),
                                     ),
                                   ),
@@ -89,7 +89,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                                       height: 60,
 // width: double.infinity,
                                       image: AssetImage(
-                                        'images/12.png',
+                                        'images/12.jpg',
                                       ),
                                     ),
                                   ),
@@ -127,7 +127,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                                       height: 60,
 // width: double.infinity,
                                       image: AssetImage(
-                                        'images/13.png',
+                                        'images/13.jpg',
                                       ),
                                     ),
                                   ),
@@ -165,7 +165,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                                       height: 60,
 // width: double.infinity,
                                       image: AssetImage(
-                                        'images/10.png',
+                                        'images/10.jpg',
                                       ),
                                     ),
                                   ),
@@ -191,7 +191,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                 },
               );
             },
-            child:Icon(
+            child:const Icon(
               Icons.miscellaneous_services,
               size: 30,
               color: Colors.black,

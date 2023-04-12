@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onroad/authenticatio/provider/login_screen_provider.dart';
 import 'package:onroad/authenticatio/user/signup_user.dart';
+import 'package:onroad/mainScreens/main_screens.dart';
 
 
 class UserProvider extends StatefulWidget {
@@ -79,7 +80,7 @@ class _UserProviderState extends State<UserProvider> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (c) => const SignUpScreenUser(),
+                              builder: (c) => const MainScreen(),
                             ),
                           );
                         },

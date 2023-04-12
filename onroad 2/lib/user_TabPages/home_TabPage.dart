@@ -96,64 +96,64 @@ class _HomeTabPageState extends State<HomeTabPage> {
               locateUserPosition();
             },
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: AnimatedSize(
-              curve: Curves.easeIn,
-              duration: const Duration(milliseconds: 120),
-              child: Container(
-                height: searchLocationContainerHeight,
-                decoration: const BoxDecoration(
-                  color: Colors.black87,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    topLeft: Radius.circular(20),
-                  ),
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-                  child: Column(
-                    children: [
-                      //from
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.add_location_alt_outlined,
-                            color: Colors.grey,
-                          ),
-                          const SizedBox(
-                            width: 12.0,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "From",
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 12),
-                              ),
-                              Text(
-                                Provider.of<AppInfo>(context)
-                                            .userPickupLocation !=
-                                        null
-                                    ? "${(Provider.of<AppInfo>(context).userPickupLocation!.locationName!).substring(0, 24)}..."
-                                    : "not getting address",
-                                style: const TextStyle(
-                                    color: Colors.grey, fontSize: 14),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 0,
+          //   left: 0,
+          //   right: 0,
+          //   child: AnimatedSize(
+          //     curve: Curves.easeIn,
+          //     duration: const Duration(milliseconds: 120),
+          //     child: Container(
+          //       height: searchLocationContainerHeight,
+          //       decoration: const BoxDecoration(
+          //         color: Colors.black87,
+          //         borderRadius: BorderRadius.only(
+          //           topRight: Radius.circular(20),
+          //           topLeft: Radius.circular(20),
+          //         ),
+          //       ),
+          //       child: Padding(
+          //         padding:
+          //             const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+          //         child: Column(
+          //           children: [
+          //             //from
+          //             Row(
+          //               children: [
+          //                 const Icon(
+          //                   Icons.add_location_alt_outlined,
+          //                   color: Colors.grey,
+          //                 ),
+          //                 const SizedBox(
+          //                   width: 12.0,
+          //                 ),
+          //                 Column(
+          //                   crossAxisAlignment: CrossAxisAlignment.start,
+          //                   children: [
+          //                     const Text(
+          //                       "From",
+          //                       style:
+          //                           TextStyle(color: Colors.grey, fontSize: 12),
+          //                     ),
+          //                     Text(
+          //                       Provider.of<AppInfo>(context)
+          //                                   .userPickupLocation !=
+          //                               null
+          //                           ? "${(Provider.of<AppInfo>(context).userPickupLocation!.locationName!).substring(0, 24)}..."
+          //                           : "not getting address",
+          //                       style: const TextStyle(
+          //                           color: Colors.grey, fontSize: 14),
+          //                     ),
+          //                   ],
+          //                 ),
+          //               ],
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

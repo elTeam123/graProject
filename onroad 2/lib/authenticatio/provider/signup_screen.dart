@@ -5,9 +5,8 @@ import 'package:onroad/authenticatio/provider/login_screen_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onroad/global/global.dart';
 import 'package:onroad/global/uplod.dart';
-import 'package:onroad/mainScreens/main_screens.dart';
+import 'package:onroad/mainScreens/mainScreens_provider.dart';
 import 'package:onroad/widgets/progress_dialog.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -32,7 +31,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } else if (!emailController.text.contains("@")) {
       Fluttertoast.showToast(msg: "Email address is not Valid.");
     } else if (phoneController.text.length > 11) {
-      Fluttertoast.showToast(msg: "Phone Number is required.Enter only 11 numbers");
+      Fluttertoast.showToast(
+          msg: "Phone Number is required.Enter only 11 numbers");
     } else if (passwordController.text.length < 6) {
       Fluttertoast.showToast(msg: "Password must be at least 6 Characters.");
     } else if (passwordController.text != confirmpasswordController.text) {
@@ -79,7 +79,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       currentFirebaseUser = firebaseUser;
       Fluttertoast.showToast(msg: "Account has been Created.");
       Navigator.push(
-          context, MaterialPageRoute(builder: (c) => const MainScreen()));
+        context,
+        MaterialPageRoute(
+          builder: (c) => const MainScreenProvider(),
+        ),
+      );
     } else {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "Account has not been Created.");
