@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:onroad/authenticatio/user/otp.dart';
 
 class UserLogin extends StatefulWidget {
   const UserLogin({Key? key}) : super(key: key);
@@ -51,7 +52,7 @@ class _UserLoginState extends State<UserLogin> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (c) => const UserLogin(),
+            builder: (c) => const MyVerify(),
           ),
         );
       },

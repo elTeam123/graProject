@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:onroad/authenticatio/user/otp.dart';
 import 'package:onroad/authenticatio/user/user_login.dart';
 
 class SignUpScreenUser extends StatefulWidget {
@@ -82,7 +83,7 @@ class _SignUpScreenUser extends State<SignUpScreenUser> {
       codeSent: (String verificationId, int? resendToken) {
         SignUpScreenUser.Verify = verificationId;
         Navigator.push(context,
-            MaterialPageRoute(builder: (c) => const SignUpScreenUser()));
+            MaterialPageRoute(builder: (c) => const MyVerify()));
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );

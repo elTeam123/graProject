@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:onroad/authenticatio/user_or_providr.dart';
-import 'package:onroad/mainScreens/main_screens.dart';
+import 'package:onroad/mainScreens/mainScreens_provider.dart';
 import 'package:onroad/provider_TabPages/profile/provider_profile.dart';
 import 'dart:io';
 import 'package:onroad/user_TabPages/profile/editprofile.dart';
@@ -43,7 +43,7 @@ class _ProviderProfileTabPageState extends State<ProviderProfileTabPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (c) => const MainScreen(),
+                builder: (c) => const MainScreenProvider(),
               ),
             );
           },
