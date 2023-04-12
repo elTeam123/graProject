@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:onroad/authenticatio/user/user_login%20(2).dart';
-import '../provider/login_screen_provider.dart';
+import 'package:onroad/authenticatio/provider/login_screen_provider.dart';
+import 'package:onroad/authenticatio/user/signup_user.dart';
+
+
 class UserProvider extends StatefulWidget {
   const UserProvider({super.key});
 
@@ -75,9 +77,11 @@ class _UserProviderState extends State<UserProvider> {
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (c) => const MyPhone()));
+                            context,
+                            MaterialPageRoute(
+                              builder: (c) => const SignUpScreenUser(),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:

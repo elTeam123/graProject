@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onroad/authenticatio/provider/signup_screen.dart';
 import 'package:onroad/global/global.dart';
-import 'package:onroad/mainScreens/main_screens.dart';
-//import 'package:onroad/splashScreen/splash_Screen.dart';
+import 'package:onroad/mainScreens/mainScreens_provider.dart';
 import 'package:onroad/widgets/progress_dialog.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -46,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
     )
             .catchError((msg) {
       Navigator.pop(context);
-      Fluttertoast.showToast(msg: "Error: " + msg.toString());
+      Fluttertoast.showToast(msg: "Error: $msg");
     }))
         .user;
 
@@ -54,7 +55,11 @@ class _LoginScreenState extends State<LoginScreen> {
       currentFirebaseUser = firebaseUser;
       Fluttertoast.showToast(msg: "Login Successful.");
       Navigator.push(
-          context, MaterialPageRoute(builder: (c) => const MainScreen()));
+        context,
+        MaterialPageRoute(
+          builder: (c) => const MainScreenProvider(),
+        ),
+      );
     } else {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "Error Occurred during Login.");
@@ -87,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(
                       height: 15,
                     ),
-                    Container(
+                    SizedBox(
                       height: 55.0,
                       width: 300.0,
                       child: TextFormField(
@@ -125,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(
                       height: 15,
                     ),
-                    Container(
+                    SizedBox(
                       height: 55.0,
                       width: 300.0,
                       child: TextFormField(
@@ -215,9 +220,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextButton(
                           onPressed: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => const SignUpScreen()));
+                              context,
+                              MaterialPageRoute(
+                                builder: (c) => const SignUpScreen(),
+                              ),
+                            );
                           },
                           child: const Text(
                             'SignUp Here',

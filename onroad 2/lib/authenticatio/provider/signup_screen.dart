@@ -9,7 +9,6 @@ import 'package:onroad/mainScreens/main_screens.dart';
 import 'package:onroad/widgets/progress_dialog.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -17,10 +16,7 @@ class SignUpScreen extends StatefulWidget {
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-
-
 class _SignUpScreenState extends State<SignUpScreen> {
-
   var fnameController = TextEditingController();
   var lnameController = TextEditingController();
   var emailController = TextEditingController();
@@ -30,65 +26,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var formKey = GlobalKey<FormState>();
   bool pass = true;
 
-  
-  validateForm()
-  {
-    if(fnameController.text.length < 3)
-    {
+  validateForm() {
+    if (fnameController.text.length < 3) {
       Fluttertoast.showToast(msg: "name must be at least 3 Characters.");
-    }
-    else if(!emailController.text.contains("@"))
-    {
+    } else if (!emailController.text.contains("@")) {
       Fluttertoast.showToast(msg: "Email address is not Valid.");
-    }
-    else if(phoneController.text.isEmpty)
-    {
-      Fluttertoast.showToast(msg: "Phone Number is required.");
-    }
-    else if(passwordController.text.length < 6)
-    {
+    } else if (phoneController.text.length > 11) {
+      Fluttertoast.showToast(msg: "Phone Number is required.Enter only 11 numbers");
+    } else if (passwordController.text.length < 6) {
       Fluttertoast.showToast(msg: "Password must be at least 6 Characters.");
-    }
-
-    else if(passwordController.text != confirmpasswordController.text)
-    {
+    } else if (passwordController.text != confirmpasswordController.text) {
       Fluttertoast.showToast(msg: "Password Do not match");
-    }
-    else
-    {
-       saveDriverInfoNow();
+    } else {
+      saveDriverInfoNow();
     }
   }
 
-
-  saveDriverInfoNow() async
-  {
+  saveDriverInfoNow() async {
     showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (BuildContext c)
-        {
-          return ProgressDialog(message: "Processing, Please wait...",);
-        }
-    );
+        builder: (BuildContext c) {
+          return ProgressDialog(
+            message: "Processing, Please wait...",
+          );
+        });
 
-    final User? firebaseUser = (
-      await fAuth.createUserWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-        
-       
-      ).catchError((msg){
-        Navigator.pop(context);
-        Fluttertoast.showToast(msg: "Error: " + msg.toString());
-      })
-    ).user;
+    final User? firebaseUser = (await fAuth
+            .createUserWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    )
+            .catchError((msg) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Error: " + msg.toString());
+    }))
+        .user;
 
-    if(firebaseUser != null)
-
-    {
-      Map driverMap =
-      {
+    if (firebaseUser != null) {
+      Map driverMap = {
         "id": firebaseUser.uid,
         "fname": fnameController.text.trim(),
         "lname": lnameController.text.trim(),
@@ -96,23 +72,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
         "phone": phoneController.text.trim(),
       };
 
-      DatabaseReference driversRef = FirebaseDatabase.instance.ref().child("provider");
+      DatabaseReference driversRef =
+          FirebaseDatabase.instance.ref().child("provider");
       driversRef.child(firebaseUser.uid).set(driverMap);
 
       currentFirebaseUser = firebaseUser;
       Fluttertoast.showToast(msg: "Account has been Created.");
-      Navigator.push(context, MaterialPageRoute(builder: (c)=> const MainScreen()));
-    }
-    else
-    {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (c) => const MainScreen()));
+    } else {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "Account has not been Created.");
     }
   }
 
-
   @override
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -123,8 +98,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Form(
             key: formKey,
             child: Column(
-              children: 
-              [
+              children: [
                 const Padding(
                   padding: EdgeInsets.only(top: 10),
                   child: Image(
@@ -137,125 +111,114 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const Text(
                   'Application policy',
                   style: TextStyle(
-                      fontFamily: 'Signatra',
-                      fontSize: 40,
+                    fontFamily: 'Signatra',
+                    fontSize: 40,
                   ),
                 ),
                 const SizedBox(
                   height: 3.0,
                 ),
-                 const Text(
+                const Text(
                   'To ensure the safety of users',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                      fontFamily: 'Brand-Regular',
-                      color: Color.fromARGB(255, 146, 143, 143),
+                    fontSize: 15,
+                    fontFamily: 'Brand-Regular',
+                    color: Color.fromARGB(255, 146, 143, 143),
                   ),
                 ),
                 const Text(
                   'Please upload a picture of the card',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                      fontFamily: 'Brand-Regular',
-                       color: Color.fromARGB(255, 146, 143, 143),
+                    fontSize: 15,
+                    fontFamily: 'Brand-Regular',
+                    color: Color.fromARGB(255, 146, 143, 143),
                   ),
                 ),
                 const SizedBox(
                   height: 10.0,
                 ),
                 SingleChildScrollView(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: 
-                        [
-                        SizedBox(
-                         height: 52.0,
-                          width: 145.0,
-                           child: TextFormField(
-                      controller: fnameController,
-                      keyboardType: TextInputType.name,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Name must not be empty';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'First Name',
-                        labelStyle: ( const TextStyle(
-                          fontFamily: 'Brand Bold',
-                          color: Colors.green,
-                        )),
-                        prefixIcon: const Icon(
-                          Icons.person,
-                          color: Colors.green,
-                        ),
-                        border: OutlineInputBorder(
-                      
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide:const BorderSide(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 52.0,
+                        width: 145.0,
+                        child: TextFormField(
+                          controller: fnameController,
+                          keyboardType: TextInputType.name,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Name must not be empty';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'First Name',
+                            labelStyle: (const TextStyle(
+                              fontFamily: 'Brand Bold',
                               color: Colors.green,
-                      
-                            )
-                        ),
-                           focusedBorder:OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide:const BorderSide(
-                                  color: Colors.green,
-                      
-                                )
-                         ),
-                        ),
-                          ),
-                         ),
-                        const SizedBox(
-                            width: 10.0,
-                          ),
-                        SizedBox(
-                         height: 52.0,
-                          width: 145.0,
-                          child: TextFormField(
-                         controller: lnameController,
-                        keyboardType: TextInputType.name,
-                        validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Name must not be empty';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Last Name',
-                        labelStyle: ( const TextStyle(
-                          fontFamily: 'Brand Bold',
-                          color: Colors.green,
-                        )),
-                        prefixIcon: const Icon(
-                          Icons.person,
-                          color: Colors.green,
-                        ),
-                        border: OutlineInputBorder(
-                      
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide:const BorderSide(
+                            )),
+                            prefixIcon: const Icon(
+                              Icons.person,
                               color: Colors.green,
-                      
-                            )
-                        ),
-                           focusedBorder:OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide:const BorderSide(
-                                  color: Colors.green,
-                      
-                                )
                             ),
-                      ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: const BorderSide(
+                                  color: Colors.green,
+                                )),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: const BorderSide(
+                                  color: Colors.green,
+                                )),
                           ),
-                         ),
-                        ],
+                        ),
                       ),
-                    ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      SizedBox(
+                        height: 52.0,
+                        width: 145.0,
+                        child: TextFormField(
+                          controller: lnameController,
+                          keyboardType: TextInputType.name,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Name must not be empty';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Last Name',
+                            labelStyle: (const TextStyle(
+                              fontFamily: 'Brand Bold',
+                              color: Colors.green,
+                            )),
+                            prefixIcon: const Icon(
+                              Icons.person,
+                              color: Colors.green,
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: const BorderSide(
+                                  color: Colors.green,
+                                )),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: const BorderSide(
+                                  color: Colors.green,
+                                )),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(
                   height: 15.0,
                 ),
@@ -282,21 +245,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         color: Colors.green,
                       ),
                       border: OutlineInputBorder(
-          
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:const BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.green,
-          
-                          )
-                      ),
-                      focusedBorder:  OutlineInputBorder(
-          
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide:const BorderSide(
-                                color: Colors.green,
-          
-                              )
-                          ),
+                          )),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            color: Colors.green,
+                          )),
                     ),
                   ),
                 ),
@@ -326,21 +283,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         color: Colors.green,
                       ),
                       border: OutlineInputBorder(
-          
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:const BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.green,
-          
-                          )
-                      ),
-                      focusedBorder:  OutlineInputBorder(
-          
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide:const BorderSide(
-                                color: Colors.green,
-          
-                              )
-                          ),
+                          )),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            color: Colors.green,
+                          )),
                     ),
                   ),
                 ),
@@ -348,7 +299,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 10.0,
                 ),
                 SizedBox(
-                 height: 52.0,
+                  height: 52.0,
                   width: 300.0,
                   child: TextFormField(
                     controller: passwordController,
@@ -382,21 +333,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       border: OutlineInputBorder(
-          
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:const BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.green,
-          
-                          )
-                      ),
-                      focusedBorder:  OutlineInputBorder(
-          
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide:const BorderSide(
-                                color: Colors.green,
-          
-                              )
-                          ),
+                          )),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            color: Colors.green,
+                          )),
                     ),
                   ),
                 ),
@@ -404,7 +349,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 10.0,
                 ),
                 SizedBox(
-                 height: 52.0,
+                  height: 52.0,
                   width: 300.0,
                   child: TextFormField(
                     controller: confirmpasswordController,
@@ -439,16 +384,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:const BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.green,
-                          )
-                         ),
-                             focusedBorder:  OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide:const BorderSide(
-                                color: Colors.green,
-                              )
-                          ),
+                          )),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            color: Colors.green,
+                          )),
                     ),
                   ),
                 ),
@@ -458,28 +401,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(
                   height: 52.0,
                   width: 300,
-                  child: ElevatedButton.icon( 
-                    onPressed: ()
-                    {
+                  child: ElevatedButton.icon(
+                    onPressed: () {
                       uploadImages();
                     },
-                     icon: const Icon(Icons.add_a_photo_outlined),
-                      
-                     label:  const Text(
-                      'Card Image',
+                    icon: const Icon(Icons.add_a_photo_outlined),
+                    label: const Text(
+                      'ID Image',
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w600,
                       ),
-                     ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:Colors.grey[400],
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        elevation: 1,
-                      ),
-                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[400],
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                      elevation: 1,
+                    ),
+                  ),
                 ),
-                  const SizedBox(
+                const SizedBox(
                   height: 15.0,
                 ),
                 Container(
@@ -494,14 +436,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       30.0,
                     ),
                   ),
-                 height: 52.0,
+                  height: 52.0,
                   width: 300.0,
                   child: MaterialButton(
-                    onPressed: () 
-                    {
-          
+                    onPressed: () {
                       validateForm();
-          
                     },
                     child: const Text(
                       'Create Account',
@@ -514,27 +453,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text('Do you have an account ?'),
-                        TextButton(
-                          onPressed: () 
-                          {
-                            Navigator.push(context, MaterialPageRoute(builder: (c)=> LoginScreen()));
-          
-                          },
-                          child: const Text(
-                            'Login Here',
-                            style:TextStyle(
-                              color: Colors.green,
-                            ) ,
-                          ),
-          
-          
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Do you have an account ?'),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (c) => LoginScreen()));
+                      },
+                      child: const Text(
+                        'Login Here',
+                        style: TextStyle(
+                          color: Colors.green,
                         ),
-                      ],
+                      ),
                     ),
+                  ],
+                ),
               ],
             ),
           ),

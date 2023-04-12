@@ -19,6 +19,7 @@ import 'package:path/path.dart';
         await refstorge.putFile(file);
         var url = refstorge.getDownloadURL();
         print("url : $url");
+        return url ;
       //  end
 
      }else

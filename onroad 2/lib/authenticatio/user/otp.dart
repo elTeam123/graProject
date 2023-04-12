@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:onroad/authenticatio/user/user_login%20(2).dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:onroad/authenticatio/user/user_login.dart';
 import 'package:onroad/mainScreens/main_screens.dart';
 import 'package:pinput/pinput.dart';
 
@@ -20,10 +21,10 @@ class _MyVerifyState extends State<MyVerify> {
       width: 56,
       height: 56,
       textStyle: const TextStyle(
-          fontSize: 20,
-          color: Color.fromRGBO(30, 60, 87, 1),
+      fontSize: 20,
+       color: Color.fromRGBO(30, 60, 87, 1),
           fontWeight: FontWeight.w600),
-      decoration: BoxDecoration(
+        decoration: BoxDecoration(
         border: Border.all(color: const Color.fromRGBO(234, 239, 243, 1)),
         borderRadius: BorderRadius.circular(20),
       ),
@@ -63,7 +64,8 @@ class _MyVerifyState extends State<MyVerify> {
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children:
+            [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Image.asset('images/x.png'),
@@ -119,17 +121,16 @@ class _MyVerifyState extends State<MyVerify> {
                   onPressed: () async {
                     try {
                       PhoneAuthCredential credential =
-                          PhoneAuthProvider.credential(
-                              verificationId: MyPhone.Verify, smsCode: code);
+                      PhoneAuthProvider.credential(
+                         verificationId: UserLogin.Verify, smsCode: code);
 
                       // Sign the user in (or link) with the credential
                       await auth.signInWithCredential(credential);
                       // ignore: use_build_context_synchronously
                       Navigator.push(context,
                           MaterialPageRoute(builder: (c) => const MainScreen()));
-                    } catch (e) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(e.toString())));
+                    } on FirebaseAuthException catch (e) {
+                      Fluttertoast.showToast(msg: "Error: ${e.message}");
                     }
                   },
                   child: const Text(
@@ -146,7 +147,7 @@ class _MyVerifyState extends State<MyVerify> {
                   TextButton(
                       onPressed: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (c) => const MyPhone()));
+                            MaterialPageRoute(builder: (c) => const UserLogin()));
                       },
                       child: const Text(
                         "Edit Phone Number ?",

@@ -1,31 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:onroad/authenticatio/user/otp.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
-class MyPhone extends StatefulWidget {
-  const MyPhone({Key? key}) : super(key: key);
+class UserLogin extends StatefulWidget {
+  const UserLogin({Key? key}) : super(key: key);
 
   static String Verify = '';
 
   @override
-  State<MyPhone> createState() => _MyPhoneState();
+  State<UserLogin> createState() => _UserLoginState();
 }
 
-class _MyPhoneState extends State<MyPhone> {
+class _UserLoginState extends State<UserLogin> {
   TextEditingController countryController = TextEditingController();
   var phone = '';
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    countryController.text = "+2";
-    super.initState();
-  }
-
-
   void showProgressIndicator(BuildContext context) {
-    AlertDialog alertDialog = AlertDialog(
+    AlertDialog alertDialog = const AlertDialog(
       backgroundColor: Colors.transparent,
       elevation: 0,
       content: Center(
@@ -43,6 +35,29 @@ class _MyPhoneState extends State<MyPhone> {
         return alertDialog;
       },
     );
+  }
+
+  Future<void> _submitPhoneNumber() async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: '+20${countryController.text + phone}',
+      verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {
+        FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+      },
+      verificationFailed: (FirebaseAuthException authException) {
+        Fluttertoast.showToast(msg: "Error: ${authException.message}");
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        UserLogin.Verify = verificationId;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (c) => const UserLogin(),
+          ),
+        );
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+    showProgressIndicator(context);
   }
 
   @override
@@ -74,7 +89,7 @@ class _MyPhoneState extends State<MyPhone> {
                 child: Image.asset('images/phonenumber.png'),
               ),
               const SizedBox(
-                height: 40,
+                height: 30,
               ),
               const Text(
                 "Phone Verification",
@@ -97,46 +112,34 @@ class _MyPhoneState extends State<MyPhone> {
               const SizedBox(
                 height: 30,
               ),
-              Container(
-                height: 55,
-                decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: Colors.grey),
-                    borderRadius: BorderRadius.circular(30)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      width: 10,
+              SizedBox(
+                height: 75.0,
+                width: 300.0,
+                child: IntlPhoneField(
+                  initialCountryCode: 'EG',
+                  controller: countryController,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    labelText: 'Phone',
+                    labelStyle: (const TextStyle(
+                      fontFamily: 'Brand Bold',
+                      color: Colors.green,
+                    )),
+                    prefixIcon: const Icon(
+                      Icons.phone,
+                      color: Colors.green,
                     ),
-                    SizedBox(
-                      width: 40,
-                      child: TextField(
-                        controller: countryController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    const Text(
-                      "|",
-                      style: TextStyle(fontSize: 33, color: Colors.grey),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                        child: TextField(
-                          onChanged: (value) {
-                            phone = value;
-                          },
-                          keyboardType: TextInputType.phone,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Phone",
-                          ),
-                        ))
-                  ],
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide(
+                          color: Colors.green,
+                        )),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide(
+                          color: Colors.green,
+                        )),
+                  ),
                 ),
               ),
               const SizedBox(
@@ -151,27 +154,8 @@ class _MyPhoneState extends State<MyPhone> {
                       elevation: 4,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30))),
-                  onPressed: () async {
-                    await FirebaseAuth.instance.verifyPhoneNumber(
-                      phoneNumber: '${countryController.text + phone}',
-                      verificationCompleted:
-                          (PhoneAuthCredential phoneAuthCredential) {
-                        FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
-                      },
-                      verificationFailed: (FirebaseAuthException authException) {
-                        Fluttertoast.showToast(msg: "Error: ${authException.message}");
-                      },
-                      codeSent: (String verificationId, int? resendToken) {
-                        MyPhone.Verify = verificationId;
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (c) => const MyVerify()));
-
-                      },
-                      codeAutoRetrievalTimeout: (String verificationId) {},
-                    );
-                    showProgressIndicator(context);
+                  onPressed: () {
+                    _submitPhoneNumber();
                   },
                   child: const Text(
                     "Send the code",

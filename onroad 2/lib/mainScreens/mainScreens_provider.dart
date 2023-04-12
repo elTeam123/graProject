@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:onroad/tabPages/Home_TabPage.dart';
-import 'package:onroad/tabPages/Ratings_TabPage.dart';
-import 'package:onroad/tabPages/profile/profile_TabPage.dart';
-import 'package:onroad/tabPages/ratings_TabPage.dart';
-import 'package:onroad/tabPages/services_TabPage.dart';
+import 'package:onroad/provider_TabPages/notifications_TabPage.dart';
+import 'package:onroad/provider_TabPages/profile/provider_tabpage.dart';
+import 'package:onroad/provider_TabPages/provider_hometabpage.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class MainScreenProvider extends StatefulWidget {
+  const MainScreenProvider({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<MainScreenProvider> createState() => _MainScreenProviderState();
 }
 
-class _MainScreenState extends State<MainScreen>
+class _MainScreenProviderState extends State<MainScreenProvider>
     with SingleTickerProviderStateMixin {
   TabController? tabController;
   int selectedIndex = 0;
@@ -29,7 +27,7 @@ class _MainScreenState extends State<MainScreen>
   void initState() {
     super.initState();
 
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -39,9 +37,9 @@ class _MainScreenState extends State<MainScreen>
         physics: const NeverScrollableScrollPhysics(),
         controller: tabController,
         children: const [
-          HomeTabPage(),
-          ProfileTabPage(),
-          ServicesTabPage(),
+          ProviderHomeTabPage(),
+          Notifications(),
+          ProviderProfileTabPage(),
         ],
       ),
       bottomNavigationBar: Container(
@@ -65,8 +63,8 @@ class _MainScreenState extends State<MainScreen>
                 text: 'Home',
               ),
               GButton(
-                icon: Icons.miscellaneous_services_rounded,
-                text: 'Services',
+                icon: Icons.notifications,
+                text: 'Notifications',
               ),
 
               GButton(

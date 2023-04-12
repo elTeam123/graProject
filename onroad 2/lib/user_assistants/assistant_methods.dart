@@ -1,9 +1,9 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:onroad/assistants/request_assistants.dart';
-import 'package:onroad/infoHnadler/app_info.dart';
-import 'package:onroad/infoHnadler/directions.dart';
+import 'package:onroad/global/mab_Key.dart';
+import 'package:onroad/user_assistants/request_assistants.dart';
+import 'package:onroad/user_infoHnadler/app_info.dart';
+import 'package:onroad/user_infoHnadler/directions.dart';
 import 'package:provider/provider.dart';
-import '../global/mab_Key.dart';
 
 class AssistantMethods {
   static Future<String> searchAddressForGeographicCoDrdinates(
@@ -18,7 +18,7 @@ class AssistantMethods {
       userPickupAddress.locationLatitude = position.latitude;
       userPickupAddress.locationLatitude = position.longitude;
       userPickupAddress.locationName = humanReadableAddress;
-      Provider.of<AppInfo>(context).updatePickUpLocationAddress(userPickupAddress);
+      Provider.of<AppInfo>(context,listen: false).updatePickUpLocationAddress(userPickupAddress);
     }
     return humanReadableAddress;
   }

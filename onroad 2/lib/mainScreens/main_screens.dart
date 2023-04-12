@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:onroad/tabPages/Home_TabPage.dart';
-import 'package:onroad/tabPages/profile/profile_TabPage.dart';
-import 'package:onroad/tabPages/ratings_TabPage.dart';
+import 'package:onroad/user_TabPages/home_TabPage.dart';
+import 'package:onroad/user_TabPages/profile/profile_TabPage.dart';
+import 'package:onroad/user_TabPages/services_TabPage.dart';
 
 
 class MainScreen extends StatefulWidget {
@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen>
   void initState() {
     super.initState();
 
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -39,7 +39,7 @@ class _MainScreenState extends State<MainScreen>
         controller: tabController,
         children: const [
           HomeTabPage(),
-          Notifications(),
+          ServicesTabPage(),
           ProfileTabPage(),
         ],
       ),
@@ -63,11 +63,12 @@ class _MainScreenState extends State<MainScreen>
                 icon: Icons.home,
                 text: 'Home',
               ),
-
               GButton(
-                icon: Icons.notifications,
-                text: 'Notifications',
+                icon: Icons.miscellaneous_services_rounded,
+                text: 'Services',
               ),
+
+
               GButton(
                 icon: Icons.person_rounded,
                 text: 'Profile',
