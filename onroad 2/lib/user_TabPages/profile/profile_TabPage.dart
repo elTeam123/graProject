@@ -74,58 +74,60 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          const Info(),
-          const SizedBox(
-            height: 50.0,
-          ),
-          ProfileMenuWidget(
-            title: 'Settings',
-            icon: Icons.settings,
-            textColor: Colors.black,
-            endIcon: true,
-            onPress: () {},
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          ProfileMenuWidget(
-            title: 'Update',
-            icon: Icons.update,
-            textColor: Colors.black,
-            endIcon: true,
-            onPress: () {},
-          ),
-          const SizedBox(
-            height: 20.0,
-          ),
-          ProfileMenuWidget(
-            title: 'Information',
-            icon: Icons.info_rounded,
-            textColor: Colors.black,
-            endIcon: true,
-            onPress: () {},
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          ProfileMenuWidget(
-            title: 'Logout',
-            icon: Icons.logout,
-            textColor: Colors.red,
-            endIcon: false,
-            onPress: () {
-              _mAuth.signOut();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  const UserProvider(),
-                ),
-              );
-            },
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Info(),
+            const SizedBox(
+              height: 50.0,
+            ),
+            ProfileMenuWidget(
+              title: 'Settings',
+              icon: Icons.settings,
+              textColor: Colors.black,
+              endIcon: true,
+              onPress: () {},
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ProfileMenuWidget(
+              title: 'Update',
+              icon: Icons.update,
+              textColor: Colors.black,
+              endIcon: true,
+              onPress: () {},
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            ProfileMenuWidget(
+              title: 'Information',
+              icon: Icons.info_rounded,
+              textColor: Colors.black,
+              endIcon: true,
+              onPress: () {},
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ProfileMenuWidget(
+              title: 'Logout',
+              icon: Icons.logout,
+              textColor: Colors.red,
+              endIcon: false,
+              onPress: () {
+                _mAuth.signOut();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  const UserProvider(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
