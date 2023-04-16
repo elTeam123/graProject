@@ -12,6 +12,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfile extends State<EditProfile> {
+
   final _formKey = GlobalKey<FormState>();
   final _fullNameController = TextEditingController();
   final _phoneNumberController = TextEditingController();
@@ -97,7 +98,8 @@ class _EditProfile extends State<EditProfile> {
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                children:
+                [
                   ClipPath(
                     clipper: CustomShape(),
                     child: Container(
@@ -113,6 +115,7 @@ class _EditProfile extends State<EditProfile> {
                     width: 300.0,
                     child: TextFormField(
                       controller: _fullNameController,
+                      textInputAction: TextInputAction.go,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Full Name must not be empty';
@@ -152,6 +155,7 @@ class _EditProfile extends State<EditProfile> {
                     width: 300.0,
                     child: TextFormField(
                       controller: _phoneNumberController,
+                      textInputAction: TextInputAction.go,
                       keyboardType: TextInputType.phone,
                       validator: (value) {
                         if (value!.isEmpty) {

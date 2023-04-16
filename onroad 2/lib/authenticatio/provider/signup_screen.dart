@@ -154,6 +154,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: 145.0,
                         child: TextFormField(
                           controller: fnameController,
+                          textInputAction: TextInputAction.go,
                           keyboardType: TextInputType.name,
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -192,6 +193,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: 145.0,
                         child: TextFormField(
                           controller: lnameController,
+                          textInputAction: TextInputAction.go,
                           keyboardType: TextInputType.name,
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -233,6 +235,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   width: 300.0,
                   child: TextFormField(
                     controller: emailController,
+                    textInputAction: TextInputAction.go,
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -271,6 +274,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   width: 300.0,
                   child: TextFormField(
                     controller: phoneController,
+                    textInputAction: TextInputAction.go,
                     keyboardType: TextInputType.phone,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -309,6 +313,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   width: 300.0,
                   child: TextFormField(
                     controller: passwordController,
+                    textInputAction: TextInputAction.go,
                     keyboardType: TextInputType.visiblePassword,
                     obscureText: pass,
                     validator: (value) {
@@ -359,6 +364,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   width: 300.0,
                   child: TextFormField(
                     controller: confirmpasswordController,
+                    textInputAction: TextInputAction.go,
                     keyboardType: TextInputType.visiblePassword,
                     obscureText: pass,
                     validator: (value) {

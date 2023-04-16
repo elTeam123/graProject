@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Info extends StatefulWidget {
   const Info({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class Info extends StatefulWidget {
 }
 
 class _InfoState extends State<Info> {
+
   File? _image;
   String? _imageUrl;
   bool camera = true;
@@ -37,12 +40,28 @@ class _InfoState extends State<Info> {
         FirebaseStorage.instance.ref().child('images/${DateTime.now()}.jpg');
     await ref.putFile(_image!);
     final url = await ref.getDownloadURL();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('image_url', url);
     setState(() {
       _imageUrl = url;
     });
     final dbRef = FirebaseDatabase.instance.ref().child('images');
     dbRef.push().set({
       'imageUrl': _imageUrl,
+    });
+  }
+
+  @override
+
+  void initState() {
+    super.initState();
+    _loadImageUrl();
+  }
+
+  Future<void> _loadImageUrl() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _imageUrl = prefs.getString('image_url');
     });
   }
 
@@ -62,8 +81,7 @@ class _InfoState extends State<Info> {
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
-              children:
-              [
+              children: [
                 Stack(
                   children: [
                     Container(
@@ -78,8 +96,9 @@ class _InfoState extends State<Info> {
                         ),
                       ),
                       child: CircleAvatar(
-                        backgroundImage:
-                            _image == null ? null : FileImage(_image!),
+                        backgroundImage: _imageUrl != null
+                            ? CachedNetworkImageProvider(_imageUrl!)
+                            : null,
                       ),
                     ),
                     Positioned(
@@ -130,6 +149,18 @@ class _InfoState extends State<Info> {
                     fontSize: 20.0,
                     fontFamily: 'Brand Bold',
                     fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                const Text(
+                  'Phone',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    fontFamily: 'Brand Bold',
+                    fontWeight: FontWeight.w200,
                     color: Colors.black,
                   ),
                 ),

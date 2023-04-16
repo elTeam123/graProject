@@ -99,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: 300.0,
                       child: TextFormField(
                         controller: emailController,
+                        textInputAction: TextInputAction.go,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Email must not be empty';
@@ -137,6 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: 300.0,
                       child: TextFormField(
                         controller: passwordController,
+                        textInputAction: TextInputAction.go,
                         keyboardType: TextInputType.visiblePassword,
                         obscureText: pass,
                         validator: (value) {
@@ -185,12 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: const Color.fromARGB(
-                          255,
-                          79,
-                          115,
-                          17,
-                        ),
+                        color: const Color.fromARGB(255, 79, 115, 17),
                         borderRadius: BorderRadius.circular(
                           30.0,
                         ),

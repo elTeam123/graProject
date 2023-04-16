@@ -4,7 +4,6 @@ import 'package:onroad/user_TabPages/home_TabPage.dart';
 import 'package:onroad/user_TabPages/profile/profile_TabPage.dart';
 import 'package:onroad/user_TabPages/services_TabPage.dart';
 
-
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -67,8 +66,6 @@ class _MainScreenState extends State<MainScreen>
                 icon: Icons.miscellaneous_services_rounded,
                 text: 'Services',
               ),
-
-
               GButton(
                 icon: Icons.person_rounded,
                 text: 'Profile',
