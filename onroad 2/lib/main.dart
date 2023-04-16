@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:onroad/provider_InfoHnadler/providerApp_info.dart';
-import 'package:onroad/splashScreen/splash_Screen.dart';
+import 'package:onroad/provider_InfoHnadler/providerapp_info.dart';
+import 'package:onroad/splashScreen/splash_screen.dart';
 import 'package:onroad/user_infoHnadler/app_info.dart';
 import 'package:provider/provider.dart';
 

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -32,7 +33,9 @@ class ImageUploader {
 
       return {'name': nameimage, 'url': url};
     } else {
-      print('Please choose image');
+      if (kDebugMode) {
+        print('Please choose image');
+      }
       return null;
     }
   }

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +61,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     )
             .catchError((msg) {
       Navigator.pop(context);
-      Fluttertoast.showToast(msg: "Error: " + msg.toString());
+      Fluttertoast.showToast(msg: "Error: $msg");
     }))
         .user;
 
@@ -464,7 +466,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     TextButton(
                       onPressed: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (c) => LoginScreen()));
+                            MaterialPageRoute(builder: (c) => const LoginScreen()));
                       },
                       child: const Text(
                         'Login Here',

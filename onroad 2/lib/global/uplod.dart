@@ -1,6 +1,7 @@
    
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
@@ -18,14 +19,18 @@ import 'package:path/path.dart';
         var refstorge = FirebaseStorage.instance.ref("images/$nameimage");
         await refstorge.putFile(file);
         var url = refstorge.getDownloadURL();
-        print("url : $url");
+        if (kDebugMode) {
+          print("url : $url");
+        }
         return url ;
       //  end
 
      }else
      {
 
-      print('Please choose image');
+      if (kDebugMode) {
+        print('Please choose image');
+      }
      }
    
    }
