@@ -73,7 +73,7 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
               );
             },
             child: Text(
-              'Edit',
+              'Ahmed',
               style: TextStyle(
                 fontSize: 20.0,
                 fontFamily: 'Brand Bold',
