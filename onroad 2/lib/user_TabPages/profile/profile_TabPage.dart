@@ -87,7 +87,7 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
       body: Column(
         children: [
           Info(
-            name: 'Ahmed Reda',
+            name: 'User Name',
             image: _imageFile != null ? FileImage(_imageFile!) : null,
             Camera: false,
             onPress: _getImage,
