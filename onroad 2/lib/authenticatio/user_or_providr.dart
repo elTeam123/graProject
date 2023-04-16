@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:onroad/authenticatio/provider/login_screen_provider.dart';
-import 'package:onroad/authenticatio/user/signup_user.dart';
 import 'package:onroad/mainScreens/main_screens.dart';
 
 
@@ -111,7 +110,7 @@ class _UserProviderState extends State<UserProvider> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (c) => LoginScreen(),
+                              builder: (c) => const LoginScreen(),
                             ),
                           );
                         },

@@ -1,19 +1,51 @@
-// ignore_for_file: non_constant_identifier_names, prefer_typing_uninitialized_variables, must_be_immutable
-
+import 'dart:io';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class Info extends StatelessWidget {
-  Info({
-    super.key,
-    required this.name,
-    required this.image,
-    this.Camera = true,
-    required this.onPress,
-  });
-  var image;
-  final String name;
-  final bool Camera;
-  final VoidCallback onPress;
+class Info extends StatefulWidget {
+  const Info({Key? key}) : super(key: key);
+
+  @override
+  State<Info> createState() => _InfoState();
+}
+
+class _InfoState extends State<Info> {
+  File? _image;
+  String? _imageUrl;
+  bool camera = true;
+
+
+  Future<void> _getImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedImage != null) {
+      setState(() {
+        _image = File(pickedImage.path);
+      });
+    }
+  }
+
+  Future<void> _uploadImage() async {
+    if (_image == null) {
+      return;
+    }
+    final ref =
+        FirebaseStorage.instance.ref().child('images/${DateTime.now()}.jpg');
+    await ref.putFile(_image!);
+    final url = await ref.getDownloadURL();
+    setState(() {
+      _imageUrl = url;
+    });
+    final dbRef = FirebaseDatabase.instance.ref().child('images');
+    dbRef.push().set({
+      'imageUrl': _imageUrl,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -30,7 +62,8 @@ class Info extends StatelessWidget {
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
+              children:
+              [
                 Stack(
                   children: [
                     Container(
@@ -45,34 +78,55 @@ class Info extends StatelessWidget {
                         ),
                       ),
                       child: CircleAvatar(
-                        backgroundImage: image,
+                        backgroundImage:
+                            _image == null ? null : FileImage(_image!),
                       ),
                     ),
                     Positioned(
                       bottom: 0.0,
                       right: 0.0,
                       child: Container(
-                          height: 40.0,
-                          width: 45.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          child: Camera
-                              ? MaterialButton(
-                                  onPressed: onPress,
-                                  child: const Icon(
-                                    Icons.add_a_photo,
-                                    color: Colors.black,
-                                    size: 30,
-                                  ),
-                                )
-                              : null),
+                        height: 40.0,
+                        width: 45.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        child: camera
+                            ? MaterialButton(
+                                onPressed: () {
+                                  _getImage().then((value) => {
+                                        setState(() {
+                                          camera = false;
+                                        })
+                                      });
+                                },
+                                child: const Icon(
+                                  Icons.add_a_photo,
+                                  color: Colors.black,
+                                  size: 30,
+                                ),
+                              )
+                            : MaterialButton(
+                                onPressed: () {
+                                  _uploadImage().then((value) => {
+                                        setState(() {
+                                          camera = true;
+                                        })
+                                      });
+                                },
+                                child: const Icon(
+                                  Icons.check,
+                                  color: Colors.black,
+                                  size: 30,
+                                ),
+                              ),
+                      ),
                     ),
                   ],
                 ),
-                Text(
-                  name,
-                  style: const TextStyle(
+                const Text(
+                  'full_name',
+                  style: TextStyle(
                     fontSize: 20.0,
                     fontFamily: 'Brand Bold',
                     fontWeight: FontWeight.w500,

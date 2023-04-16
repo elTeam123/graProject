@@ -1,10 +1,9 @@
-import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:onroad/user_TabPages/profile/profile_TabPage.dart';
-import 'package:onroad/user_TabPages/profile/profile_body.dart';
+// ignore_for_file: use_build_context_synchronously
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:onroad/user_TabPages/profile/profile_TabPage.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -14,32 +13,56 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfile extends State<EditProfile> {
-  var formKey = GlobalKey<FormState>();
-  bool pass = true;
-  File? _imageFile;
+  final _formKey = GlobalKey<FormState>();
+  final _fullNameController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
 
-
-  var nameController = TextEditingController();
-  var phoneController = TextEditingController();
-
-  Future<void> _getImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    setState(() {
-      _imageFile = File(pickedFile!.path);
-    });
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
   }
 
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _phoneNumberController.dispose();
+    super.dispose();
+  }
 
-  saveChange(){
-    if (kDebugMode) {
-      print(nameController.value.text);
-    }
-    if (kDebugMode) {
-      print(phoneController.value.text);
+  Future<void> _loadUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userData = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      setState(() {
+        _fullNameController.text = userData['full_name'] ?? '';
+        _phoneNumberController.text = userData['phone_number'] ?? '';
+      });
     }
   }
 
+  Future<void> _updateUserData() async {
+    if (_formKey.currentState!.validate()) {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .update({
+          'full_name': _fullNameController.text,
+          'phone_number': _phoneNumberController.text,
+        });
+        final scaffoldMessenger = ScaffoldMessenger.of(context);
+        scaffoldMessenger.showSnackBar(
+          const SnackBar(content: Text('Profile updated successfully')),
+        );
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,12 +76,7 @@ class _EditProfile extends State<EditProfile> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (c) => const ProfileTabPage(),
-              ),
-            );
+            Navigator.pop(context);
           },
         ),
         title: Text(
@@ -77,14 +95,16 @@ class _EditProfile extends State<EditProfile> {
           width: double.infinity,
           child: SingleChildScrollView(
             child: Form(
-              key: formKey,
+              key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Info(
-                    name: 'Ahmed Reda',
-                    onPress: _getImage,
-                    image: _imageFile != null ? FileImage(_imageFile!) : null,
+                  ClipPath(
+                    clipper: CustomShape(),
+                    child: Container(
+                      color: Colors.green,
+                      height: 200.0,
+                    ),
                   ),
                   const SizedBox(
                     height: 30.0,
@@ -93,7 +113,7 @@ class _EditProfile extends State<EditProfile> {
                     height: 55.0,
                     width: 300.0,
                     child: TextFormField(
-                      controller: nameController,
+                      controller: _fullNameController,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Full Name must not be empty';
@@ -132,7 +152,7 @@ class _EditProfile extends State<EditProfile> {
                     height: 55.0,
                     width: 300.0,
                     child: TextFormField(
-                      controller: phoneController,
+                      controller: _phoneNumberController,
                       keyboardType: TextInputType.phone,
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -209,7 +229,7 @@ class _EditProfile extends State<EditProfile> {
                         height: 50.0,
                         child: MaterialButton(
                           onPressed: () {
-                            saveChange();
+                            _updateUserData;
                           },
                           child: const Text(
                             'Save',
@@ -233,4 +253,26 @@ class _EditProfile extends State<EditProfile> {
   }
 }
 
+class CustomShape extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    double height = size.height;
+    double width = size.width;
+    path.lineTo(0, height - 100);
+    path.quadraticBezierTo(
+      width / 2,
+      height,
+      width,
+      height - 100,
+    );
+    path.lineTo(width, 0);
+    path.close();
+    return path;
+  }
 
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return true;
+  }
+}
