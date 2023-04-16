@@ -322,7 +322,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                                     width: 10,
                                   ),
                                   Text(
-                                    'Mohamed Salah',
+                                    ' Salah',
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontFamily: 'Brand Bold',
@@ -419,6 +419,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                       const SizedBox(
                         height: 20,
                       ),
+
                       Padding(
                         padding: const EdgeInsets.only(left: 20),
                         child: Row(
