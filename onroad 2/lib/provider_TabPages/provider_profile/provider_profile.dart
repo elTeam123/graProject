@@ -1,25 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:onroad/authenticatio/user_or_providr.dart';
-import 'package:onroad/mainScreens/main_screens.dart';
-import 'package:onroad/user_TabPages/profile/editprofile.dart';
+import 'package:onroad/mainScreens/mainScreens_provider.dart';
+import 'package:onroad/provider_TabPages/provider_profile/provider_editprofile.dart';
 import 'package:onroad/user_TabPages/profile/profile.dart';
 import 'package:onroad/user_TabPages/profile/profile_body.dart';
 
+class ProviderProfileTabPage extends StatefulWidget {
+  const ProviderProfileTabPage({super.key});
 
-class ProfileTabPage extends StatefulWidget {
-  const ProfileTabPage({super.key});
 
   @override
-  State<ProfileTabPage> createState() => _ProfileTabPageState();
+  State<ProviderProfileTabPage> createState() => _ProviderProfileTabPageState();
 }
 
-class _ProfileTabPageState extends State<ProfileTabPage> {
+class _ProviderProfileTabPageState extends State<ProviderProfileTabPage> {
+
   String? name;
-  String? image;
-
   final _mAuth = FirebaseAuth.instance;
-
 
 
   @override
@@ -33,7 +31,7 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>  const MainScreen(),
+                builder: (context) =>  const MainScreenProvider(),
               ),
             );
           },
@@ -58,12 +56,12 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (c) => const EditProfile(),
+                  builder: (c) => const ProviderEditProfile(),
                 ),
               );
             },
             child: Text(
-              'Ahmed',
+              'Edit',
               style: TextStyle(
                 fontSize: 20.0,
                 fontFamily: 'Brand Bold',
@@ -120,7 +118,7 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>  const UserProvider(),
+                  builder: (context) =>   const UserProvider(),
                 ),
               );
             },
