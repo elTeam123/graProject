@@ -10,8 +10,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:onroad/Models/activate_nearbyavailabledrivers.dart';
 import 'package:onroad/user_assistants/assistant_methods.dart';
 import 'package:onroad/user_assistants/geofire_assistant.dart';
-import 'package:onroad/user_infoHnadler/app_info.dart';
-import 'package:provider/provider.dart';
 
 class HomeTabPage extends StatefulWidget {
   const HomeTabPage({super.key});
@@ -164,14 +162,13 @@ class _HomeTabPageState extends State<HomeTabPage> {
     Geofire.queryAtLocation(
       userCurrentPosition!.latitude,
       userCurrentPosition!.longitude,
-      5, ///////Kilo meters////
+      10,
     )!
         .listen(
       (map) {
         if (kDebugMode) {
           print(map);
         }
-
         if (map != null) {
           var callBack = map['callBack'];
 
@@ -183,7 +180,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
             case Geofire.onKeyEntered:
               ActivateNearbyAvailableProvider activateNearbyAvailableProvider =
                   ActivateNearbyAvailableProvider();
-              activateNearbyAvailableProvider.locationLongitude =
+              activateNearbyAvailableProvider.locationLatitude =
                   map['latitude'];
               activateNearbyAvailableProvider.locationLongitude =
                   map['longitude'];
@@ -204,7 +201,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
             case Geofire.onKeyMoved:
               ActivateNearbyAvailableProvider activateNearbyAvailableProvider =
                   ActivateNearbyAvailableProvider();
-              activateNearbyAvailableProvider.locationLongitude =
+              activateNearbyAvailableProvider.locationLatitude =
                   map['latitude'];
               activateNearbyAvailableProvider.locationLongitude =
                   map['longitude'];
