@@ -51,9 +51,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(
           255,
-          1,
-          103,
-          10,
+          79,
+          115,
+          17,
         ),
         elevation: 0,
       ),
@@ -95,18 +95,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     fontFamily: 'Brand Bold',
                     color: Color.fromARGB(
                       255,
-                      1,
-                      103,
-                      10,
+                      79,
+                      115,
+                      17,
                     ),
                   )),
                   prefixIcon: const Icon(
                     Icons.email,
                     color: Color.fromARGB(
                       255,
-                      1,
-                      103,
-                      10,
+                      79,
+                      115,
+                      17,
                     ),
                   ),
                   border: OutlineInputBorder(
@@ -114,9 +114,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       borderSide: const BorderSide(
                         color: Color.fromARGB(
                           255,
-                          1,
-                          103,
-                          10,
+                          79,
+                          115,
+                          17,
                         ),
                       )),
                   focusedBorder: OutlineInputBorder(
@@ -124,9 +124,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       borderSide: const BorderSide(
                         color: Color.fromARGB(
                           255,
-                          1,
-                          103,
-                          10,
+                          79,
+                          115,
+                          17,
                         ),
                       )),
                 ),
@@ -139,9 +139,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               decoration: BoxDecoration(
                 color: const Color.fromARGB(
                   255,
-                  1,
-                  103,
-                  10,
+                  79,
+                  115,
+                  17,
                 ),
                 borderRadius: BorderRadius.circular(
                   30.0,

@@ -31,7 +31,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                   child: Column(
                     children: [
                       Image.asset(
-                        'images/line.jpg',
+                        'images/line.png',
                         height: 45,
                         color: Colors.grey,
                       ),
@@ -53,7 +53,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                                 child: Image(
                                   height: 60,
                                   image: AssetImage(
-                                    'images/11.jpg',
+                                    'images/11.png',
                                   ),
                                 ),
                               ),
@@ -93,7 +93,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                                   height: 60,
 // width: double.infinity,
                                   image: AssetImage(
-                                    'images/12.jpg',
+                                    'images/12.png',
                                   ),
                                 ),
                               ),
@@ -133,7 +133,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                                   height: 60,
 // width: double.infinity,
                                   image: AssetImage(
-                                    'images/13.jpg',
+                                    'images/13.png',
                                   ),
                                 ),
                               ),
@@ -173,7 +173,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                                   height: 60,
 // width: double.infinity,
                                   image: AssetImage(
-                                    'images/10.jpg',
+                                    'images/10.png',
                                   ),
                                 ),
                               ),
