@@ -35,7 +35,7 @@ class _UserProviderState extends State<UserProvider> {
                 const Padding(
                   padding: EdgeInsets.only(left: 20.0),
                   child: Text(
-                    'Welcom to',
+                    'Welcome to',
                     style: TextStyle(
                       fontSize: 40.0,
                       fontFamily: 'Brand Bold',

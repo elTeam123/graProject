@@ -8,6 +8,8 @@ import 'package:onroad/global/global.dart';
 import 'package:onroad/mainScreens/mainScreens_provider.dart';
 import 'package:onroad/widgets/progress_dialog.dart';
 
+import 'forgot_password.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -183,7 +185,35 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 15,
+                      height: 3,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children:  [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (c) => const ForgotPasswordPage(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                                'Forgot Password?',
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 3,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -226,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             );
                           },
                           child: const Text(
-                            'SignUp Here',
+                            'SignUp ',
                             style: TextStyle(
                               color: Colors.green,
                             ),

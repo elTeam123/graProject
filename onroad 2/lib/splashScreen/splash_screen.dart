@@ -54,7 +54,7 @@ class _MySplasScreenState extends State<MySplasScreen> {
                 Image(
                   height: 400,
                   image: AssetImage(
-                    'images/logo.png',
+                    'images/onroad.png',
                   ),
                 ),
               ],
