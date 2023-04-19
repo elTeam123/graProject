@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:onroad/user_TabPages/home_TabPage.dart';
-import 'package:onroad/user_TabPages/profile/profile_TabPage.dart';
 import 'package:onroad/user_TabPages/services_TabPage.dart';
+import 'package:onroad/user_TabPages/user_profile/user_profile.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

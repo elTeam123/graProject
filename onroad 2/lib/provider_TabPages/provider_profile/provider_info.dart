@@ -1,24 +1,27 @@
+
 import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:onroad/global/global.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Info extends StatefulWidget {
-  const Info({Key? key}) : super(key: key);
+class ProviderInfo extends StatefulWidget {
+  const ProviderInfo({super.key});
 
   @override
-  State<Info> createState() => _InfoState();
+  State<ProviderInfo> createState() => _ProviderInfoState();
 }
 
-class _InfoState extends State<Info> {
-
+class _ProviderInfoState extends State<ProviderInfo> {
   File? _image;
   String? _imageUrl;
   bool camera = true;
-
 
   Future<void> _getImage() async {
     final picker = ImagePicker();
@@ -36,8 +39,7 @@ class _InfoState extends State<Info> {
     if (_image == null) {
       return;
     }
-    final ref =
-        FirebaseStorage.instance.ref().child('images/${DateTime.now()}.jpg');
+    final ref = FirebaseStorage.instance.ref().child('images/$DateTime.jpg');
     await ref.putFile(_image!);
     final url = await ref.getDownloadURL();
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -45,14 +47,17 @@ class _InfoState extends State<Info> {
     setState(() {
       _imageUrl = url;
     });
-    final dbRef = FirebaseDatabase.instance.ref().child('images');
-    dbRef.push().set({
-      'imageUrl': _imageUrl,
-    });
+    DatabaseReference dbRef = FirebaseDatabase.instance
+        .ref()
+        .child('provider')
+        .child(currentFirebaseUser!.uid)
+        .child('Image');
+    dbRef.set(
+      _imageUrl,
+    );
   }
 
   @override
-
   void initState() {
     super.initState();
     _loadImageUrl();
@@ -95,10 +100,36 @@ class _InfoState extends State<Info> {
                           width: 5.0,
                         ),
                       ),
-                      child: CircleAvatar(
-                        backgroundImage: _imageUrl != null
-                            ? CachedNetworkImageProvider(_imageUrl!)
-                            : null,
+                      child: InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return PhotoViewGallery(
+                                pageOptions: [
+                                  PhotoViewGalleryPageOptions(
+                                    imageProvider: _imageUrl != null
+                                        ? CachedNetworkImageProvider(_imageUrl!)
+                                        : null,
+                                    heroAttributes:
+                                        const PhotoViewHeroAttributes(
+                                      tag: "hero",
+                                    ),
+                                  ),
+                                ],
+                                loadingBuilder: (context, event) =>
+                                    const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: CircleAvatar(
+                          backgroundImage: _imageUrl != null
+                              ? CachedNetworkImageProvider(_imageUrl!)
+                              : null,
+                        ),
                       ),
                     ),
                     Positioned(
@@ -143,9 +174,9 @@ class _InfoState extends State<Info> {
                     ),
                   ],
                 ),
-                const Text(
-                  'full_name',
-                  style: TextStyle(
+                Text(
+                  'Full Name',
+                  style: const TextStyle(
                     fontSize: 20.0,
                     fontFamily: 'Brand Bold',
                     fontWeight: FontWeight.w500,
@@ -155,9 +186,9 @@ class _InfoState extends State<Info> {
                 const SizedBox(
                   height: 5.0,
                 ),
-                const Text(
+                Text(
                   'Phone',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 15.0,
                     fontFamily: 'Brand Bold',
                     fontWeight: FontWeight.w200,

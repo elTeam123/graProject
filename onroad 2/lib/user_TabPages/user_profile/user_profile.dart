@@ -1,10 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:onroad/authenticatio/user_or_providr.dart';
 import 'package:onroad/mainScreens/main_screens.dart';
-import 'package:onroad/user_TabPages/profile/editprofile.dart';
-import 'package:onroad/user_TabPages/profile/profile.dart';
-import 'package:onroad/user_TabPages/profile/profile_body.dart';
+import 'package:onroad/user_TabPages/user_profile/user_editprofile.dart';
+import 'package:onroad/user_TabPages/user_profile/user_icon.dart';
+import 'package:onroad/user_TabPages/user_profile/user_info.dart';
 
 
 class ProfileTabPage extends StatefulWidget {
@@ -115,14 +117,13 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
             icon: Icons.logout,
             textColor: Colors.red,
             endIcon: false,
-            onPress: () {
-              _mAuth.signOut();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  const UserProvider(),
-                ),
-              );
+            onPress: () async {
+              await _mAuth.signOut();
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const UserProvider()),
+                      (route) => false);
             },
           ),
         ],

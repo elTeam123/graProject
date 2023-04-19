@@ -1,15 +1,20 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:async';
-
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:onroad/Models/activate_nearbyavailabledrivers.dart';
+import 'package:onroad/global/global.dart';
+import 'package:onroad/main.dart';
+import 'package:onroad/user_TabPages/services_TabPage.dart';
 import 'package:onroad/user_assistants/assistant_methods.dart';
 import 'package:onroad/user_assistants/geofire_assistant.dart';
+import 'package:onroad/user_infoHnadler/app_info.dart';
+import 'package:provider/provider.dart';
 
 class HomeTabPage extends StatefulWidget {
   const HomeTabPage({super.key});
@@ -67,7 +72,10 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
   Set<Marker> markersSet = {};
   Set<Circle> circlesSet = {};
+
   bool activeNearbyProviderKeysLoaded = false;
+  List<ActivateNearbyAvailableProvider> onlineNearByAvailableProvidersList = [];
+  DatabaseReference? referenceProviderRequest;
 
   @override
   void initState() {
@@ -75,9 +83,88 @@ class _HomeTabPageState extends State<HomeTabPage> {
     checkIfLocationPermissionAllowed();
   }
 
+// save request
+  saveProviderRequestInformation() {
+    // save Info Request
+    referenceProviderRequest = FirebaseDatabase.instance.ref().child("All Provider Requests").push();
+    var originLocation = Provider.of<AppInfo>(context, listen: false).userPickupLocation;
+    // var destinationLocation = Provider.of<AppInfo>(context, listen: false).providerPickupLocation;
+
+
+    onlineNearByAvailableProvidersList =
+        GeoFireAssistant.activateNearbyAvailableProvideList;
+    searchNearestOnlineDrivers();
+  }
+
+
+  searchNearestOnlineDrivers() async {
+    // cancel the request
+    if (onlineNearByAvailableProvidersList.isEmpty) {
+      setState(() {
+        markersSet.clear();
+        circlesSet.clear();
+      });
+      Fluttertoast.showToast(msg: "No Online Provider");
+      Fluttertoast.showToast(
+          msg: "Please Search Again later, App Will Restarting Now");
+
+      Future.delayed(
+        const Duration(microseconds: 4000),
+        () {
+          MyApp.restartApp(context);
+        },
+      );
+
+      return;
+    }
+    //available provider
+    await retrieveOnlineProviderInfo(onlineNearByAvailableProvidersList);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (c) => const ServicesTabPage(),
+      ),
+    );
+  }
+
+  retrieveOnlineProviderInfo(List onlineNearestProvidersList) async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref().child('provider');
+    for (int i = 0; i < onlineNearByAvailableProvidersList.length; i++) {
+      await ref
+          .child(
+            onlineNearestProvidersList[i].providerId.toString(),
+          )
+          .once()
+          .then(
+        (dataSnapshot) {
+          var providerInfoKey = dataSnapshot.snapshot.value;
+          dList.add(providerInfoKey); // dList have active providers Info
+
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(
+          right: 150,
+        ),
+        child: FloatingActionButton(
+          backgroundColor: Colors.green,
+          elevation: 5,
+          onPressed: () {
+            saveProviderRequestInformation();
+          },
+          child: const Icon(
+            Icons.search,
+            size: 30,
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: Stack(
         children: [
           GoogleMap(

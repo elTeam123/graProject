@@ -1,19 +1,19 @@
+
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
 class ProviderEditProfile extends StatefulWidget {
   const ProviderEditProfile({super.key});
 
 
   @override
-  State<ProviderEditProfile> createState() => _ProviderEditProfileState();
+  State<ProviderEditProfile> createState() => _ProviderEditProfile();
 }
 
-class _ProviderEditProfileState extends State<ProviderEditProfile> {
+class _ProviderEditProfile extends State<ProviderEditProfile> {
 
   final _formKey = GlobalKey<FormState>();
   final _fullNameController = TextEditingController();
@@ -36,10 +36,9 @@ class _ProviderEditProfileState extends State<ProviderEditProfile> {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       final userData = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('provider')
           .doc(user.uid)
           .get();
-
       setState(() {
         _fullNameController.text = userData['full_name'] ?? '';
         _phoneNumberController.text = userData['phone_number'] ?? '';
@@ -52,7 +51,7 @@ class _ProviderEditProfileState extends State<ProviderEditProfile> {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         await FirebaseFirestore.instance
-            .collection('users')
+            .collection('provider')
             .doc(user.uid)
             .update({
           'full_name': _fullNameController.text,
@@ -100,7 +99,8 @@ class _ProviderEditProfileState extends State<ProviderEditProfile> {
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                children:
+                [
                   ClipPath(
                     clipper: CustomShape(),
                     child: Container(
@@ -116,6 +116,7 @@ class _ProviderEditProfileState extends State<ProviderEditProfile> {
                     width: 300.0,
                     child: TextFormField(
                       controller: _fullNameController,
+                      textInputAction: TextInputAction.go,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Full Name must not be empty';
@@ -155,6 +156,7 @@ class _ProviderEditProfileState extends State<ProviderEditProfile> {
                     width: 300.0,
                     child: TextFormField(
                       controller: _phoneNumberController,
+                      textInputAction: TextInputAction.go,
                       keyboardType: TextInputType.phone,
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -254,6 +256,7 @@ class _ProviderEditProfileState extends State<ProviderEditProfile> {
     );
   }
 }
+
 class CustomShape extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
