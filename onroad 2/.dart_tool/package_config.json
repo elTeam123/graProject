@@ -339,7 +339,7 @@
     },
     {
       "name": "image_picker",
-      "rootUri": "file:///C:/Users/mohammedElsaaba/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker-0.8.7+3",
+      "rootUri": "file:///C:/Users/mohammedElsaaba/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker-0.8.7+4",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -470,6 +470,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "phoenix_native",
+      "rootUri": "file:///C:/Users/mohammedElsaaba/AppData/Local/Pub/Cache/hosted/pub.dev/phoenix_native-0.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "photo_view",
       "rootUri": "file:///C:/Users/mohammedElsaaba/AppData/Local/Pub/Cache/hosted/pub.dev/photo_view-0.14.0",
       "packageUri": "lib/",
@@ -591,13 +597,13 @@
     },
     {
       "name": "sqflite",
-      "rootUri": "file:///C:/Users/mohammedElsaaba/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite-2.2.6",
+      "rootUri": "file:///C:/Users/mohammedElsaaba/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite-2.2.7",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "sqflite_common",
-      "rootUri": "file:///C:/Users/mohammedElsaaba/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite_common-2.4.3",
+      "rootUri": "file:///C:/Users/mohammedElsaaba/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite_common-2.4.4",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -627,7 +633,7 @@
     },
     {
       "name": "synchronized",
-      "rootUri": "file:///C:/Users/mohammedElsaaba/AppData/Local/Pub/Cache/hosted/pub.dev/synchronized-3.0.1",
+      "rootUri": "file:///C:/Users/mohammedElsaaba/AppData/Local/Pub/Cache/hosted/pub.dev/synchronized-3.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -686,7 +692,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-04-19T01:31:48.826842Z",
+  "generated": "2023-04-23T23:53:12.127574Z",
   "generator": "pub",
   "generatorVersion": "2.19.4"
 }

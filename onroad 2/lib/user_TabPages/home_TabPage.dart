@@ -1,15 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:onroad/Models/activate_nearbyavailabledrivers.dart';
 import 'package:onroad/global/global.dart';
-import 'package:onroad/main.dart';
 import 'package:onroad/user_TabPages/services_TabPage.dart';
 import 'package:onroad/user_assistants/assistant_methods.dart';
 import 'package:onroad/user_assistants/geofire_assistant.dart';
@@ -65,7 +66,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
         await AssistantMethods.searchAddressForGeographicCoDrdinates(
             userCurrentPosition!, context);
     if (kDebugMode) {
-      print('this is your address=$humanReadableAddress');
+      print('this is your address= $humanReadableAddress');
     }
     initializeGeoFireListener();
   }
@@ -86,20 +87,37 @@ class _HomeTabPageState extends State<HomeTabPage> {
 // save request
   saveProviderRequestInformation() {
     // save Info Request
-    referenceProviderRequest = FirebaseDatabase.instance.ref().child("All Provider Requests").push();
-    var originLocation = Provider.of<AppInfo>(context, listen: false).userPickupLocation;
-    // var destinationLocation = Provider.of<AppInfo>(context, listen: false).providerPickupLocation;
+    referenceProviderRequest =
+        FirebaseDatabase.instance.ref().child(" Provider Requests").push();
+    var originLocation =
+        Provider.of<AppInfo>(context, listen: false).userPickupLocation;
+    // var providerLocation = Provider.of<ProviderAppInfo>(context, listen: false).providerPickupLocation;
 
+    //user location data
+    Map originLocationMap = {
+      "latitude": originLocation?.locationLatitude.toString(),
+      "longitude": originLocation?.locationLongitude.toString(),
+    };
+
+
+    Map userInfoMap = {
+      "origin": originLocationMap,
+      "Time": DateTime.now().toString(),
+      "userAddress": originLocation?.locationName,
+      "providerID": "  ",
+    };
+
+    referenceProviderRequest?.set(userInfoMap);
 
     onlineNearByAvailableProvidersList =
         GeoFireAssistant.activateNearbyAvailableProvideList;
-    searchNearestOnlineDrivers();
+    searchNearestOnlineProvider();
   }
 
-
-  searchNearestOnlineDrivers() async {
+  searchNearestOnlineProvider() async {
     // cancel the request
     if (onlineNearByAvailableProvidersList.isEmpty) {
+      referenceProviderRequest!.remove();
       setState(() {
         markersSet.clear();
         circlesSet.clear();
@@ -111,7 +129,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
       Future.delayed(
         const Duration(microseconds: 4000),
         () {
-          MyApp.restartApp(context);
+          SystemNavigator.pop();
         },
       );
 
@@ -122,10 +140,27 @@ class _HomeTabPageState extends State<HomeTabPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (c) => const ServicesTabPage(),
+        builder: (c) =>
+            ServicesTabPage(referenceProviderRequest: referenceProviderRequest),
       ),
     );
   }
+
+  // retrieveOnlineProviderInfo(List onlineNearestProvidersList) async {
+  //   DatabaseReference ref = FirebaseDatabase.instance.ref().child('provider');
+  //   for (int i = 0; i < onlineNearestProvidersList.length; i++) {
+  //     String providerId = onlineNearestProvidersList[i].providerId.toString();
+  //     await ref.child(providerId).once().then((dataSnapshot) {
+  //       var providerInfoKey = dataSnapshot.snapshot.value;
+  //       // Check if providerInfoKey already exists in dList
+  //       bool providerExists = dList.contains((element) => element['key']== providerInfoKey!);
+  //       if (!providerExists) {
+  //         dList.add(providerInfoKey); // dList have active providers Info
+  //       }
+  //     });
+  //   }
+  //   return dList;
+  // }
 
   retrieveOnlineProviderInfo(List onlineNearestProvidersList) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref().child('provider');
@@ -139,7 +174,6 @@ class _HomeTabPageState extends State<HomeTabPage> {
         (dataSnapshot) {
           var providerInfoKey = dataSnapshot.snapshot.value;
           dList.add(providerInfoKey); // dList have active providers Info
-
         },
       );
     }

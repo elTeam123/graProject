@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:onroad/global/global.dart';
@@ -5,13 +6,16 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:smooth_star_rating_nsafe/smooth_star_rating.dart';
 
 class ServicesTabPage extends StatefulWidget {
-  const ServicesTabPage({super.key});
+ DatabaseReference?referenceProviderRequest;
+ ServicesTabPage({this.referenceProviderRequest});
+
 
   @override
   State<ServicesTabPage> createState() => _ServicesTabPageState();
 }
 
 class _ServicesTabPageState extends State<ServicesTabPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +24,12 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-            SystemNavigator.pop();
+             SystemNavigator.pop();
+            //  Navigator.pop(context);
+            //  setState(() {
+            //    dList=[];
+            //  });
+            widget.referenceProviderRequest!.remove();
           },
           icon: const Icon(
             Icons.arrow_back_ios_rounded,
