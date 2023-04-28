@@ -57,7 +57,8 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   photo_view: ^0.14.0
   smooth_star_rating_nsafe: ^1.0.0+1
-  phoenix_native: ^0.0.2
+  firebase_messaging: ^14.4.1
+
 
 
 dev_dependencies:

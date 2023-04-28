@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:onroad/global/global.dart';
 import 'package:onroad/provider_Assistants/assistabtprovider_methods.dart';
+import 'package:onroad/puch_notification/puch_notification_system.dart';
 
 class ProviderHomeTabPage extends StatefulWidget {
   const ProviderHomeTabPage({super.key});
@@ -67,10 +68,19 @@ class _ProviderHomeTabPageState extends State<ProviderHomeTabPage> {
     }
   }
 
+  readCurrentProviderInfo()async
+  {
+    currentFirebaseUser = fAuth.currentUser;
+    PushNotificationSystem pushNotificationSystem = PushNotificationSystem();
+    pushNotificationSystem.initializeCloudMessaging(context);
+    pushNotificationSystem.generateAndGetToken();
+  }
+
   @override
   void initState() {
     super.initState();
     checkIfLocationPermissionAllowed();
+    readCurrentProviderInfo();
   }
 
   @override
@@ -180,7 +190,7 @@ class _ProviderHomeTabPageState extends State<ProviderHomeTabPage> {
         .child('provider')
         .child(currentFirebaseUser!.uid)
         .child('newProviderStatus');
-    ref.set("idle"); //ready to have a request
+    ref.set(""); //ready to have a request
     ref.onValue.listen((event) {});
   }
 

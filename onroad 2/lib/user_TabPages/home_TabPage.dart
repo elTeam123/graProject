@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
@@ -14,8 +13,7 @@ import 'package:onroad/global/global.dart';
 import 'package:onroad/user_TabPages/services_TabPage.dart';
 import 'package:onroad/user_assistants/assistant_methods.dart';
 import 'package:onroad/user_assistants/geofire_assistant.dart';
-import 'package:onroad/user_infoHnadler/app_info.dart';
-import 'package:provider/provider.dart';
+
 
 class HomeTabPage extends StatefulWidget {
   const HomeTabPage({super.key});
@@ -65,6 +63,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
     String humanReadableAddress =
         await AssistantMethods.searchAddressForGeographicCoDrdinates(
             userCurrentPosition!, context);
+
     if (kDebugMode) {
       print('this is your address= $humanReadableAddress');
     }
@@ -82,37 +81,43 @@ class _HomeTabPageState extends State<HomeTabPage> {
   void initState() {
     super.initState();
     checkIfLocationPermissionAllowed();
+    dList.clear();
   }
 
-// save request
-  saveProviderRequestInformation() {
-    // save Info Request
-    referenceProviderRequest =
-        FirebaseDatabase.instance.ref().child(" Provider Requests").push();
-    var originLocation =
-        Provider.of<AppInfo>(context, listen: false).userPickupLocation;
-    // var providerLocation = Provider.of<ProviderAppInfo>(context, listen: false).providerPickupLocation;
 
-    //user location data
-    Map originLocationMap = {
-      "latitude": originLocation?.locationLatitude.toString(),
-      "longitude": originLocation?.locationLongitude.toString(),
+  void saveProviderRequestInformation() async {
+    // Get the current location and time
+    Position position = await Geolocator.getCurrentPosition();
+    // Create a reference to the Firebase database
+    DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
+
+    String humanReadableAddress =
+    await AssistantMethods.searchAddressForGeographicCoDrdinates(
+        userCurrentPosition!, context);
+
+    // Save the user's location, time, and other information to the database
+    Map<String, dynamic> originLocationMap = {
+      "latitude": position.latitude.toString(),
+      "longitude": position.longitude.toString(),
     };
-
-
-    Map userInfoMap = {
+    Map<String, dynamic> userInfoMap = {
+      "name": " ",
+      "phone": " ",
       "origin": originLocationMap,
-      "Time": DateTime.now().toString(),
-      "userAddress": originLocation?.locationName,
-      "providerID": "  ",
+      "time":DateTime.now().toString() ,
+      "providerID": " ",
+      "locationName": humanReadableAddress,
     };
 
-    referenceProviderRequest?.set(userInfoMap);
+    databaseReference.child("Provider Requests").push().set(userInfoMap);
+    // Call other functions here if needed
 
     onlineNearByAvailableProvidersList =
         GeoFireAssistant.activateNearbyAvailableProvideList;
     searchNearestOnlineProvider();
   }
+
+
 
   searchNearestOnlineProvider() async {
     // cancel the request
@@ -135,15 +140,44 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
       return;
     }
+
     //available provider
     await retrieveOnlineProviderInfo(onlineNearByAvailableProvidersList);
-    Navigator.push(
+    var response = await  Navigator.push(
       context,
       MaterialPageRoute(
         builder: (c) =>
             ServicesTabPage(referenceProviderRequest: referenceProviderRequest),
       ),
     );
+    if(response == "providerChoosed" ){
+      FirebaseDatabase
+          .instance.ref()
+          .child("provider")
+          .child(chosenProviderId!)
+          .once().then((snap){
+            if(snap.snapshot.value != null){
+              sendNotificationtoProviderNow(chosenProviderId!);
+            }
+            else{
+              Fluttertoast.showToast(msg: "Not exist ,try again");
+            }
+      });
+    }
+  }
+
+            ///////////////////////send a requist////////////////////
+  sendNotificationtoProviderNow(String chosenProviderId)
+  {
+    // assign providerRequist
+
+    FirebaseDatabase.instance.ref()
+        .child("provider")
+        .child(chosenProviderId)
+        .child("newProviderStatus")
+        .set(referenceProviderRequest?.key);
+
+
   }
 
   // retrieveOnlineProviderInfo(List onlineNearestProvidersList) async {

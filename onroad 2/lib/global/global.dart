@@ -6,3 +6,4 @@ final FirebaseAuth fAuth = FirebaseAuth.instance;
 User? currentFirebaseUser;
 StreamSubscription<Position>? streamSubscriptionPosition;
 List dList = []; // provider key info
+String? chosenProviderId ="";

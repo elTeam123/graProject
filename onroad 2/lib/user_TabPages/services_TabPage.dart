@@ -6,7 +6,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:smooth_star_rating_nsafe/smooth_star_rating.dart';
 
 class ServicesTabPage extends StatefulWidget {
- DatabaseReference?referenceProviderRequest;
+ DatabaseReference? referenceProviderRequest;
  ServicesTabPage({this.referenceProviderRequest});
 
 
@@ -66,7 +66,8 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                     color: Colors.grey,
                   ),
                   MaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
@@ -215,6 +216,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
               ),
             ),
           ),
+                   //////////////////////////////Her Online provider select/////////////////
           body: ListView.builder(
               itemCount: dList.length,
               itemBuilder: (BuildContext context, int index) {
@@ -228,7 +230,12 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                         child: Row(
                           children: [
                             MaterialButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                setState(() {
+                                  chosenProviderId = dList[index]["id"].toString();
+                                });
+                                Navigator.pop(context,"providerChoosed");
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(
