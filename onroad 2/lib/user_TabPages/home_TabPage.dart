@@ -8,11 +8,11 @@ import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:onroad/Models/activate_nearbyavailabledrivers.dart';
 import 'package:onroad/global/global.dart';
 import 'package:onroad/user_TabPages/services_TabPage.dart';
 import 'package:onroad/user_assistants/assistant_methods.dart';
 import 'package:onroad/user_assistants/geofire_assistant.dart';
+import '../Models/activate_nearbyavailabledrivers.dart';
 
 
 class HomeTabPage extends StatefulWidget {
@@ -74,43 +74,44 @@ class _HomeTabPageState extends State<HomeTabPage> {
   Set<Circle> circlesSet = {};
 
   bool activeNearbyProviderKeysLoaded = false;
+
   List<ActivateNearbyAvailableProvider> onlineNearByAvailableProvidersList = [];
+
   DatabaseReference? referenceProviderRequest;
+
 
   @override
   void initState() {
     super.initState();
     checkIfLocationPermissionAllowed();
-    dList.clear();
   }
 
 
   void saveProviderRequestInformation() async {
+    referenceProviderRequest = FirebaseDatabase.instance.ref().child("SOS Requests").push();
     // Get the current location and time
     Position position = await Geolocator.getCurrentPosition();
     // Create a reference to the Firebase database
-    DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
-
     String humanReadableAddress =
     await AssistantMethods.searchAddressForGeographicCoDrdinates(
         userCurrentPosition!, context);
 
     // Save the user's location, time, and other information to the database
+
     Map<String, dynamic> originLocationMap = {
       "latitude": position.latitude.toString(),
       "longitude": position.longitude.toString(),
     };
-    Map<String, dynamic> userInfoMap = {
-      "name": " ",
-      "phone": " ",
+    Map userInfoMap = {
+      "name": "dfgdf ",
+      "phone": "dfgdfg ",
       "origin": originLocationMap,
       "time":DateTime.now().toString() ,
-      "providerID": " ",
+      "providerID": "waww ",
       "locationName": humanReadableAddress,
     };
-
-    databaseReference.child("Provider Requests").push().set(userInfoMap);
     // Call other functions here if needed
+     referenceProviderRequest!.set(userInfoMap);
 
     onlineNearByAvailableProvidersList =
         GeoFireAssistant.activateNearbyAvailableProvideList;
@@ -122,7 +123,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
   searchNearestOnlineProvider() async {
     // cancel the request
     if (onlineNearByAvailableProvidersList.isEmpty) {
-      referenceProviderRequest!.remove();
+       referenceProviderRequest!.remove();
       setState(() {
         markersSet.clear();
         circlesSet.clear();
@@ -143,7 +144,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
     //available provider
     await retrieveOnlineProviderInfo(onlineNearByAvailableProvidersList);
-    var response = await  Navigator.push(
+      var response = await  Navigator.push(
       context,
       MaterialPageRoute(
         builder: (c) =>
@@ -166,18 +167,16 @@ class _HomeTabPageState extends State<HomeTabPage> {
     }
   }
 
+
             ///////////////////////send a requist////////////////////
-  sendNotificationtoProviderNow(String chosenProviderId)
+   sendNotificationtoProviderNow(String chosenProviderId)
   {
     // assign providerRequist
-
-    FirebaseDatabase.instance.ref()
+      FirebaseDatabase.instance.ref()
         .child("provider")
         .child(chosenProviderId)
         .child("newProviderStatus")
-        .set(referenceProviderRequest?.key);
-
-
+        .set(referenceProviderRequest!.key);
   }
 
   // retrieveOnlineProviderInfo(List onlineNearestProvidersList) async {
@@ -249,64 +248,6 @@ class _HomeTabPageState extends State<HomeTabPage> {
               locateUserPosition();
             },
           ),
-          // Positioned(
-          //   bottom: 0,
-          //   left: 0,
-          //   right: 0,
-          //   child: AnimatedSize(
-          //     curve: Curves.easeIn,
-          //     duration: const Duration(milliseconds: 120),
-          //     child: Container(
-          //       height: searchLocationContainerHeight,
-          //       decoration: const BoxDecoration(
-          //         color: Colors.black87,
-          //         borderRadius: BorderRadius.only(
-          //           topRight: Radius.circular(20),
-          //           topLeft: Radius.circular(20),
-          //         ),
-          //       ),
-          //       child: Padding(
-          //         padding:
-          //             const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-          //         child: Column(
-          //           children: [
-          //             //from
-          //             Row(
-          //               children: [
-          //                 const Icon(
-          //                   Icons.add_location_alt_outlined,
-          //                   color: Colors.grey,
-          //                 ),
-          //                 const SizedBox(
-          //                   width: 12.0,
-          //                 ),
-          //                 Column(
-          //                   crossAxisAlignment: CrossAxisAlignment.start,
-          //                   children: [
-          //                     const Text(
-          //                       "From",
-          //                       style:
-          //                           TextStyle(color: Colors.grey, fontSize: 12),
-          //                     ),
-          //                     Text(
-          //                       Provider.of<AppInfo>(context)
-          //                                   .userPickupLocation !=
-          //                               null
-          //                           ? "${(Provider.of<AppInfo>(context).userPickupLocation!.locationName!).substring(0, 24)}..."
-          //                           : "not getting address",
-          //                       style: const TextStyle(
-          //                           color: Colors.grey, fontSize: 14),
-          //                     ),
-          //                   ],
-          //                 ),
-          //               ],
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -372,9 +313,12 @@ class _HomeTabPageState extends State<HomeTabPage> {
               displayActiveProviderOnMap();
               break;
           }
+
         }
 
-        setState(() {});
+        setState(() {
+
+        });
       },
     );
   }

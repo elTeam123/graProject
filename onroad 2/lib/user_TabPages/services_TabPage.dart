@@ -1,15 +1,13 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:onroad/global/global.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:smooth_star_rating_nsafe/smooth_star_rating.dart';
 
-class ServicesTabPage extends StatefulWidget {
+class ServicesTabPage extends StatefulWidget
+{
  DatabaseReference?referenceProviderRequest;
  ServicesTabPage({this.referenceProviderRequest});
-
-
   @override
   State<ServicesTabPage> createState() => _ServicesTabPageState();
 }
@@ -24,12 +22,13 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-             SystemNavigator.pop();
-            //  Navigator.pop(context);
-            //  setState(() {
-            //    dList=[];
-            //  });
-            widget.referenceProviderRequest!.remove();
+
+             Navigator.pop(context);
+             setState(() {
+               dList=[];
+               widget.referenceProviderRequest!.remove();
+             });
+
           },
           icon: const Icon(
             Icons.arrow_back_ios_rounded,
@@ -228,7 +227,12 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                         child: Row(
                           children: [
                             MaterialButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                  setState(() {
+                                    chosenProviderId = dList[index]["id"].toString();
+                                  });
+                                  Navigator.pop(context,"providerChoosed");
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(

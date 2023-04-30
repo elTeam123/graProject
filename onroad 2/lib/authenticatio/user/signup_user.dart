@@ -1,293 +1,469 @@
-// // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
-//
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_database/firebase_database.dart';
-// import 'package:flutter/material.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:intl_phone_field/intl_phone_field.dart';
-// import 'package:onroad/authenticatio/user/otp.dart';
-// import 'package:onroad/authenticatio/user/user_login.dart';
-//
-// class SignUpScreenUser extends StatefulWidget {
-//   const SignUpScreenUser({super.key});
-//   static String Verify = '';
-//
-//   @override
-//   State<SignUpScreenUser> createState() => _SignUpScreenUser();
-// }
-//
-// class _SignUpScreenUser extends State<SignUpScreenUser> {
-//   final databaseReference = FirebaseDatabase.instance.ref();
-//   final _firstNameController = TextEditingController();
-//   final _lastNameController = TextEditingController();
-//   final _phoneNumberController = TextEditingController();
-//   var formKey = GlobalKey<FormState>();
-//   var phone = '';
-//
-//   validateForm() {
-//     if (_firstNameController.text.length < 3) {
-//       Fluttertoast.showToast(msg: "name must be at least 3 Characters.");
-//     } else if (_lastNameController.text.length < 3) {
-//       Fluttertoast.showToast(msg: "name must be at least 3 Characters.");
-//     } else if (_phoneNumberController.text.isEmpty) {
-//       Fluttertoast.showToast(msg: "Phone Number is required.");
-//     } else {
-//       _saveData();
-//     }
-//   }
-//
-//   void _saveData() {
-//     String firstName = _firstNameController.text;
-//     String lastName = _lastNameController.text;
-//     String phoneNumber = _phoneNumberController.text;
-//
-//     databaseReference.child("users").push().set({
-//       'first_name': firstName,
-//       'last_name': lastName,
-//       'phone_number': phoneNumber
-//     }).then((value) => {
-//           _firstNameController.clear(),
-//           _lastNameController.clear(),
-//           _phoneNumberController.clear(),
-//         });
-//   }
-//
-//   void showProgressIndicator(BuildContext context) {
-//     AlertDialog alertDialog = const AlertDialog(
-//       backgroundColor: Colors.transparent,
-//       elevation: 0,
-//       content: Center(
-//         child: CircularProgressIndicator(
-//           valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-//         ),
-//       ),
-//     );
-//
-//     showDialog(
-//       barrierColor: Colors.white.withOpacity(0),
-//       barrierDismissible: false,
-//       context: context,
-//       builder: (context) {
-//         return alertDialog;
-//       },
-//     );
-//   }
-//
-//   Future<void> _submitPhoneNumber() async {
-//     await FirebaseAuth.instance.verifyPhoneNumber(
-//       phoneNumber: '+20${_phoneNumberController.text + phone}',
-//       verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {
-//         FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
-//       },
-//       verificationFailed: (FirebaseAuthException authException) {
-//         Fluttertoast.showToast(msg: "Error: ${authException.message}");
-//       },
-//       codeSent: (String verificationId, int? resendToken) {
-//         SignUpScreenUser.Verify = verificationId;
-//         Navigator.push(context,
-//             MaterialPageRoute(builder: (c) => const ()));
-//       },
-//       codeAutoRetrievalTimeout: (String verificationId) {},
-//     );
-//     showProgressIndicator(context);
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       extendBodyBehindAppBar: true,
-//       appBar: AppBar(
-//         backgroundColor: Colors.transparent,
-//         leading: IconButton(
-//           onPressed: () {
-//             Navigator.pop(context);
-//           },
-//           icon: const Icon(
-//             Icons.arrow_back_ios_rounded,
-//             color: Colors.black,
-//           ),
-//         ),
-//         elevation: 0,
-//       ),
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//           child: Form(
-//             key: formKey,
-//             child: Column(
-//               children: [
-//                 Padding(
-//                   padding: const EdgeInsets.symmetric(horizontal: 14),
-//                   child: Image.asset('images/2.png'),
-//                 ),
-//                 const SizedBox(
-//                   height: 10.0,
-//                 ),
-//                 SizedBox(
-//                   height: 52.0,
-//                   width: 300.0,
-//                   child: TextFormField(
-//                     controller: _firstNameController,
-//                     keyboardType: TextInputType.name,
-//                     validator: (value) {
-//                       if (value!.isEmpty) {
-//                         return 'First name must not be empty';
-//                       }
-//                       return null;
-//                     },
-//                     decoration: InputDecoration(
-//                       labelText: 'First name',
-//                       labelStyle: (const TextStyle(
-//                         fontFamily: 'Brand Bold',
-//                         color: Colors.green,
-//                       )),
-//                       prefixIcon: const Icon(
-//                         Icons.person,
-//                         color: Colors.green,
-//                       ),
-//                       border: OutlineInputBorder(
-//                           borderRadius: BorderRadius.circular(30),
-//                           borderSide: const BorderSide(
-//                             color: Colors.green,
-//                           )),
-//                       focusedBorder: OutlineInputBorder(
-//                           borderRadius: BorderRadius.circular(30),
-//                           borderSide: const BorderSide(
-//                             color: Colors.green,
-//                           )),
-//                     ),
-//                   ),
-//                 ),
-//                 const SizedBox(
-//                   height: 20.0,
-//                 ),
-//                 SizedBox(
-//                   height: 52.0,
-//                   width: 300.0,
-//                   child: TextFormField(
-//                     controller: _lastNameController,
-//                     keyboardType: TextInputType.name,
-//                     validator: (value) {
-//                       if (value!.isEmpty) {
-//                         return 'Last name must not be empty';
-//                       }
-//                       return null;
-//                     },
-//                     decoration: InputDecoration(
-//                       labelText: 'Lsat name',
-//                       labelStyle: (const TextStyle(
-//                         fontFamily: 'Brand Bold',
-//                         color: Colors.green,
-//                       )),
-//                       prefixIcon: const Icon(
-//                         Icons.person,
-//                         color: Colors.green,
-//                       ),
-//                       border: OutlineInputBorder(
-//                           borderRadius: BorderRadius.circular(30),
-//                           borderSide: const BorderSide(
-//                             color: Colors.green,
-//                           )),
-//                       focusedBorder: OutlineInputBorder(
-//                           borderRadius: BorderRadius.circular(30),
-//                           borderSide: const BorderSide(
-//                             color: Colors.green,
-//                           )),
-//                     ),
-//                   ),
-//                 ),
-//                 const SizedBox(
-//                   height: 20.0,
-//                 ),
-//                 SizedBox(
-//                   height: 70.0,
-//                   width: 300.0,
-//                   child: IntlPhoneField(
-//                     initialCountryCode: 'EG',
-//                     controller: _phoneNumberController,
-//                     keyboardType: TextInputType.phone,
-//                     decoration: InputDecoration(
-//                       labelText: 'Phone',
-//                       labelStyle: (const TextStyle(
-//                         fontFamily: 'Brand Bold',
-//                         color: Colors.green,
-//                       )),
-//                       prefixIcon: const Icon(
-//                         Icons.phone,
-//                         color: Colors.green,
-//                       ),
-//                       border: OutlineInputBorder(
-//                           borderRadius: BorderRadius.circular(30),
-//                           borderSide: const BorderSide(
-//                             color: Colors.green,
-//                           )),
-//                       focusedBorder: OutlineInputBorder(
-//                           borderRadius: BorderRadius.circular(30),
-//                           borderSide: const BorderSide(
-//                             color: Colors.green,
-//                           )),
-//                     ),
-//                   ),
-//                 ),
-//                 const SizedBox(
-//                   height: 20.0,
-//                 ),
-//                 Container(
-//                   decoration: BoxDecoration(
-//                     color: const Color.fromARGB(
-//                       255,
-//                       79,
-//                       115,
-//                       17,
-//                     ),
-//                     borderRadius: BorderRadius.circular(
-//                       30.0,
-//                     ),
-//                   ),
-//                   height: 52.0,
-//                   width: 300.0,
-//                   child: MaterialButton(
-//                     onPressed: () {
-//                       validateForm();
-//                       _submitPhoneNumber();
-//                     },
-//                     child: const Text(
-//                       'Create Account',
-//                       style: TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 18.0,
-//                         fontFamily: 'Brand Bold',
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   crossAxisAlignment: CrossAxisAlignment.center,
-//                   children: [
-//                     const Text('Do you have an account ?'),
-//                     TextButton(
-//                       onPressed: () {
-//                         Navigator.push(
-//                           context,
-//                           MaterialPageRoute(
-//                             builder: (c) => const UserLoginScreen(),
-//                           ),
-//                         );
-//                       },
-//                       child: const Text(
-//                         'Login Here',
-//                         style: TextStyle(
-//                           color: Colors.green,
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
+import 'package:onroad/authenticatio/provider/login_screen_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:onroad/authenticatio/user/user_login.dart';
+import 'package:onroad/global/global.dart';
+import 'package:onroad/global/uplod.dart';
+import 'package:onroad/mainScreens/main_screens.dart';
+import 'package:onroad/widgets/progress_dialog.dart';
+
+class UserSignUpScreen extends StatefulWidget {
+  const UserSignUpScreen({super.key});
+
+  @override
+  State<UserSignUpScreen> createState() => _UserSignUpScreenState();
+}
+
+class _UserSignUpScreenState extends State<UserSignUpScreen> {
+  var fnameController = TextEditingController();
+  var lnameController = TextEditingController();
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+  var confirmpasswordController = TextEditingController();
+  var phoneController = TextEditingController();
+  var formKey = GlobalKey<FormState>();
+  bool pass = true;
+
+  validateForm() {
+    if (fnameController.text.length < 3) {
+      Fluttertoast.showToast(msg: "name must be at least 3 Characters.");
+    } else if (!emailController.text.contains("@")) {
+      Fluttertoast.showToast(msg: "Email address is not Valid.");
+    } else if (phoneController.text.length > 11) {
+      Fluttertoast.showToast(
+          msg: "Phone Number is required.Enter only 11 numbers");
+    } else if (passwordController.text.length < 6) {
+      Fluttertoast.showToast(msg: "Password must be at least 6 Characters.");
+    } else if (passwordController.text != confirmpasswordController.text) {
+      Fluttertoast.showToast(msg: "Password Do not match");
+    } else {
+      saveDriverInfoNow();
+    }
+  }
+
+  saveDriverInfoNow() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext c) {
+          return ProgressDialog(
+            message: "Processing, Please wait...",
+          );
+        });
+
+    final User? firebaseUser = (await fAuth
+        .createUserWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    )
+        .catchError((msg) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Error: $msg");
+    }))
+        .user;
+
+    if (firebaseUser != null) {
+      Map driverMap = {
+        "id": firebaseUser.uid,
+        "fname": fnameController.text.trim(),
+        "lname": lnameController.text.trim(),
+        "email": emailController.text.trim(),
+        "phone": phoneController.text.trim(),
+      };
+
+      DatabaseReference driversRef =
+      FirebaseDatabase.instance.ref().child("user");
+      driversRef.child(firebaseUser.uid).set(driverMap);
+
+      currentFirebaseUser = firebaseUser;
+      Fluttertoast.showToast(msg: "Account has been Created.");
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (c) => const MainScreen(),
+        ),
+      );
+    } else {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Account has not been Created.");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.all(
+          15.0,
+        ),
+        child: SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Image(
+                    height: 170.0,
+                    image: AssetImage(
+                      'images/signup.png',
+                    ),
+                  ),
+                ),
+                const Text(
+                  'Application policy',
+                  style: TextStyle(
+                    fontFamily: 'Signatra',
+                    fontSize: 40,
+                  ),
+                ),
+                const SizedBox(
+                  height: 3.0,
+                ),
+                const Text(
+                  'To ensure the safety of users',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    fontFamily: 'Brand-Regular',
+                    color: Color.fromARGB(255, 146, 143, 143),
+                  ),
+                ),
+                const Text(
+                  'Please upload a picture of the card',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    fontFamily: 'Brand-Regular',
+                    color: Color.fromARGB(255, 146, 143, 143),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                SingleChildScrollView(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 52.0,
+                        width: 145.0,
+                        child: TextFormField(
+                          controller: fnameController,
+                          textInputAction: TextInputAction.go,
+                          keyboardType: TextInputType.name,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Name must not be empty';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'First Name',
+                            labelStyle: (const TextStyle(
+                              fontFamily: 'Brand Bold',
+                              color: Colors.green,
+                            )),
+                            prefixIcon: const Icon(
+                              Icons.person,
+                              color: Colors.green,
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: const BorderSide(
+                                  color: Colors.green,
+                                )),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: const BorderSide(
+                                  color: Colors.green,
+                                )),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      SizedBox(
+                        height: 52.0,
+                        width: 145.0,
+                        child: TextFormField(
+                          controller: lnameController,
+                          textInputAction: TextInputAction.go,
+                          keyboardType: TextInputType.name,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Name must not be empty';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Last Name',
+                            labelStyle: (const TextStyle(
+                              fontFamily: 'Brand Bold',
+                              color: Colors.green,
+                            )),
+                            prefixIcon: const Icon(
+                              Icons.person,
+                              color: Colors.green,
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: const BorderSide(
+                                  color: Colors.green,
+                                )),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: const BorderSide(
+                                  color: Colors.green,
+                                )),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+                SizedBox(
+                  height: 52.0,
+                  width: 300.0,
+                  child: TextFormField(
+                    controller: emailController,
+                    textInputAction: TextInputAction.go,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Email must not be empty';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Email Address',
+                      labelStyle: (const TextStyle(
+                        fontFamily: 'Brand Bold',
+                        color: Colors.green,
+                      )),
+                      prefixIcon: const Icon(
+                        Icons.email,
+                        color: Colors.green,
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            color: Colors.green,
+                          )),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            color: Colors.green,
+                          )),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+                SizedBox(
+                  height: 52.0,
+                  width: 300.0,
+                  child: TextFormField(
+                    controller: phoneController,
+                    textInputAction: TextInputAction.go,
+                    keyboardType: TextInputType.phone,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Phone must not be empty';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Phone',
+                      labelStyle: (const TextStyle(
+                        fontFamily: 'Brand Bold',
+                        color: Colors.green,
+                      )),
+                      prefixIcon: const Icon(
+                        Icons.phone,
+                        color: Colors.green,
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            color: Colors.green,
+                          )),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            color: Colors.green,
+                          )),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                SizedBox(
+                  height: 52.0,
+                  width: 300.0,
+                  child: TextFormField(
+                    controller: passwordController,
+                    textInputAction: TextInputAction.go,
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: pass,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Password must not be empty';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      labelStyle: (const TextStyle(
+                        fontFamily: 'Brand Bold',
+                        color: Colors.green,
+                      )),
+                      prefixIcon: const Icon(
+                        Icons.lock,
+                        color: Colors.green,
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            pass = !pass;
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.visibility,
+                          color: Colors.green,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            color: Colors.green,
+                          )),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            color: Colors.green,
+                          )),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                SizedBox(
+                  height: 52.0,
+                  width: 300.0,
+                  child: TextFormField(
+                    controller: confirmpasswordController,
+                    textInputAction: TextInputAction.go,
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: pass,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Password must not be empty';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Confirm Password',
+                      labelStyle: (const TextStyle(
+                        fontFamily: 'Brand Bold',
+                        color: Colors.green,
+                      )),
+                      prefixIcon: const Icon(
+                        Icons.lock,
+                        color: Colors.green,
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            pass = !pass;
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.visibility,
+                          color: Colors.green,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            color: Colors.green,
+                          )),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            color: Colors.green,
+                          )),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(
+                      255,
+                      79,
+                      115,
+                      17,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      30.0,
+                    ),
+                  ),
+                  height: 52.0,
+                  width: 300.0,
+                  child: MaterialButton(
+                    onPressed: () {
+                      validateForm();
+                    },
+                    child: const Text(
+                      'Create Account',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 21.0,
+                        fontFamily: 'Brand Bold',
+                      ),
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Do you have an account ?'),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (c) => const UserLoginScreen()));
+                      },
+                      child: const Text(
+                        'Login Here',
+                        style: TextStyle(
+                          color: Colors.green,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

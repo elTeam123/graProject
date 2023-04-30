@@ -19,8 +19,10 @@ class ProviderHomeTabPage extends StatefulWidget {
 }
 
 class _ProviderHomeTabPageState extends State<ProviderHomeTabPage> {
-  final Completer<GoogleMapController> _controllerGoogleMap = Completer();
+
   GoogleMapController? newGoogleMapController;
+  final Completer<GoogleMapController> _controllerGoogleMap = Completer();
+
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
@@ -190,10 +192,9 @@ class _ProviderHomeTabPageState extends State<ProviderHomeTabPage> {
         .child('provider')
         .child(currentFirebaseUser!.uid)
         .child('newProviderStatus');
-    ref.set(""); //ready to have a request
+    ref.set("watting"); //ready to have a request
     ref.onValue.listen((event) {});
   }
-
   updateProviderLocationAtRealtime() {
     streamSubscriptionPosition = Geolocator.getPositionStream()
         .listen((Position position)

@@ -1,5 +1,9 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onroad/Models/user_provider_request_info.dart';
+import 'package:onroad/global/global.dart';
+import 'package:onroad/mainScreens/new_sos_screen.dart';
 
 class NotificationDialogBox extends StatefulWidget {
   UserProviderRequestInfo? userProviderRequestDetails;
@@ -34,7 +38,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
             const SizedBox(
               height: 12,
             ),
-                        //////////////////////title//////////////////
+            //////////////////////title//////////////////
             const Text(
               "New SOS",
               style: TextStyle(
@@ -47,7 +51,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  ////////////////////////SOS location//////////////////////
+                  ////////////////////////SOS location/////////////////////
                   Row(
                     children: [
                       Image.asset(
@@ -71,11 +75,11 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                     ],
                   ),
                   const SizedBox(height: 20.0),
-                  /////////////////////////////SOS Type////////////////////////////
+                                                      /////////////////////////////SOS Type////////////////////////////
                   Row(
                     children: [
                       Image.asset(
-                        '',
+                        " ",
                         width: 30,
                         height: 30,
                       ),
@@ -106,7 +110,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                           ////////////////////Cancel SOS requist//////////////
+                                                             ////////////////////Cancel SOS requist//////////////
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
@@ -114,7 +118,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child:  Text(
+                    child: Text(
                       "Cancel".toUpperCase(),
                       style: const TextStyle(
                         fontSize: 14.0,
@@ -124,13 +128,15 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                   const SizedBox(
                     width: 25.0,
                   ),
-                             ////////////////////Accept SOS requist////////////////
+                                                        ////////////////////Accept SOS requist////////////////
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                     ),
-                    onPressed: () {},
-                    child:  Text(
+                    onPressed: () {
+                      acceptSoSRequeste(context);
+                    },
+                    child: Text(
                       "Accept".toUpperCase(),
                       style: const TextStyle(
                         fontSize: 14.0,
@@ -144,5 +150,42 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
         ),
       ),
     );
+  }
+
+  acceptSoSRequeste(BuildContext context) {
+    String getSOSRideRequestID = " ";
+    FirebaseDatabase.instance
+        .ref()
+        .child("provider")
+        .child(currentFirebaseUser!.uid)
+        .child("newProviderStatus")
+        .once()
+        .then((snap) {
+      if (snap.snapshot.value != null) {
+        getSOSRideRequestID = snap.snapshot.value.toString();
+
+      } else {
+        Fluttertoast.showToast(msg: "This SOS request do not exists.");
+      }
+      if (getSOSRideRequestID ==
+          widget.userProviderRequestDetails!.sosRequestId) {
+        FirebaseDatabase.instance
+            .ref()
+            .child("provider")
+            .child(currentFirebaseUser!.uid)
+            .child("newProviderStatus")
+            .set("accepted");
+                              ////send provider to newSOS Screen////
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (c) => NewSosScreen(
+                userProviderRequestDetails:widget.userProviderRequestDetails),
+          ),
+        );
+      } else {
+        Fluttertoast.showToast(msg: "this SOS do not exists.");
+      }
+    });
   }
 }
