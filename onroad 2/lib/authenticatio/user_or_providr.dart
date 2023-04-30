@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:onroad/authenticatio/provider/login_screen_provider.dart';
-import 'package:onroad/authenticatio/user/signup_user.dart';
-import 'package:onroad/authenticatio/user/user_login.dart';
 import 'package:onroad/mainScreens/main_screens.dart';
 
 
@@ -76,7 +74,6 @@ class _UserProviderState extends State<UserProvider> {
                     SizedBox(
                       height: 50,
                       width: 130,
-                                   ///////////////////User push///////////////////////////
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
@@ -108,13 +105,12 @@ class _UserProviderState extends State<UserProvider> {
                     SizedBox(
                       height: 50,
                       width: 130,
-                                        ////////////////Provider push //////////////
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (c) => const ProviderLoginScreen(),
+                              builder: (c) => const LoginScreen(),
                             ),
                           );
                         },

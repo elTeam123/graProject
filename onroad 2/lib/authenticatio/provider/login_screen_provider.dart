@@ -10,14 +10,14 @@ import 'package:onroad/widgets/progress_dialog.dart';
 
 import 'forgot_password.dart';
 
-class ProviderLoginScreen extends StatefulWidget {
-  const ProviderLoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<ProviderLoginScreen> createState() => _ProviderLoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _ProviderLoginScreenState extends State<ProviderLoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
@@ -44,7 +44,7 @@ class _ProviderLoginScreenState extends State<ProviderLoginScreen> {
           );
         });
 
-    final User? firebaseProvider = (await fAuth
+    final User? firebaseUser = (await fAuth
             .signInWithEmailAndPassword(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
@@ -55,21 +55,15 @@ class _ProviderLoginScreenState extends State<ProviderLoginScreen> {
     }))
         .user;
 
-    if (firebaseProvider != null) {
-      currentFirebaseUser = firebaseProvider;
+    if (firebaseUser != null) {
+      currentFirebaseUser = firebaseUser;
       Fluttertoast.showToast(msg: "Login Successful.");
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (c) => const MainScreenProvider(),
-      //   ),
-      // );
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MainScreenProvider(),
-          ),
-          (route) => false);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (c) => const MainScreenProvider(),
+        ),
+      );
     } else {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "Error Occurred during Login.");
@@ -197,7 +191,7 @@ class _ProviderLoginScreenState extends State<ProviderLoginScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
+                        children:  [
                           TextButton(
                             onPressed: () {
                               Navigator.push(
@@ -208,11 +202,11 @@ class _ProviderLoginScreenState extends State<ProviderLoginScreen> {
                               );
                             },
                             child: const Text(
-                              'Forgot Password?',
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold,
-                              ),
+                                'Forgot Password?',
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
                             ),
                           ),
                         ],
@@ -257,7 +251,7 @@ class _ProviderLoginScreenState extends State<ProviderLoginScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (c) => const ProviderSignUpScreen(),
+                                builder: (c) => const SignUpScreen(),
                               ),
                             );
                           },

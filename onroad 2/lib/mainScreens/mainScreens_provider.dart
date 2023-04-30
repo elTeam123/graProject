@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:onroad/provider_TabPages/notifications_tabpage.dart';
 import 'package:onroad/provider_TabPages/provider_hometabpage.dart';
@@ -32,46 +33,92 @@ class _MainScreenProviderState extends State<MainScreenProvider>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: TabBarView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: tabController,
-        children: const [
-          ProviderHomeTabPage(),
-          Notifications(),
-          ProviderProfileTabPage(),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        color: Colors.white60,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 15,
-            vertical: 13,
-          ),
-          child: GNav(
-            backgroundColor: Colors.white60,
-            color: Colors.black,
-            activeColor: Colors.black,
-            tabBackgroundColor: Colors.green,
-            gap: 8,
-            onTabChange: onItemClicked,
-            padding: const EdgeInsets.all(16),
-            tabs: const [
-              GButton(
-                icon: Icons.home,
-                text: 'Home',
+    //////////////////////////الجزء الخاص بالخروج من التطبيق //////////////////////////
+    return WillPopScope(
+      onWillPop: () async {
+        return await showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text(
+              'Are you sure you want to exit?',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
               ),
-              GButton(
-                icon: Icons.notifications,
-                text: 'Notifications',
+            ),
+            actions: <Widget>[
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.green,
+                ),
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text(
+                  'No',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-
-              GButton(
-                icon: Icons.person_rounded,
-                text: 'Profile',
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
+                onPressed: () => {
+                  Navigator.of(context).pop(true),
+                  SystemNavigator.pop(),
+                },
+                child: const Text(
+                  'Yes',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
+          ),
+        );
+      },
+      child: Scaffold(
+        body: TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: tabController,
+          children: const [
+            ProviderHomeTabPage(),
+            Notifications(),
+            ProviderProfileTabPage(),
+          ],
+        ),
+        bottomNavigationBar: Container(
+          color: Colors.white60,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 13,
+            ),
+            child: GNav(
+              backgroundColor: Colors.white60,
+              color: Colors.black,
+              activeColor: Colors.black,
+              tabBackgroundColor: Colors.green,
+              gap: 8,
+              onTabChange: onItemClicked,
+              padding: const EdgeInsets.all(16),
+              tabs: const [
+                GButton(
+                  icon: Icons.home,
+                  text: 'Home',
+                ),
+                GButton(
+                  icon: Icons.notifications,
+                  text: 'Notifications',
+                ),
+                GButton(
+                  icon: Icons.person_rounded,
+                  text: 'Profile',
+                ),
+              ],
+            ),
           ),
         ),
       ),

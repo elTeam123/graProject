@@ -5,20 +5,19 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:onroad/authenticatio/provider/login_screen_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:onroad/authenticatio/user/user_login.dart';
 import 'package:onroad/global/global.dart';
 import 'package:onroad/global/uplod.dart';
 import 'package:onroad/mainScreens/mainScreens_provider.dart';
 import 'package:onroad/widgets/progress_dialog.dart';
 
-class ProviderSignUpScreen extends StatefulWidget {
-  const ProviderSignUpScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<ProviderSignUpScreen> createState() => _ProviderSignUpScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _ProviderSignUpScreenState extends State<ProviderSignUpScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   var fnameController = TextEditingController();
   var lnameController = TextEditingController();
   var emailController = TextEditingController();
@@ -55,7 +54,7 @@ class _ProviderSignUpScreenState extends State<ProviderSignUpScreen> {
           );
         });
 
-    final User? firebaseProvider = (await fAuth
+    final User? firebaseUser = (await fAuth
             .createUserWithEmailAndPassword(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
@@ -66,9 +65,9 @@ class _ProviderSignUpScreenState extends State<ProviderSignUpScreen> {
     }))
         .user;
 
-    if (firebaseProvider != null) {
+    if (firebaseUser != null) {
       Map driverMap = {
-        "id": firebaseProvider.uid,
+        "id": firebaseUser.uid,
         "fname": fnameController.text.trim(),
         "lname": lnameController.text.trim(),
         "email": emailController.text.trim(),
@@ -77,9 +76,9 @@ class _ProviderSignUpScreenState extends State<ProviderSignUpScreen> {
 
       DatabaseReference driversRef =
           FirebaseDatabase.instance.ref().child("provider");
-      driversRef.child(firebaseProvider.uid).set(driverMap);
+      driversRef.child(firebaseUser.uid).set(driverMap);
 
-      currentFirebaseUser = firebaseProvider;
+      currentFirebaseUser = firebaseUser;
       Fluttertoast.showToast(msg: "Account has been Created.");
       Navigator.push(
         context,
@@ -473,7 +472,7 @@ class _ProviderSignUpScreenState extends State<ProviderSignUpScreen> {
                     TextButton(
                       onPressed: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (c) => const UserLoginScreen()));
+                            MaterialPageRoute(builder: (c) => const LoginScreen()));
                       },
                       child: const Text(
                         'Login Here',
