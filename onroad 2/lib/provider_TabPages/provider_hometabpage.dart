@@ -31,7 +31,6 @@ class _ProviderHomeTabPageState extends State<ProviderHomeTabPage> {
   GlobalKey<ScaffoldState> sKey = GlobalKey<ScaffoldState>();
   double searchLocationContainerHeight = 220;
   //جزء تحديد الموقع
-  Position? providerCurrentPosition;
   var geolocator = Geolocator();
   LocationPermission? _locationPremission;
 
@@ -64,16 +63,26 @@ class _ProviderHomeTabPageState extends State<ProviderHomeTabPage> {
     String humanReadableAddress = await ProviderAssistantMethods
         .searchProviderAddressForGeographicCoDrdinates(
             providerCurrentPosition!, context);
-
-    if (kDebugMode) {
       print('this is your address=$humanReadableAddress');
-    }
+
   }
 
   readCurrentProviderInfo()async
   {
     currentFirebaseUser = fAuth.currentUser;
+    FirebaseDatabase.instance.ref().child("provider").child(currentFirebaseUser!.uid).once().then((snap)
+    {
+     if(snap.snapshot.value != null)
+     {
+       onlineproviderData.id  = (snap.snapshot.value as Map)["id"];
+       onlineproviderData.fname=(snap.snapshot.value as Map)["fname"];
+       onlineproviderData.lname=(snap.snapshot.value as Map)["lname"];
+       onlineproviderData.phone=(snap.snapshot.value as Map)["phone"];
+       onlineproviderData.email=(snap.snapshot.value as Map)["email"];
+     }
+    });
     PushNotificationSystem pushNotificationSystem = PushNotificationSystem();
+
     pushNotificationSystem.initializeCloudMessaging(context);
     pushNotificationSystem.generateAndGetToken();
   }

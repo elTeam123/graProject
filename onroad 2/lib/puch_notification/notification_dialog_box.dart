@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onroad/Models/user_provider_request_info.dart';
 import 'package:onroad/global/global.dart';
 import 'package:onroad/mainScreens/new_sos_screen.dart';
+import 'package:onroad/provider_Assistants/assistabtprovider_methods.dart';
 
 class NotificationDialogBox extends StatefulWidget {
   UserProviderRequestInfo? userProviderRequestDetails;
@@ -175,6 +176,8 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
             .child(currentFirebaseUser!.uid)
             .child("newProviderStatus")
             .set("accepted");
+        ProviderAssistantMethods.pauseLiveLocationUpdates();
+
                               ////send provider to newSOS Screen////
         Navigator.push(
           context,
@@ -184,7 +187,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
           ),
         );
       } else {
-        Fluttertoast.showToast(msg: "this SOS do not exists.");
+        Fluttertoast.showToast(msg: "This SOS do not exists.");
       }
     });
   }

@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:async';
+import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +10,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:onroad/global/global.dart';
+import 'package:onroad/provider_Assistants/assistabtprovider_methods.dart';
 import 'package:onroad/user_TabPages/services_TabPage.dart';
 import 'package:onroad/user_assistants/assistant_methods.dart';
 import 'package:onroad/user_assistants/geofire_assistant.dart';
 import '../Models/activate_nearbyavailabledrivers.dart';
-
+import 'package:http/http.dart' as http;
 
 class HomeTabPage extends StatefulWidget {
   const HomeTabPage({super.key});
@@ -79,22 +81,21 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
   DatabaseReference? referenceProviderRequest;
 
-
   @override
   void initState() {
     super.initState();
     checkIfLocationPermissionAllowed();
   }
 
-
   void saveProviderRequestInformation() async {
-    referenceProviderRequest = FirebaseDatabase.instance.ref().child("SOS Requests").push();
+    referenceProviderRequest =
+        FirebaseDatabase.instance.ref().child("SOS Requests").push();
     // Get the current location and time
     Position position = await Geolocator.getCurrentPosition();
     // Create a reference to the Firebase database
     String humanReadableAddress =
-    await AssistantMethods.searchAddressForGeographicCoDrdinates(
-        userCurrentPosition!, context);
+        await AssistantMethods.searchAddressForGeographicCoDrdinates(
+            userCurrentPosition!, context);
 
     // Save the user's location, time, and other information to the database
 
@@ -106,24 +107,22 @@ class _HomeTabPageState extends State<HomeTabPage> {
       "name": "dfgdf ",
       "phone": "dfgdfg ",
       "origin": originLocationMap,
-      "time":DateTime.now().toString() ,
+      "time": DateTime.now().toString(),
       "providerID": "waww ",
       "locationName": humanReadableAddress,
     };
     // Call other functions here if needed
-     referenceProviderRequest!.set(userInfoMap);
+    referenceProviderRequest!.set(userInfoMap);
 
     onlineNearByAvailableProvidersList =
         GeoFireAssistant.activateNearbyAvailableProvideList;
     searchNearestOnlineProvider();
   }
 
-
-
   searchNearestOnlineProvider() async {
     // cancel the request
     if (onlineNearByAvailableProvidersList.isEmpty) {
-       referenceProviderRequest!.remove();
+      referenceProviderRequest!.remove();
       setState(() {
         markersSet.clear();
         circlesSet.clear();
@@ -144,39 +143,59 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
     //available provider
     await retrieveOnlineProviderInfo(onlineNearByAvailableProvidersList);
-      var response = await  Navigator.push(
+    var response = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (c) =>
             ServicesTabPage(referenceProviderRequest: referenceProviderRequest),
       ),
     );
-    if(response == "providerChoosed" ){
-      FirebaseDatabase
-          .instance.ref()
+    if (response == "providerChoosed") {
+      FirebaseDatabase.instance
+          .ref()
           .child("provider")
           .child(chosenProviderId!)
-          .once().then((snap){
-            if(snap.snapshot.value != null){
-              sendNotificationtoProviderNow(chosenProviderId!);
-            }
-            else{
-              Fluttertoast.showToast(msg: "Not exist ,try again");
-            }
+          .once()
+          .then((snap) {
+        if (snap.snapshot.value != null) {
+          sendNotificationtoProviderNow(chosenProviderId!);
+        } else {
+          Fluttertoast.showToast(msg: "Not exist ,Try again");
+        }
       });
     }
   }
 
-
-            ///////////////////////send a requist////////////////////
-   sendNotificationtoProviderNow(String chosenProviderId)
-  {
+  ///////////////////////send a requist////////////////////
+  sendNotificationtoProviderNow(String chosenProviderId) {
     // assign providerRequist
-      FirebaseDatabase.instance.ref()
+    FirebaseDatabase.instance
+        .ref()
         .child("provider")
         .child(chosenProviderId)
         .child("newProviderStatus")
         .set(referenceProviderRequest!.key);
+    //////////////////automate the push notification system//////////////////
+    FirebaseDatabase.instance
+        .ref()
+        .child("provider")
+        .child(chosenProviderId)
+        .child("Token")
+        .once()
+        .then((snap) {
+      if (snap.snapshot.value != null) {
+        String deviceRegistrationToken = snap.snapshot.value.toString();
+        ///////// send Notification Now ///////////
+        AssistantMethods.sendNotificationToProviderNow(
+            deviceRegistrationToken,
+            referenceProviderRequest!.key.toString(),
+            context);
+        Fluttertoast.showToast(msg: "Notification sent Successfully.");
+      } else {
+        Fluttertoast.showToast(msg: "Please Choose another provider.");
+        return;
+      }
+    });
   }
 
   // retrieveOnlineProviderInfo(List onlineNearestProvidersList) async {
@@ -313,12 +332,9 @@ class _HomeTabPageState extends State<HomeTabPage> {
               displayActiveProviderOnMap();
               break;
           }
-
         }
 
-        setState(() {
-
-        });
+        setState(() {});
       },
     );
   }
