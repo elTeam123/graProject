@@ -23,7 +23,7 @@ class _InfoState extends State<Info> {
   String? _imageUrl;
   bool camera = true;
 
-  Future<void> _getImage() async {
+  Future<void> _getUserImage() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(
       source: ImageSource.gallery,
@@ -35,7 +35,7 @@ class _InfoState extends State<Info> {
     }
   }
 
-  Future<void> _uploadImage() async {
+  Future<void> _uploadUserImage() async {
     if (_image == null) {
       return;
     }
@@ -48,11 +48,11 @@ class _InfoState extends State<Info> {
     setState(() {
       _imageUrl = url;
     });
-    final dbRef = FirebaseDatabase.instance
+    final user = FirebaseDatabase.instance
         .ref()
         .child('users')
         .child(currentFirebaseUser!.uid);
-    dbRef.push().set({
+    user.push().set({
       'imageUrl': _imageUrl,
     });
   }
@@ -64,9 +64,9 @@ class _InfoState extends State<Info> {
   }
 
   Future<void> _loadImageUrl() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences user = await SharedPreferences.getInstance();
     setState(() {
-      _imageUrl = prefs.getString('image_url');
+      _imageUrl = user.getString('image_url');
     });
   }
 
@@ -119,7 +119,7 @@ class _InfoState extends State<Info> {
                                 ],
                                 loadingBuilder: (context, event) =>
                                     const Center(
-                                  child: CircularProgressIndicator(),
+                                      child: CircularProgressIndicator(),
                                 ),
                               );
                             },
@@ -129,6 +129,10 @@ class _InfoState extends State<Info> {
                           backgroundImage: _imageUrl != null
                               ? CachedNetworkImageProvider(_imageUrl!)
                               : null,
+                          foregroundImage: _imageUrl != null
+                              ? null
+                              : const AssetImage('images/profile.png'),
+                          backgroundColor: Colors.white,
                         ),
                       ),
                     ),
@@ -144,7 +148,7 @@ class _InfoState extends State<Info> {
                         child: camera
                             ? MaterialButton(
                                 onPressed: () {
-                                  _getImage().then((value) => {
+                                  _getUserImage().then((value) => {
                                         setState(() {
                                           camera = false;
                                         })
@@ -158,7 +162,7 @@ class _InfoState extends State<Info> {
                               )
                             : MaterialButton(
                                 onPressed: () {
-                                  _uploadImage().then((value) => {
+                                  _uploadUserImage().then((value) => {
                                         setState(() {
                                           camera = true;
                                         })

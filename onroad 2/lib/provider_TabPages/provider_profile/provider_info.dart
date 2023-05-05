@@ -1,6 +1,4 @@
-
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -23,7 +21,7 @@ class _ProviderInfoState extends State<ProviderInfo> {
   String? _imageUrl;
   bool camera = true;
 
-  Future<void> _getImage() async {
+  Future<void> _getProviderImage() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(
       source: ImageSource.gallery,
@@ -35,7 +33,7 @@ class _ProviderInfoState extends State<ProviderInfo> {
     }
   }
 
-  Future<void> _uploadImage() async {
+  Future<void> _uploadProviderImage() async {
     if (_image == null) {
       return;
     }
@@ -60,10 +58,10 @@ class _ProviderInfoState extends State<ProviderInfo> {
   @override
   void initState() {
     super.initState();
-    _loadImageUrl();
+    _loadProviderImageUrl();
   }
 
-  Future<void> _loadImageUrl() async {
+  Future<void> _loadProviderImageUrl() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _imageUrl = prefs.getString('image_url');
@@ -129,6 +127,10 @@ class _ProviderInfoState extends State<ProviderInfo> {
                           backgroundImage: _imageUrl != null
                               ? CachedNetworkImageProvider(_imageUrl!)
                               : null,
+                          foregroundImage: _imageUrl != null
+                              ? null
+                              : const AssetImage('images/profile.png'),
+                          backgroundColor: Colors.white,
                         ),
                       ),
                     ),
@@ -144,7 +146,7 @@ class _ProviderInfoState extends State<ProviderInfo> {
                         child: camera
                             ? MaterialButton(
                                 onPressed: () {
-                                  _getImage().then((value) => {
+                                  _getProviderImage().then((value) => {
                                         setState(() {
                                           camera = false;
                                         })
@@ -158,7 +160,7 @@ class _ProviderInfoState extends State<ProviderInfo> {
                               )
                             : MaterialButton(
                                 onPressed: () {
-                                  _uploadImage().then((value) => {
+                                  _uploadProviderImage().then((value) => {
                                         setState(() {
                                           camera = true;
                                         })
@@ -174,9 +176,9 @@ class _ProviderInfoState extends State<ProviderInfo> {
                     ),
                   ],
                 ),
-                Text(
+                const Text(
                   'Full Name',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20.0,
                     fontFamily: 'Brand Bold',
                     fontWeight: FontWeight.w500,
@@ -186,9 +188,9 @@ class _ProviderInfoState extends State<ProviderInfo> {
                 const SizedBox(
                   height: 5.0,
                 ),
-                Text(
+                const Text(
                   'Phone',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15.0,
                     fontFamily: 'Brand Bold',
                     fontWeight: FontWeight.w200,
