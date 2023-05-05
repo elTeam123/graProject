@@ -20,7 +20,7 @@ class Info extends StatefulWidget {
 
 class _InfoState extends State<Info> {
   File? _image;
-  String? _imageUrl;
+  String? _imageUserUrl;
   bool camera = true;
 
   Future<void> _getUserImage() async {
@@ -46,27 +46,27 @@ class _InfoState extends State<Info> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('image_url', url);
     setState(() {
-      _imageUrl = url;
+      _imageUserUrl = url;
     });
     final user = FirebaseDatabase.instance
         .ref()
         .child('users')
         .child(currentFirebaseUser!.uid);
     user.push().set({
-      'imageUrl': _imageUrl,
+      '_imageUserUrl': _imageUserUrl,
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _loadImageUrl();
+    _loadUserImageUrl();
   }
 
-  Future<void> _loadImageUrl() async {
+  Future<void> _loadUserImageUrl() async {
     SharedPreferences user = await SharedPreferences.getInstance();
     setState(() {
-      _imageUrl = user.getString('image_url');
+      _imageUserUrl = user.getString('image_url');
     });
   }
 
@@ -108,8 +108,8 @@ class _InfoState extends State<Info> {
                               return PhotoViewGallery(
                                 pageOptions: [
                                   PhotoViewGalleryPageOptions(
-                                    imageProvider: _imageUrl != null
-                                        ? CachedNetworkImageProvider(_imageUrl!)
+                                    imageProvider: _imageUserUrl != null
+                                        ? CachedNetworkImageProvider(_imageUserUrl!)
                                         : null,
                                     heroAttributes:
                                         const PhotoViewHeroAttributes(
@@ -126,10 +126,10 @@ class _InfoState extends State<Info> {
                           );
                         },
                         child: CircleAvatar(
-                          backgroundImage: _imageUrl != null
-                              ? CachedNetworkImageProvider(_imageUrl!)
+                          backgroundImage: _imageUserUrl != null
+                              ? CachedNetworkImageProvider(_imageUserUrl!)
                               : null,
-                          foregroundImage: _imageUrl != null
+                          foregroundImage: _imageUserUrl != null
                               ? null
                               : const AssetImage('images/profile.png'),
                           backgroundColor: Colors.white,

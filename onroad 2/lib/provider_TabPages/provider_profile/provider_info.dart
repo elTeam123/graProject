@@ -18,7 +18,7 @@ class ProviderInfo extends StatefulWidget {
 
 class _ProviderInfoState extends State<ProviderInfo> {
   File? _image;
-  String? _imageUrl;
+  String? _imageProviderUrl;
   bool camera = true;
 
   Future<void> _getProviderImage() async {
@@ -37,22 +37,22 @@ class _ProviderInfoState extends State<ProviderInfo> {
     if (_image == null) {
       return;
     }
-    final ref = FirebaseStorage.instance.ref().child('images/$DateTime.jpg');
+    final ref =
+    FirebaseStorage.instance.ref().child('images/${DateTime.now()}.jpg');
     await ref.putFile(_image!);
     final url = await ref.getDownloadURL();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('image_url', url);
     setState(() {
-      _imageUrl = url;
+      _imageProviderUrl = url;
     });
-    DatabaseReference dbRef = FirebaseDatabase.instance
+    final provider = FirebaseDatabase.instance
         .ref()
         .child('provider')
-        .child(currentFirebaseUser!.uid)
-        .child('Image');
-    dbRef.set(
-      _imageUrl,
-    );
+        .child(currentFirebaseUser!.uid);
+    provider.push().set({
+      '_imageProviderUrl': _imageProviderUrl,
+    });
   }
 
   @override
@@ -64,7 +64,7 @@ class _ProviderInfoState extends State<ProviderInfo> {
   Future<void> _loadProviderImageUrl() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _imageUrl = prefs.getString('image_url');
+      _imageProviderUrl = prefs.getString('image_url');
     });
   }
 
@@ -106,8 +106,8 @@ class _ProviderInfoState extends State<ProviderInfo> {
                               return PhotoViewGallery(
                                 pageOptions: [
                                   PhotoViewGalleryPageOptions(
-                                    imageProvider: _imageUrl != null
-                                        ? CachedNetworkImageProvider(_imageUrl!)
+                                    imageProvider: _imageProviderUrl != null
+                                        ? CachedNetworkImageProvider(_imageProviderUrl!)
                                         : null,
                                     heroAttributes:
                                         const PhotoViewHeroAttributes(
@@ -124,10 +124,10 @@ class _ProviderInfoState extends State<ProviderInfo> {
                           );
                         },
                         child: CircleAvatar(
-                          backgroundImage: _imageUrl != null
-                              ? CachedNetworkImageProvider(_imageUrl!)
+                          backgroundImage: _imageProviderUrl != null
+                              ? CachedNetworkImageProvider(_imageProviderUrl!)
                               : null,
-                          foregroundImage: _imageUrl != null
+                          foregroundImage: _imageProviderUrl != null
                               ? null
                               : const AssetImage('images/profile.png'),
                           backgroundColor: Colors.white,
@@ -176,9 +176,9 @@ class _ProviderInfoState extends State<ProviderInfo> {
                     ),
                   ],
                 ),
-                const Text(
-                  'Full Name',
-                  style: TextStyle(
+                Text(
+                  '${onlineproviderData.fname!} ${onlineproviderData.lname!}',
+                  style: const TextStyle(
                     fontSize: 20.0,
                     fontFamily: 'Brand Bold',
                     fontWeight: FontWeight.w500,
@@ -186,12 +186,12 @@ class _ProviderInfoState extends State<ProviderInfo> {
                   ),
                 ),
                 const SizedBox(
-                  height: 5.0,
+                  height: 4.0,
                 ),
-                const Text(
-                  'Phone',
-                  style: TextStyle(
-                    fontSize: 15.0,
+                Text(
+                  onlineproviderData.phone!,
+                  style: const TextStyle(
+                    fontSize: 13.0,
                     fontFamily: 'Brand Bold',
                     fontWeight: FontWeight.w200,
                     color: Colors.black,

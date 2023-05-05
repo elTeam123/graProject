@@ -19,7 +19,6 @@ class ProviderHomeTabPage extends StatefulWidget {
 }
 
 class _ProviderHomeTabPageState extends State<ProviderHomeTabPage> {
-
   GoogleMapController? newGoogleMapController;
   final Completer<GoogleMapController> _controllerGoogleMap = Completer();
 
@@ -63,23 +62,25 @@ class _ProviderHomeTabPageState extends State<ProviderHomeTabPage> {
     String humanReadableAddress = await ProviderAssistantMethods
         .searchProviderAddressForGeographicCoDrdinates(
             providerCurrentPosition!, context);
-      print('this is your address=$humanReadableAddress');
-
+    print('this is your address=$humanReadableAddress');
   }
 
-  readCurrentProviderInfo()async
-  {
+  readCurrentProviderInfo() async {
     currentFirebaseUser = fAuth.currentUser;
-    FirebaseDatabase.instance.ref().child("provider").child(currentFirebaseUser!.uid).once().then((snap)
-    {
-     if(snap.snapshot.value != null)
-     {
-       onlineproviderData.id  = (snap.snapshot.value as Map)["id"];
-       onlineproviderData.fname=(snap.snapshot.value as Map)["fname"];
-       onlineproviderData.lname=(snap.snapshot.value as Map)["lname"];
-       onlineproviderData.phone=(snap.snapshot.value as Map)["phone"];
-       onlineproviderData.email=(snap.snapshot.value as Map)["email"];
-     }
+    FirebaseDatabase.instance
+        .ref()
+        .child("provider")
+        .child(currentFirebaseUser!.uid)
+        .once()
+        .then((snap) {
+      if (snap.snapshot.value != null) {
+        onlineproviderData.id = (snap.snapshot.value as Map)["id"];
+        onlineproviderData.fname = (snap.snapshot.value as Map)["fname"];
+        onlineproviderData.lname = (snap.snapshot.value as Map)["lname"];
+        onlineproviderData.phone = (snap.snapshot.value as Map)["phone"];
+        onlineproviderData.email = (snap.snapshot.value as Map)["email"];
+        onlineproviderData.Image = (snap.snapshot.value as Map)["Image"];
+      }
     });
     PushNotificationSystem pushNotificationSystem = PushNotificationSystem();
 
@@ -97,91 +98,91 @@ class _ProviderHomeTabPageState extends State<ProviderHomeTabPage> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-        children: [
-          GoogleMap(
-            mapType: MapType.normal,
-            myLocationEnabled: true,
-            zoomControlsEnabled: true,
-            zoomGesturesEnabled: true,
-            initialCameraPosition: _kGooglePlex,
-            onMapCreated: (GoogleMapController controller) {
-              _controllerGoogleMap.complete(controller);
-              newGoogleMapController = controller;
-              locateProviderPosition();
-            },
-          ),
-          //on and off UI
-          statusText != "Online"
-              ? Container(
-            height: MediaQuery.of(context).size.height,
-            width: double.infinity,
-            color: Colors.black87,
-          )
-              : Container(),
-          // button for online offline provider
-          Positioned(
-            top: statusText != "Online"
-                ? MediaQuery.of(context).size.height * 0.46
-                : 25,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    if (isProviderActivate != true) //offline
-                        {
-                     providerIsOnline();
-                      updateProviderLocationAtRealtime();
+      children: [
+        GoogleMap(
+          mapType: MapType.normal,
+          myLocationEnabled: true,
+          zoomControlsEnabled: true,
+          zoomGesturesEnabled: true,
+          initialCameraPosition: _kGooglePlex,
+          onMapCreated: (GoogleMapController controller) {
+            _controllerGoogleMap.complete(controller);
+            newGoogleMapController = controller;
+            locateProviderPosition();
+          },
+        ),
+        //on and off UI
+        statusText != "Online"
+            ? Container(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                color: Colors.black87,
+              )
+            : Container(),
+        // button for online offline provider
+        Positioned(
+          top: statusText != "Online"
+              ? MediaQuery.of(context).size.height * 0.46
+              : 25,
+          left: 0,
+          right: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  if (isProviderActivate != true) //offline
+                  {
+                    providerIsOnline();
+                    updateProviderLocationAtRealtime();
 
-                      setState(() {
-                        statusText = "Online";
-                        isProviderActivate = true;
-                        buttonColor = Colors.transparent;
-                      });
+                    setState(() {
+                      statusText = "Online";
+                      isProviderActivate = true;
+                      buttonColor = Colors.transparent;
+                    });
 
-                      //display Toast
-                      Fluttertoast.showToast(msg: "you are Online Now");
-                    } else //online
-                        {
-                      providerIsOffline();
+                    //display Toast
+                    Fluttertoast.showToast(msg: "you are Online Now");
+                  } else //online
+                  {
+                    providerIsOffline();
 
-                      setState(() {
-                        statusText = "Offline";
-                        isProviderActivate = false;
-                        buttonColor = Colors.grey;
-                      });
-                      //display Toast
-                      Fluttertoast.showToast(msg: "you are Offline Now");
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: buttonColor,
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(26),
-                    ),
-                  ),
-                  child: statusText != "Online"
-                      ? Text(
-                    statusText,
-                    style: const TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white70,
-                    ),
-                  )
-                      : const Icon(
-                    Icons.phonelink_ring,
-                    color: Colors.white,
-                    size: 26,
+                    setState(() {
+                      statusText = "Offline";
+                      isProviderActivate = false;
+                      buttonColor = Colors.grey;
+                    });
+                    //display Toast
+                    Fluttertoast.showToast(msg: "you are Offline Now");
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: buttonColor,
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(26),
                   ),
                 ),
-              ],
-            ),
+                child: statusText != "Online"
+                    ? Text(
+                        statusText,
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white70,
+                        ),
+                      )
+                    : const Icon(
+                        Icons.phonelink_ring,
+                        color: Colors.white,
+                        size: 26,
+                      ),
+              ),
+            ],
           ),
-        ],
+        ),
+      ],
     );
   }
 
@@ -197,24 +198,24 @@ class _ProviderHomeTabPageState extends State<ProviderHomeTabPage> {
       providerCurrentPosition!.latitude,
       providerCurrentPosition!.longitude,
     );
-    DatabaseReference ref = FirebaseDatabase.instance.ref()
+    DatabaseReference ref = FirebaseDatabase.instance
+        .ref()
         .child('provider')
         .child(currentFirebaseUser!.uid)
         .child('newProviderStatus');
     ref.set("watting"); //ready to have a request
     ref.onValue.listen((event) {});
   }
+
   updateProviderLocationAtRealtime() {
-    streamSubscriptionPosition = Geolocator.getPositionStream()
-        .listen((Position position)
-    {
+    streamSubscriptionPosition = Geolocator.getPositionStream().listen(
+      (Position position) {
         providerCurrentPosition = position;
-        if (isProviderActivate == true)
-        {
+        if (isProviderActivate == true) {
           Geofire.setLocation(
-              currentFirebaseUser!.uid,
-              providerCurrentPosition!.latitude,
-              providerCurrentPosition!.longitude,
+            currentFirebaseUser!.uid,
+            providerCurrentPosition!.latitude,
+            providerCurrentPosition!.longitude,
           );
         }
         LatLng latLng = LatLng(
@@ -243,7 +244,7 @@ class _ProviderHomeTabPageState extends State<ProviderHomeTabPage> {
       const Duration(milliseconds: 2000),
       () {
         // SystemChannels.platform.invokeMethod("systemNavigator.pop()");
-         SystemNavigator.pop();
+        SystemNavigator.pop();
       },
     );
   }
