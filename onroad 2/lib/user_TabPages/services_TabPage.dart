@@ -1,18 +1,34 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:onroad/global/global.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:smooth_star_rating_nsafe/smooth_star_rating.dart';
 
-class ServicesTabPage extends StatefulWidget
-{
+class ServicesTabPage extends StatefulWidget {
  DatabaseReference?referenceProviderRequest;
  ServicesTabPage({this.referenceProviderRequest});
+
+
   @override
   State<ServicesTabPage> createState() => _ServicesTabPageState();
 }
 
 class _ServicesTabPageState extends State<ServicesTabPage> {
+  int counter = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    increaseCounter();
+  }
+
+  void increaseCounter() {
+    setState(() {
+      counter++;
+    });
+    Future.delayed(const Duration(seconds: 1), increaseCounter);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +38,12 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-
-             Navigator.pop(context);
-             setState(() {
-               dList=[];
-               widget.referenceProviderRequest!.remove();
-             });
-
+             SystemNavigator.pop();
+            //  Navigator.pop(context);
+            //  setState(() {
+            //    dList=[];
+            //  });
+            widget.referenceProviderRequest!.remove();
           },
           icon: const Icon(
             Icons.arrow_back_ios_rounded,
@@ -214,86 +229,81 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
               ),
             ),
           ),
-          body: ListView.builder(
+            body: ListView.builder(
               itemCount: dList.length,
               itemBuilder: (BuildContext context, int index) {
                 return SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Row(
-                          children: [
-                            MaterialButton(
-                              onPressed: () {
-                                  setState(() {
-                                    chosenProviderId = dList[index]["id"].toString();
-                                  });
-                                  Navigator.pop(context,"providerChoosed");
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                    20,
-                                  ),
-                                  color: Colors.white,
-                                ),
-                                width: 250,
+                     child: Column(
+                       children: [
+                         const Padding(
+                           padding: EdgeInsets.only(top: 10),
+                         ),
+                          MaterialButton(                         
+                            onPressed: ()
+                            {
+                              setState(() {
+                                chosenProviderId = dList[index]["id"].toString();
+                              });
+                              Navigator.pop(context,"providerChoosed");
+                            },
+                            child: Container(
+                                decoration:BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.1),
+                                      spreadRadius: 5,
+                                      blurRadius: 7,
+
+                                    ),
+                                  ],
+                                borderRadius:BorderRadius.circular(20,),
+                                color: Colors.white,
+                                ) ,
+                                width: 300,
                                 height: 80,
-                                child: Row(
-                                  children: [
-                                    const Image(
-                                      height: 60,
-                                      image: AssetImage(
-                                        'images/user.png',
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      dList[index]['fname'] +
-                                          " " +
-                                          dList[index]['lname'],
-                                      style: const TextStyle(
+                                 child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: 
+                                  [
+                                     const Text(
+                                     " Active Provider" ,
+                                      style: TextStyle(
                                         fontSize: 15,
                                         fontFamily: 'Brand Bold',
                                       ),
                                     ),
                                     const SizedBox(
-                                      width: 10,
-                                    ),
-                                    const Text(
-                                      '5 Km',
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        fontFamily: 'Brand Bold',
-                                        color: Colors.green,
+                                         height: 5,
+                                       ),
+                                    SmoothStarRating(
+                                        rating:3.5,
+                                        color: Colors.black,
+                                        borderColor: Colors.white70,
+                                        allowHalfRating: true,
+                                        starCount: 5,
+                                        size: 15,
                                       ),
-                                    ),
+                                    const SizedBox(
+                                         height: 5,
+                                       ),
+                                    const Text(
+                                         '5 Km',
+                                         style: TextStyle(
+                                           fontSize: 11,
+                                           fontFamily: 'Brand Bold',
+                                           color: Colors.green,
+                                         ),
+                                       ),
                                   ],
-                                ),
-                              ),
-                            ),
-                            SmoothStarRating(
-                              rating: 3.5,
-                              color: Colors.black,
-                              borderColor: Colors.white70,
-                              allowHalfRating: true,
-                              starCount: 5,
-                              size: 15,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  ),
-                );
+                                 ),
+                           ),
+                          ),
+                         const SizedBox(
+                           height: 17,
+                         ),
+                       ],
+                     ),
+                   );
               }),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
         ),

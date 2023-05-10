@@ -56,7 +56,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                   Row(
                     children: [
                       Image.asset(
-                        '', //SOS location Image
+                        "images/info.png", //SOS location Image
                         width: 30,
                         height: 30,
                       ),
@@ -80,7 +80,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                   Row(
                     children: [
                       Image.asset(
-                        " ",
+                        "images/service.png",
                         width: 30,
                         height: 30,
                       ),
@@ -178,7 +178,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
             .set("accepted");
         ProviderAssistantMethods.pauseLiveLocationUpdates();
 
-                              ////send provider to newSOS Screen////
+                              ////send provider to new SOS Screen////
         Navigator.push(
           context,
           MaterialPageRoute(

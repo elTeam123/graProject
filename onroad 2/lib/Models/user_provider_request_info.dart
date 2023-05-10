@@ -7,6 +7,7 @@ class UserProviderRequestInfo {
   String? name;
   String? phone;
   DateTime? time;
+  String? services;
   UserProviderRequestInfo({
     this.sosRequestId,
     this.originLatLing,
@@ -14,6 +15,7 @@ class UserProviderRequestInfo {
     this.name,
     this.phone,
     this.time,
+    this.services,
 
   });
 }

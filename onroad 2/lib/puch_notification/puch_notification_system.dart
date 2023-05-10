@@ -61,6 +61,7 @@ class PushNotificationSystem {
         String name = ((snapData.snapshot.value! as Map)["name"]);
         String phone = ((snapData.snapshot.value! as Map)["phone"]);
         String time = ((snapData.snapshot.value! as Map)["time"]);
+        String services = ((snapData.snapshot.value! as Map)["Servece"]);
         String? sosRequestId = snapData.snapshot.key;
 
 
@@ -71,8 +72,9 @@ class PushNotificationSystem {
             LatLng(originLat, originLing);
         userProviderRequestDetails.locationName = locationName;
         userProviderRequestDetails.phone = phone;
-        userProviderRequestDetails.name=name;
-        userProviderRequestDetails.sosRequestId=sosRequestId;
+        userProviderRequestDetails.name = name;
+        userProviderRequestDetails.sosRequestId = sosRequestId;
+        userProviderRequestDetails.services = services;
 
 
 

@@ -31,19 +31,19 @@ class AssistantMethods {
 
   static sendNotificationToProviderNow(
       String deviceRegistrationToken, String userSosRequestId, context) async {
-    Map<String, String> headerNotificatioon = {
+    Map<String, String> headerNotification = {
       "Content-Type": "application/json",
      "Authorization": sreverToken,
     };
     Map bodyNotification = {
       "body": "hello, new SOS request. please check.",
-      "title": "SOS"
+      "title": "SOS",
     };
     Map dataMap = {
       "click_action": "FLUTTER_NOTIFICATION_CLICK",
       "id": "1",
       "status": "done",
-      "providerRequestedId": userSosRequestId
+      "providerRequestedId": userSosRequestId,
     };
     Map officialNotificationFormat = {
       "notification": bodyNotification,
@@ -53,7 +53,7 @@ class AssistantMethods {
     };
     var responseNotification = http.post(
       Uri.parse('https://fcm.googleapis.com/fcm/send'),
-      headers: headerNotificatioon,
+      headers: headerNotification,
       body: jsonEncode(officialNotificationFormat),
     );
   }
