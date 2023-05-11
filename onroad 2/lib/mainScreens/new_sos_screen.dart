@@ -382,8 +382,9 @@ var srvicesType = onlineUserData.services;
                           width: 22,
                         ),
                          Expanded(
+
                           child: Text(
-                            srvicesType!,
+                            'Check out and rescue ',
                             style: const TextStyle(
                               fontSize: 16,
                             ),
