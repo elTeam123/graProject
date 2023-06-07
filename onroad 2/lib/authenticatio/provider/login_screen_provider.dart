@@ -1,12 +1,15 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, body_might_complete_normally_catch_error
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:onroad/authenticatio/provider/signup_screen.dart';
 import 'package:onroad/global/global.dart';
 import 'package:onroad/mainScreens/mainScreens_provider.dart';
 import 'package:onroad/widgets/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'forgot_password.dart';
 
@@ -225,8 +228,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: 300,
                       height: 55.0,
                       child: MaterialButton(
-                        onPressed: () {
-                          validateForm();
+                        onPressed: () async {
+                          validateForm(); // التحقق من صحة النموذج أولاً
+
+                          if (formKey.currentState!.validate()) {
+                            final SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                            prefs.setString('email', emailController.text);
+                            Get.to(const MainScreenProvider());
+                            loginDriverNow(); // تسجيل الدخول إذا تم اجتياز التحقق من النموذج
+                          }
                         },
                         child: const Text(
                           'Login',

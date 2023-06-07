@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:onroad/authenticatio/provider/login_screen_provider.dart';
+import 'package:onroad/authenticatio/user/UserLogin.dart';
+import 'package:onroad/authenticatio/user/user_login.dart';
 import 'package:onroad/mainScreens/main_screens.dart';
+import 'package:provider/provider.dart';
+
 
 
 class UserProvider extends StatefulWidget {
@@ -14,6 +18,7 @@ class UserProvider extends StatefulWidget {
 class _UserProviderState extends State<UserProvider> {
   @override
   Widget build(BuildContext context) {
+    // final ap = Provider.of<AuthProvider>(context, listen: false);
     return WillPopScope(
       onWillPop: () async {
         return await showDialog(
@@ -124,7 +129,7 @@ class _UserProviderState extends State<UserProvider> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (c) => const MainScreen(),
+                              builder: (c) => const LoginScreenUser(),
                             ),
                           );
                         },
@@ -167,10 +172,10 @@ class _UserProviderState extends State<UserProvider> {
                           elevation: 6,
                         ),
                         child: const Text(
-                          'Provider',
+                          'ServiceProvider',
                           style: TextStyle(
                             fontFamily: 'Brand Bold',
-                            fontSize: 15,
+                            fontSize: 13,
                           ),
                         ),
                       ),

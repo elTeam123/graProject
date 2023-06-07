@@ -3,22 +3,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:onroad/authenticatio/provider/login_screen_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onroad/authenticatio/user/user_login.dart';
 import 'package:onroad/global/global.dart';
-import 'package:onroad/global/uplod.dart';
-import 'package:onroad/mainScreens/main_screens.dart';
 import 'package:onroad/widgets/progress_dialog.dart';
+import '../../mainScreens/main_screens.dart';
 
-class UserSignUpScreen extends StatefulWidget {
-  const UserSignUpScreen({super.key});
+class SignUpScreenUser extends StatefulWidget {
+  const SignUpScreenUser({super.key});
 
   @override
-  State<UserSignUpScreen> createState() => _UserSignUpScreenState();
+  State<SignUpScreenUser> createState() => _SignUpScreenState();
 }
 
-class _UserSignUpScreenState extends State<UserSignUpScreen> {
+class _SignUpScreenState extends State<SignUpScreenUser> {
   var fnameController = TextEditingController();
   var lnameController = TextEditingController();
   var emailController = TextEditingController();
@@ -56,11 +54,11 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
         });
 
     final User? firebaseUser = (await fAuth
-        .createUserWithEmailAndPassword(
+            .createUserWithEmailAndPassword(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
     )
-        .catchError((msg) {
+            .catchError((msg) {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "Error: $msg");
     }))
@@ -76,7 +74,7 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
       };
 
       DatabaseReference driversRef =
-      FirebaseDatabase.instance.ref().child("user");
+          FirebaseDatabase.instance.ref().child("userrrrs");
       driversRef.child(firebaseUser.uid).set(driverMap);
 
       currentFirebaseUser = firebaseUser;
@@ -107,40 +105,12 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
             child: Column(
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.only(top: 22),
                   child: Image(
-                    height: 170.0,
+                    height: 250.0,
                     image: AssetImage(
                       'images/signup.png',
                     ),
-                  ),
-                ),
-                const Text(
-                  'Application policy',
-                  style: TextStyle(
-                    fontFamily: 'Signatra',
-                    fontSize: 40,
-                  ),
-                ),
-                const SizedBox(
-                  height: 3.0,
-                ),
-                const Text(
-                  'To ensure the safety of users',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15,
-                    fontFamily: 'Brand-Regular',
-                    color: Color.fromARGB(255, 146, 143, 143),
-                  ),
-                ),
-                const Text(
-                  'Please upload a picture of the card',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15,
-                    fontFamily: 'Brand-Regular',
-                    color: Color.fromARGB(255, 146, 143, 143),
                   ),
                 ),
                 const SizedBox(
@@ -411,7 +381,6 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
                 const SizedBox(
                   height: 15.0,
                 ),
-
                 Container(
                   decoration: BoxDecoration(
                     color: const Color.fromARGB(
@@ -448,7 +417,7 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
                     TextButton(
                       onPressed: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (c) => const UserLoginScreen()));
+                            MaterialPageRoute(builder: (c) => const LoginScreenUser()));
                       },
                       child: const Text(
                         'Login Here',

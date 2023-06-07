@@ -24,6 +24,7 @@ void main() async {
         ChangeNotifierProvider<ProviderAppInfo>(
           create: (context) => ProviderAppInfo(),
         ),
+
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

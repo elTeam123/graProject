@@ -28,7 +28,7 @@ class _MainScreenProviderState extends State<MainScreenProvider>
   void initState() {
     super.initState();
 
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -85,7 +85,7 @@ class _MainScreenProviderState extends State<MainScreenProvider>
           controller: tabController,
           children: const [
             ProviderHomeTabPage(),
-            Notifications(),
+            // Notifications(),
             ProviderProfileTabPage(),
           ],
         ),
@@ -93,15 +93,15 @@ class _MainScreenProviderState extends State<MainScreenProvider>
           color: Colors.white60,
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-              vertical: 13,
+              horizontal: 50,
+              vertical: 10,
             ),
             child: GNav(
               backgroundColor: Colors.white60,
               color: Colors.black,
               activeColor: Colors.black,
               tabBackgroundColor: Colors.green,
-              gap: 8,
+              gap: 16,
               onTabChange: onItemClicked,
               padding: const EdgeInsets.all(16),
               tabs: const [
@@ -109,10 +109,10 @@ class _MainScreenProviderState extends State<MainScreenProvider>
                   icon: Icons.home,
                   text: 'Home',
                 ),
-                GButton(
-                  icon: Icons.notifications,
-                  text: 'Notifications',
-                ),
+                // GButton(
+                //   icon: Icons.notifications,
+                //   text: 'Notifications',
+                // ),
                 GButton(
                   icon: Icons.person_rounded,
                   text: 'Profile',

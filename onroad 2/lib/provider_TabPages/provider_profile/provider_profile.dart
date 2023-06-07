@@ -1,14 +1,16 @@
-
-
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:onroad/authenticatio/user_or_providr.dart';
+import 'package:onroad/mainScreens/mainScreens_provider.dart';
 import 'package:onroad/mainScreens/main_screens.dart';
 import 'package:onroad/provider_TabPages/provider_profile/provider_editprofile.dart';
 import 'package:onroad/provider_TabPages/provider_profile/provider_icon.dart';
 import 'package:onroad/provider_TabPages/provider_profile/provider_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProviderProfileTabPage extends StatefulWidget {
   const ProviderProfileTabPage({super.key});
@@ -25,6 +27,7 @@ class _ProviderProfileTabPage extends State<ProviderProfileTabPage> {
   final _mAuth = FirebaseAuth.instance;
 
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +39,7 @@ class _ProviderProfileTabPage extends State<ProviderProfileTabPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>  const MainScreen(),
+                builder: (context) =>  const MainScreenProvider(),
               ),
             );
           },
@@ -126,6 +129,9 @@ class _ProviderProfileTabPage extends State<ProviderProfileTabPage> {
                   MaterialPageRoute(
                       builder: (context) => const UserProvider()),
                       (route) => false);
+              final SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.remove('email');
+              Get.to(const UserProvider());
             },
           ),
         ],

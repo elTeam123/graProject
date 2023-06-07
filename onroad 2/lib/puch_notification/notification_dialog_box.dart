@@ -117,7 +117,27 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                       backgroundColor: Colors.red,
                     ),
                     onPressed: () {
+                      FirebaseDatabase.instance.ref()
+                          .child("SOS Requests")
+                          .child(widget.userProviderRequestDetails!.sosRequestId!)
+                      .remove().then((value)
+                      {
+                        FirebaseDatabase.instance.ref()
+                            .child("provider")
+                            .child(currentFirebaseUser!.uid)
+                            .child("newProviderStatus")
+                            .set("watting");
+                      }).then((value){
+                        FirebaseDatabase.instance.ref()
+                            .child("provider")
+                            .child(currentFirebaseUser!.uid)
+                            .child("sosHistory").child(widget.userProviderRequestDetails!.sosRequestId!).remove();
+                      }).then((value) {
+                        Fluttertoast.showToast(msg: "SOS Request Cancelled");
+                      });
+
                       Navigator.pop(context);
+
                     },
                     child: Text(
                       "Cancel".toUpperCase(),

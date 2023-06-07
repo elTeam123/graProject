@@ -2,25 +2,30 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:onroad/authenticatio/user_or_providr.dart';
+import 'package:onroad/mainScreens/mainScreens_provider.dart';
 import 'package:onroad/mainScreens/main_screens.dart';
-import 'package:onroad/user_TabPages/user_profile/user_editprofile.dart';
-import 'package:onroad/user_TabPages/user_profile/user_icon.dart';
-import 'package:onroad/user_TabPages/user_profile/user_info.dart';
-
+import 'package:onroad/provider_TabPages/provider_profile/provider_editprofile.dart';
+import 'package:onroad/provider_TabPages/provider_profile/provider_icon.dart';
+import 'package:onroad/provider_TabPages/provider_profile/provider_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileTabPage extends StatefulWidget {
   const ProfileTabPage({super.key});
 
+
   @override
-  State<ProfileTabPage> createState() => _ProfileTabPageState();
+  State<ProfileTabPage> createState() => _ProviderProfileTabPage();
 }
 
-class _ProfileTabPageState extends State<ProfileTabPage> {
+class _ProviderProfileTabPage extends State<ProfileTabPage> {
   String? name;
   String? image;
 
   final _mAuth = FirebaseAuth.instance;
+
 
 
   @override
@@ -59,7 +64,7 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (c) => const EditProfile(),
+                  builder: (c) => const ProviderEditProfile(),
                 ),
               );
             },
@@ -78,11 +83,11 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
       body: Column(
         children:
         [
-          const Info(),
+          const ProviderInfo(),
           const SizedBox(
             height: 50.0,
           ),
-          ProfileMenuWidget(
+          ProviderProfileMenuWidget(
             title: 'Settings',
             icon: Icons.settings,
             textColor: Colors.black,
@@ -92,7 +97,7 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
           const SizedBox(
             height: 10,
           ),
-          ProfileMenuWidget(
+          ProviderProfileMenuWidget(
             title: 'Update',
             icon: Icons.update,
             textColor: Colors.black,
@@ -102,7 +107,7 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
           const SizedBox(
             height: 20.0,
           ),
-          ProfileMenuWidget(
+          ProviderProfileMenuWidget(
             title: 'Information',
             icon: Icons.info_rounded,
             textColor: Colors.black,
@@ -112,7 +117,7 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
           const SizedBox(
             height: 10,
           ),
-          ProfileMenuWidget(
+          ProviderProfileMenuWidget(
             title: 'Logout',
             icon: Icons.logout,
             textColor: Colors.red,
@@ -124,6 +129,9 @@ class _ProfileTabPageState extends State<ProfileTabPage> {
                   MaterialPageRoute(
                       builder: (context) => const UserProvider()),
                       (route) => false);
+              final SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.clear();
+              Get.offAll(const UserProvider());
             },
           ),
         ],

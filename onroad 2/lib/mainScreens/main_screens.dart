@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen>
   void initState() {
     super.initState();
 
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -84,18 +84,18 @@ class _MainScreenState extends State<MainScreen>
         body: TabBarView(
           physics: const NeverScrollableScrollPhysics(),
           controller: tabController,
-          children: [
-            const HomeTabPage(),
-            ServicesTabPage(),
-            const ProfileTabPage(),
+          children: const [
+            HomeTabPage(),
+            // ServicesTabPage(),
+            ProfileTabPage(),
           ],
         ),
         bottomNavigationBar: Container(
           color: Colors.white60,
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-              vertical: 13,
+              horizontal: 50,
+              vertical: 10,
             ),
             child: GNav(
               backgroundColor: Colors.white60,
@@ -110,10 +110,10 @@ class _MainScreenState extends State<MainScreen>
                   icon: Icons.home,
                   text: 'Home',
                 ),
-                GButton(
-                  icon: Icons.miscellaneous_services_rounded,
-                  text: 'Services',
-                ),
+                // GButton(
+                //   icon: Icons.miscellaneous_services_rounded,
+                //   text: 'Services',
+                // ),
                 GButton(
                   icon: Icons.person_rounded,
                   text: 'Profile',

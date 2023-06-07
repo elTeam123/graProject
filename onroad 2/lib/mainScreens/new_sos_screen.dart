@@ -1,17 +1,22 @@
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:onroad/Models/user_provider_request_info.dart';
 import 'package:onroad/global/global.dart';
+import 'package:onroad/mainScreens/mainScreens_provider.dart';
 import 'package:onroad/provider_Assistants/assistabtprovider_methods.dart';
 import '../widgets/progress_dialog.dart';
 
 class NewSosScreen extends StatefulWidget {
   final UserProviderRequestInfo? userProviderRequestDetails;
-  const NewSosScreen({super.key, this.userProviderRequestDetails,});
+  const NewSosScreen({
+    super.key,
+    this.userProviderRequestDetails,
+  });
 
   @override
   State<NewSosScreen> createState() => _NewSosScreenState();
@@ -21,9 +26,10 @@ class _NewSosScreenState extends State<NewSosScreen> {
   GoogleMapController? newSosGoogleMapController;
   final Completer<GoogleMapController> _controllerGoogleMap = Completer();
 
-var srvicesType = onlineUserData.services;
+  var srvicesType = onlineUserData.services;
   String? buttonTitle = "arrived";
   Color? buttonColor = Colors.green;
+  String statusBtn = "accepted" ; 
 
   Set<Marker> setOfMarkers = <Marker>{};
   Set<Circle> setOfCircle = <Circle>{};
@@ -34,11 +40,11 @@ var srvicesType = onlineUserData.services;
   BitmapDescriptor? iconAnimatedMarker;
   var geoLocator = Geolocator();
   Position? onliceProviderCurrentPosition;
-  String  sosRequestStatus = "accepted";
+  String sosRequestStatus = "accepted";
   String durationFromProviderToSoS = "";
   bool isRequestDirectionDetails = false;
 
-  /////////poly line////////
+  /////////polyline////////
   // when provider accpet SOS =>
   // originLatLng = provider Location
   // destinationLatLng = User Location
@@ -204,12 +210,12 @@ var srvicesType = onlineUserData.services;
         });
         oldLatLng = latLngLiveProvider;
         upadteDurationTimeAtRealTime();
-        Map driverLatLngDataMap =
-        {
-          "latitude" : onliceProviderCurrentPosition!.latitude.toString(),
+        Map driverLatLngDataMap = {
+          "latitude": onliceProviderCurrentPosition!.latitude.toString(),
           "longitude": onliceProviderCurrentPosition!.longitude.toString(),
         };
-        FirebaseDatabase.instance.ref()
+        FirebaseDatabase.instance
+            .ref()
             .child("SOS Requests")
             .child(widget.userProviderRequestDetails!.sosRequestId!)
             .child("providerLocation")
@@ -219,32 +225,27 @@ var srvicesType = onlineUserData.services;
   }
 
   upadteDurationTimeAtRealTime() async {
- if(isRequestDirectionDetails == false)
- {
-   isRequestDirectionDetails = true;
-   if(onliceProviderCurrentPosition == null)
-   {
-     return;
-   }
-   var origionPosition = LatLng(
-       onliceProviderCurrentPosition!.latitude,
-       onliceProviderCurrentPosition!.longitude
-   );
-   LatLng? destinationLatLng;
-   if(sosRequestStatus == "accepted")
-   {
-     destinationLatLng = widget.userProviderRequestDetails!.originLatLing;
-   }
-   var directionInformation = await ProviderAssistantMethods.obtainOriginToDestinationDirectionDetails(origionPosition, destinationLatLng!);
-   if(directionInformation != null )
-   {
-     setState(() {
-       durationFromProviderToSoS = directionInformation.duration_text!;
-     });
-   }
-   isRequestDirectionDetails = false;
- }
-
+    if (isRequestDirectionDetails == false) {
+      isRequestDirectionDetails = true;
+      if (onliceProviderCurrentPosition == null) {
+        return;
+      }
+      var origionPosition = LatLng(onliceProviderCurrentPosition!.latitude,
+          onliceProviderCurrentPosition!.longitude);
+      LatLng? destinationLatLng;
+      if (sosRequestStatus == "accepted") {
+        destinationLatLng = widget.userProviderRequestDetails!.originLatLing;
+      }
+      var directionInformation = await ProviderAssistantMethods
+          .obtainOriginToDestinationDirectionDetails(
+              origionPosition, destinationLatLng!);
+      if (directionInformation != null) {
+        setState(() {
+          durationFromProviderToSoS = directionInformation.duration_text!;
+        });
+      }
+      isRequestDirectionDetails = false;
+    }
   }
 
   @override
@@ -306,7 +307,7 @@ var srvicesType = onlineUserData.services;
                 child: Column(
                   children: [
                     ////duration////
-                     Text(
+                    Text(
                       durationFromProviderToSoS,
                       style: const TextStyle(
                         fontSize: 16,
@@ -381,8 +382,7 @@ var srvicesType = onlineUserData.services;
                         const SizedBox(
                           width: 22,
                         ),
-                         Expanded(
-
+                        Expanded(
                           child: Text(
                             'Check out and rescue ',
                             style: const TextStyle(
@@ -405,7 +405,45 @@ var srvicesType = onlineUserData.services;
                     ),
 
                     ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (statusBtn == "accepted")
+                        {
+                          statusBtn = "arrived";
+                          FirebaseDatabase.instance.ref()
+                              .child("SOS Requests")
+                              .child(widget.userProviderRequestDetails!.sosRequestId!).child("status").set(statusBtn);
+                          setState(() {
+                            buttonTitle = "Start Check" ;
+                            buttonColor = Colors.lightGreenAccent ;
+
+                          });
+                        }
+                        else if (statusBtn == "arrived")
+                        {
+                          statusBtn = "Check SOS";
+                          FirebaseDatabase.instance.ref()
+                              .child("SOS Requests")
+                              .child(widget.userProviderRequestDetails!.sosRequestId!).child("status").set(statusBtn);
+                          setState(() {
+                            buttonTitle = "Finish" ;
+                            buttonColor = Colors.red ;
+                          });
+                        }
+                        else if (statusBtn == "Check SOS")
+                        {
+                          statusBtn = "done";
+                          FirebaseDatabase.instance.ref()
+                              .child("SOS Requests")
+                              .child(widget.userProviderRequestDetails!.sosRequestId!).child("status").set(statusBtn);
+                          streamSubscriptionLivePosition!.cancel();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (c) => const MainScreenProvider(),
+                            ),
+                          );
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: buttonColor,
                       ),

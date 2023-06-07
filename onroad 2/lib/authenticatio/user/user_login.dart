@@ -3,21 +3,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:onroad/authenticatio/provider/forgot_password.dart';
 import 'package:onroad/authenticatio/user/signup_user.dart';
 import 'package:onroad/global/global.dart';
-import 'package:onroad/mainScreens/mainScreens_provider.dart';
 import 'package:onroad/mainScreens/main_screens.dart';
 import 'package:onroad/widgets/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class UserLoginScreen extends StatefulWidget {
-  const UserLoginScreen({super.key});
+
+class LoginScreenUser extends StatefulWidget {
+  const LoginScreenUser({super.key});
 
   @override
-  State<UserLoginScreen> createState() => _UserLoginScreenState();
+  State<LoginScreenUser> createState() => _LoginScreenState();
 }
 
-class _UserLoginScreenState extends State<UserLoginScreen> {
+class _LoginScreenState extends State<LoginScreenUser> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
@@ -58,18 +61,12 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
     if (firebaseUser != null) {
       currentFirebaseUser = firebaseUser;
       Fluttertoast.showToast(msg: "Login Successful.");
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (c) => const MainScreenProvider(),
-      //   ),
-      // );
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MainScreen(),
-          ),
-          (route) => false);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (c) => const MainScreen(),
+        ),
+      );
     } else {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "Error Occurred during Login.");
@@ -197,7 +194,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
+                        children:  [
                           TextButton(
                             onPressed: () {
                               Navigator.push(
@@ -208,11 +205,11 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                               );
                             },
                             child: const Text(
-                              'Forgot Password?',
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold,
-                              ),
+                                'Forgot Password?',
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
                             ),
                           ),
                         ],
@@ -231,8 +228,16 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                       width: 300,
                       height: 55.0,
                       child: MaterialButton(
-                        onPressed: () {
-                          validateForm();
+                        onPressed: () async {
+                          validateForm(); // التحقق من صحة النموذج أولاً
+
+                          if (formKey.currentState!.validate()) {
+                            final SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                            prefs.setString('email', emailController.text);
+                            Get.to(const MainScreen());
+                            loginDriverNow(); // تسجيل الدخول إذا تم اجتياز التحقق من النموذج
+                          }
                         },
                         child: const Text(
                           'Login',
@@ -257,7 +262,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (c) => const UserSignUpScreen(),
+                                builder: (c) => const SignUpScreenUser(),
                               ),
                             );
                           },

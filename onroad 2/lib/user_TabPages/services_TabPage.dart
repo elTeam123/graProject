@@ -1,34 +1,57 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onroad/global/global.dart';
+import 'package:onroad/user_TabPages/home_TabPage.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:smooth_star_rating_nsafe/smooth_star_rating.dart';
 
 class ServicesTabPage extends StatefulWidget {
- DatabaseReference?referenceProviderRequest;
- ServicesTabPage({this.referenceProviderRequest});
-
+  DatabaseReference? referenceProviderRequest;
+  ServicesTabPage({this.referenceProviderRequest});
 
   @override
   State<ServicesTabPage> createState() => _ServicesTabPageState();
 }
 
 class _ServicesTabPageState extends State<ServicesTabPage> {
-  int counter = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    increaseCounter();
+  void checkOutAndRescue() async {
+    FirebaseDatabase.instance
+        .ref()
+        .child("SOS Requests")
+        .child(widget.referenceProviderRequest!.key!)
+        .child("Servece")
+        .set("checkOutAndRescue");
   }
 
-  void increaseCounter() {
-    setState(() {
-      counter++;
-    });
-    Future.delayed(const Duration(seconds: 1), increaseCounter);
+  void checktTires() async {
+    FirebaseDatabase.instance
+        .ref()
+        .child("SOS Requests")
+        .child(widget.referenceProviderRequest!.key!)
+        .child("Servece")
+        .set("Tires");
   }
+
+  void theBattery() async {
+    FirebaseDatabase.instance
+        .ref()
+        .child("SOS Requests")
+        .child(widget.referenceProviderRequest!.key!)
+        .child("Servece")
+        .set("The battery");
+  }
+
+  void needPetrol() async {
+    FirebaseDatabase.instance
+        .ref()
+        .child("SOS Requests")
+        .child(widget.referenceProviderRequest!.key!)
+        .child("Servece")
+        .set("Petrol");
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +61,7 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-             SystemNavigator.pop();
+            SystemNavigator.pop();
             //  Navigator.pop(context);
             //  setState(() {
             //    dList=[];
@@ -80,7 +103,9 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                     color: Colors.grey,
                   ),
                   MaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      checkOutAndRescue();
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
@@ -117,7 +142,9 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                     height: 16,
                   ),
                   MaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      checktTires();
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
@@ -155,7 +182,9 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                     height: 16,
                   ),
                   MaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      theBattery();
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
@@ -192,7 +221,9 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                     height: 16,
                   ),
                   MaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      needPetrol();
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
@@ -229,81 +260,97 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
               ),
             ),
           ),
-            body: ListView.builder(
+          body: ListView.builder(
               itemCount: dList.length,
               itemBuilder: (BuildContext context, int index) {
                 return SingleChildScrollView(
-                     child: Column(
-                       children: [
-                         const Padding(
-                           padding: EdgeInsets.only(top: 10),
-                         ),
-                          MaterialButton(                         
-                            onPressed: ()
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 10),
+                      ),
+                      MaterialButton(
+                        onPressed: () async {
+                          await FirebaseDatabase.instance
+                              .ref()
+                              .child("SOS Requests")
+                              .child(widget.referenceProviderRequest!.key!)
+                              .child("Servece")
+                              .once()
+                              .then((snap) {
+                            if (snap.snapshot.value != "")
                             {
-                              setState(() {
                                 chosenProviderId = dList[index]["id"].toString();
-                              });
-                              Navigator.pop(context,"providerChoosed");
-                            },
-                            child: Container(
-                                decoration:BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.1),
-                                      spreadRadius: 5,
-                                      blurRadius: 7,
+                                Navigator.pop(context, "providerChoosed");
 
-                                    ),
-                                  ],
-                                borderRadius:BorderRadius.circular(20,),
-                                color: Colors.white,
-                                ) ,
-                                width: 300,
-                                height: 80,
-                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: 
-                                  [
-                                     const Text(
-                                     " Active Provider" ,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontFamily: 'Brand Bold',
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                         height: 5,
-                                       ),
-                                    SmoothStarRating(
-                                        rating:3.5,
-                                        color: Colors.black,
-                                        borderColor: Colors.white70,
-                                        allowHalfRating: true,
-                                        starCount: 5,
-                                        size: 15,
-                                      ),
-                                    const SizedBox(
-                                         height: 5,
-                                       ),
-                                    const Text(
-                                         '5 Km',
-                                         style: TextStyle(
-                                           fontSize: 11,
-                                           fontFamily: 'Brand Bold',
-                                           color: Colors.green,
-                                         ),
-                                       ),
-                                  ],
-                                 ),
-                           ),
+                            }
+                            else {
+                              Fluttertoast.showToast(
+                                  msg: "Choose your service frist, please... ",
+                              webShowClose: true
+                              );
+                            }
+                          });
+
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(
+                              20,
+                            ),
+                            color: Colors.white,
                           ),
-                         const SizedBox(
-                           height: 17,
-                         ),
-                       ],
-                     ),
-                   );
+                          width: 300,
+                          height: 80,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                " Active Provider",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'Brand Bold',
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              SmoothStarRating(
+                                rating: 3.5,
+                                color: Colors.black,
+                                borderColor: Colors.white70,
+                                allowHalfRating: true,
+                                starCount: 5,
+                                size: 15,
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              const Text(
+                                '5 Km',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontFamily: 'Brand Bold',
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 17,
+                      ),
+                    ],
+                  ),
+                );
               }),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
         ),

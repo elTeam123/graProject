@@ -22,5 +22,7 @@ String sreverToken = "key=AAAAaQbYg9o:APA91bHYQnFhBhE4UjhkN0lqYdlAQS7TnMG8wCdUBI
 String providerFname = '';
 String providerLname = '';
 String providerPhone = '';
+double countStar = 0.0 ;
+String titleRating =" ";
 
 

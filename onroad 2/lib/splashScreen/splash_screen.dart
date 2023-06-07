@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +7,8 @@ import 'package:onroad/authenticatio/user_or_providr.dart';
 import 'package:onroad/global/global.dart';
 import 'package:onroad/mainScreens/mainScreens_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../mainScreens/main_screens.dart';
 dynamic finalEmail;
 
 class MySplasScreen extends StatefulWidget {
@@ -23,11 +27,10 @@ class _MySplasScreenState extends State<MySplasScreen> {
       Timer(const Duration(seconds: 1), () async {
         if (fAuth.currentUser != null) {
           currentFirebaseUser = fAuth.currentUser;
-
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (c) => const MainScreenProvider(),
+              builder: (c) => const UserProvider(),
             ),
           );
 
@@ -40,6 +43,25 @@ class _MySplasScreenState extends State<MySplasScreen> {
             ),
           );
         }
+        // if (fAuth.currentUser != null) {
+        //   currentFirebaseUser = fAuth.currentUser;
+        //
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (c) => const MainScreen(),
+        //     ),
+        //   );
+        // } else {
+        //   // ignore: use_build_context_synchronously
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (c) => const UserProvider(),
+        //     ),
+        //   );
+        // }
+        
       });
     });
     super.initState();
@@ -51,7 +73,6 @@ class _MySplasScreenState extends State<MySplasScreen> {
       finalEmail = obtainedEmail!;
     });
     print(finalEmail);
-
   }
 
   @override

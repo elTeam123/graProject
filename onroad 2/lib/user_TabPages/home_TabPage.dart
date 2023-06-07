@@ -15,6 +15,7 @@ import 'package:onroad/user_TabPages/services_TabPage.dart';
 import 'package:onroad/user_assistants/assistant_methods.dart';
 import 'package:onroad/user_assistants/geofire_assistant.dart';
 import '../Models/activate_nearbyavailabledrivers.dart';
+import '../mainScreens/rate_driver_screen.dart';
 
 class HomeTabPage extends StatefulWidget {
   const HomeTabPage({super.key});
@@ -33,6 +34,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
   GlobalKey<ScaffoldState> sKey = GlobalKey<ScaffoldState>();
   double waitingResponseFromProviderContainerHight = 0;
   double assignedProviderInfoContainerHight = 0;
+
 
   //جزء تحديد الموقع
   Position? userCurrentPosition;
@@ -80,7 +82,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
   List<ActivateNearbyAvailableProvider> onlineNearByAvailableProvidersList = [];
   StreamSubscription<DatabaseEvent>? sosRequsestInfoStream;
   DatabaseReference? referenceProviderRequest;
-  String providerSosStatus = "Provider is coming";
+  String providerSosStatus = " ";
 
   @override
   void initState() {
@@ -88,10 +90,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
     checkIfLocationPermissionAllowed();
   }
 
-  var checkOutAndRescue = "Check out and rescue";
-  var tiresCheck = 'Tires';
-  var theBattery = "The battery";
-  var petrolFull = "Petrol";
+
 
   void saveProviderRequestInformation() async {
     referenceProviderRequest =
@@ -114,34 +113,54 @@ class _HomeTabPageState extends State<HomeTabPage> {
       "phone": "01012404838",
       "origin": originLocationMap,
       "time": DateTime.now().toString(),
-      "providerid": " ",
+      "providerId": "waiting",
       "locationName": humanReadableAddress,
-      "Servece": checkOutAndRescue
+      "Servece" :"",
     };
     referenceProviderRequest!.set(userInfoMap);
 
-    sosRequsestInfoStream =
-        referenceProviderRequest!.onValue.listen((eventSnap) {
-      if (eventSnap.snapshot.value == null) {
+    sosRequsestInfoStream = referenceProviderRequest!.onValue.listen((eventSnap)
+    {
+      if(eventSnap.snapshot.value == null)
+      {
         return;
       }
-      if ((eventSnap.snapshot.value as Map)["providerFname"] != null) {
+      if((eventSnap.snapshot.value as Map)["providerFname"] != null)
+      {
         setState(() {
-          providerFname =
-              (eventSnap.snapshot.value as Map)["providerFname"].toString();
+          providerFname = (eventSnap.snapshot.value as Map)["providerFname"].toString();
         });
       }
-      if ((eventSnap.snapshot.value as Map)["providerLname"] != null) {
+        if((eventSnap.snapshot.value as Map)["providerLname"]!= null)
+      {
         setState(() {
-          providerLname =
-              (eventSnap.snapshot.value as Map)["providerLname"].toString();
+          providerLname = (eventSnap.snapshot.value as Map)["providerLname"].toString();
         });
       }
-      if ((eventSnap.snapshot.value as Map)["providerPhone"] != null) {
+      if((eventSnap.snapshot.value as Map)["providerPhone"] != null)
+      {
         setState(() {
-          providerPhone =
-              (eventSnap.snapshot.value as Map)["providerPhone"].toString();
+          providerPhone = (eventSnap.snapshot.value as Map)["providerPhone"].toString();
         });
+        if((eventSnap.snapshot.value as Map)["status"] != null)
+        {
+          providerSosStatus = (eventSnap.snapshot.value as Map)["status"].toString();
+        }
+        if(providerSosStatus == "done")
+        {
+                                           ///////////// User Rate Provider \\\\\\\\\\\\\\
+          if((eventSnap.snapshot.value as Map)["providerId"] != null)
+        {
+          String assignedProviderId = (eventSnap.snapshot.value as Map)["providerId"].toString();
+          Navigator.push(context, MaterialPageRoute(builder: (c)=> RateProviderScreen(
+            assignedProviderId : assignedProviderId,
+          ),),);
+          referenceProviderRequest!.onDisconnect();
+          sosRequsestInfoStream!.cancel();
+        }
+        }
+
+
       }
     });
 
@@ -151,7 +170,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
   }
 
   searchNearestOnlineProvider() async {
-    // cancel the request
+      // cancel the request
     if (onlineNearByAvailableProvidersList.isEmpty) {
       referenceProviderRequest!.remove();
       setState(() {
@@ -171,7 +190,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
       return;
     }
 
-    //available provider
+                           //available provider//
     await retrieveOnlineProviderInfo(onlineNearByAvailableProvidersList);
     var response = await Navigator.push(
       context,
@@ -187,12 +206,13 @@ class _HomeTabPageState extends State<HomeTabPage> {
           .child(chosenProviderId!)
           .once()
           .then((snap) {
-        if (snap.snapshot.value != null) {
-          ////sendNotificationtoProvider////
+        if (snap.snapshot.value != null)
+        {
+                                           ////sendNotificationtoProvider////
           sendNotificationtoProviderNow(chosenProviderId!);
-          // watting resopnses UI //
+                                                // watting resopnses UI //
           showWaitingResponseFromProvider();
-          /////Response from a Provider/////
+                                           /////Response from a Provider/////
           FirebaseDatabase.instance
               .ref()
               .child("provider")
@@ -200,23 +220,25 @@ class _HomeTabPageState extends State<HomeTabPage> {
               .child("newProviderStatus")
               .onValue
               .listen(
-            (eventSnapshot) {
-              /////////////////Provider cancel the SOS => push Notification///////////////////
-              if (eventSnapshot.snapshot.value == "watting") {
-                Fluttertoast.showToast(
-                    msg: "The provider has Cancelled your SOS.");
-                Future.delayed(const Duration(milliseconds: 3000), () {
-                  Fluttertoast.showToast(
-                      msg: "please choose another provider.");
-                  MyApp.restartApp(context);
-                });
-              }
-              ////////////////Provider Accpet the SOS and UI => push Notification////////////////
-              if (eventSnapshot.snapshot.value == "accepted") {
-                showUiForAssignedProviderInfo();
-              }
-            },
-          );
+                (eventSnapshot) {
+                  /////////////////Provider cancel the SOS => push Notification///////////////////
+                  if(eventSnapshot.snapshot.value == "watting")
+                  {
+                    Fluttertoast.showToast(msg: "The provider has Cancelled your SOS.");
+                    Future.delayed(const Duration(milliseconds: 3000),()
+                    {
+                      Fluttertoast.showToast(msg: "please choose another provider.");
+                      MyApp.restartApp(context);
+                    }
+                    );
+                  }
+                 ////////////////Provider Accpet the SOS and UI => push Notification////////////////
+                  if(eventSnapshot.snapshot.value == "accepted")
+                  {
+                    showUiForAssignedProviderInfo();
+                  }
+                },
+              );
         } else {
           Fluttertoast.showToast(msg: "Not exist ,Try again");
         }
@@ -224,18 +246,22 @@ class _HomeTabPageState extends State<HomeTabPage> {
     }
   }
 
-  showUiForAssignedProviderInfo() {
-    setState(() {
-      waitingResponseFromProviderContainerHight = 0;
-      assignedProviderInfoContainerHight = 220;
-    });
+
+  showUiForAssignedProviderInfo()
+  {
+   setState(() {
+     waitingResponseFromProviderContainerHight = 0;
+     assignedProviderInfoContainerHight = 220 ;
+   });
   }
 
-  showWaitingResponseFromProvider() {
+  showWaitingResponseFromProvider()
+  {
     setState(() {
       waitingResponseFromProviderContainerHight = 220;
     });
   }
+
 
   ///////////////////////send a requist////////////////////
   sendNotificationtoProviderNow(String chosenProviderId) {
@@ -256,7 +282,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
         .then((snap) {
       if (snap.snapshot.value != null) {
         String deviceRegistrationToken = snap.snapshot.value.toString();
-        ///////// send Notification Now ///////////
+                             ///////// send Notification Now ///////////
         AssistantMethods.sendNotificationToProviderNow(deviceRegistrationToken,
             referenceProviderRequest!.key.toString(), context);
         Fluttertoast.showToast(msg: "Notification sent Successfully.");
@@ -312,6 +338,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
           elevation: 5,
           onPressed: () {
             saveProviderRequestInformation();
+
           },
           child: const Icon(
             Icons.search,
@@ -336,44 +363,38 @@ class _HomeTabPageState extends State<HomeTabPage> {
               locateUserPosition();
             },
           ),
-          //  UI for wating response
+        //  UI for waiting response
           Positioned(
-            bottom: 200,
+            bottom:200,
             left: 10,
             right: 10,
             child: Container(
-              height: waitingResponseFromProviderContainerHight,
+              height:waitingResponseFromProviderContainerHight,
               decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(30),
-                    topLeft: Radius.circular(30),
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  )),
-              child: Padding(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(30),
+                  topLeft: Radius.circular(30),
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                )
+              ),
+              child:Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Center(
                   child: AnimatedTextKit(
                     animatedTexts: [
                       FadeAnimatedText(
-                        'Wating for Response',
-                        duration: const Duration(seconds: 10),
+                        'waiting for Response',
+                        duration: const Duration(seconds:10),
                         textAlign: TextAlign.center,
-                        textStyle: const TextStyle(
-                          fontSize: 30.0,
-                          color: Colors.green,
-                          fontFamily: 'Brand Bold',
-                        ),
+                        textStyle: const TextStyle(fontSize: 30.0, color:Colors.green , fontFamily: "Brand-Regular"),
                       ),
                       ScaleAnimatedText(
-                        'Please wait ..',
-                        duration: const Duration(seconds: 10),
+                        'please wait...',
+                        duration: const Duration(seconds:10),
                         textAlign: TextAlign.center,
-                        textStyle: const TextStyle(
-                            fontSize: 32.0,
-                            color: Colors.green,
-                            fontFamily: "Brand Bold"),
+                        textStyle: const TextStyle(fontSize: 32.0, color:Colors.green, fontFamily:"Brand-Regular"),
                         scalingFactor: .10,
                       ),
                     ],
@@ -384,12 +405,12 @@ class _HomeTabPageState extends State<HomeTabPage> {
           ),
           //ui for assigned provider info
           Positioned(
-              bottom: 200,
-              left: 10,
-              right: 10,
-              child: Container(
-                height: assignedProviderInfoContainerHight,
-                decoration: const BoxDecoration(
+            bottom:200,
+            left: 10,
+            right: 10,
+            child: Container(
+              height:assignedProviderInfoContainerHight ,
+              decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(30),
@@ -397,87 +418,75 @@ class _HomeTabPageState extends State<HomeTabPage> {
                     bottomLeft: Radius.circular(30),
                     bottomRight: Radius.circular(30),
                   ),
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            providerSosStatus,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Brand Bold',
-                              color: Colors.black54,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Text(
-                            '14 Min',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontFamily: 'Brand Bold',
-                              color: Colors.green,
-                            ),
-                          ),
-                        ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      providerSosStatus,
+                      textAlign:TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
-                      const SizedBox(
-                        height: 18,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    const Divider(
+                      height: 2,
+                      thickness: 2,
+                      color:Colors.white24,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                                        //provider name//
+                     Text(
+                      "$providerFname $providerLname",
+                      textAlign:TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
-                      const Divider(
-                        height: 2,
-                        thickness: 2,
-                        color: Colors.black26,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                                       //Call provider button//
+                    ElevatedButton.icon(
+                        onPressed:()
+                        {
+
+                        },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
                       ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      //provider name//
-                      Text(
-                        "$providerFname $providerLname",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 19,
-                          fontFamily: 'Brand Bold',
-                          color: Colors.black,
+                        icon: const Icon(
+                          Icons.phone_android,
+                          color: Colors.black54,
+                          size: 22,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      //Call provider button//
-                      Center(
-                        child: ElevatedButton.icon(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                          ),
-                          icon: const Icon(
-                            Icons.phone_android,
-                            color: Colors.black,
-                            size: 22,
-                          ),
-                          label: const Text(
-                            "Call Provider",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: 'Brand Bold',
-                            ),
+                        label: const Text(
+                          "Call provider",
+                          style: TextStyle(
+                            color:Colors.black54,
+                            fontWeight:FontWeight.bold,
                           ),
                         ),
-                      )
-                    ],
-                  ),
+                    )
+
+
+                  ],
                 ),
-              ))
+              ),
+            )
+
+          )
         ],
       ),
     );
@@ -488,10 +497,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
     Geofire.queryAtLocation(
       userCurrentPosition!.latitude,
       userCurrentPosition!.longitude,
-      25, ///////Kilo meters////
-    )!
-        .listen(
-      (map) {
+      25,)!.listen((map) {
         if (kDebugMode) {
           print(map);
         }
