@@ -55,6 +55,7 @@ class _RateProviderScreen extends State<RateProviderScreen> {
                   rating: countStar,
                   allowHalfRating: true,
                   color: Colors.yellow,
+                  borderColor: Colors.black12,
                   starCount: 5,
                   size: 46,
                   onRatingChanged: (valueOfStars) {

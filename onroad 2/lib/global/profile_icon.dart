@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 
-class ProviderProfileMenuWidget extends StatelessWidget {
-  const ProviderProfileMenuWidget({
+class ProfileIcon extends StatelessWidget {
+  const ProfileIcon({
     super.key,
     required this.title,
     required this.icon,

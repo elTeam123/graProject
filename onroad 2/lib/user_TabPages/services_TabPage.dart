@@ -1,15 +1,16 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onroad/global/global.dart';
-import 'package:onroad/user_TabPages/home_TabPage.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:smooth_star_rating_nsafe/smooth_star_rating.dart';
 
 class ServicesTabPage extends StatefulWidget {
   DatabaseReference? referenceProviderRequest;
-  ServicesTabPage({this.referenceProviderRequest});
+  ServicesTabPage({super.key, this.referenceProviderRequest});
 
   @override
   State<ServicesTabPage> createState() => _ServicesTabPageState();
@@ -52,7 +53,6 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
         .set("Petrol");
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,11 +61,10 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-            SystemNavigator.pop();
-            //  Navigator.pop(context);
-            //  setState(() {
-            //    dList=[];
-            //  });
+            Navigator.pop(context);
+            setState(() {
+              dList = [];
+            });
             widget.referenceProviderRequest!.remove();
           },
           icon: const Icon(
@@ -111,10 +110,10 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                         borderRadius: BorderRadius.circular(
                           20,
                         ),
-                        color: Colors.grey[300],
+                        color: Colors.black12,
                       ),
-                      child: Row(
-                        children: const [
+                      child: const Row(
+                        children: [
                           Padding(
                             padding: EdgeInsets.all(5.0),
                             child: Image(
@@ -150,10 +149,10 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                         borderRadius: BorderRadius.circular(
                           20,
                         ),
-                        color: Colors.grey[300],
+                        color: Colors.black12,
                       ),
-                      child: Row(
-                        children: const [
+                      child: const Row(
+                        children: [
                           Padding(
                             padding: EdgeInsets.all(5.0),
                             child: Image(
@@ -190,10 +189,10 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                         borderRadius: BorderRadius.circular(
                           20,
                         ),
-                        color: Colors.grey[300],
+                        color: Colors.black12,
                       ),
-                      child: Row(
-                        children: const [
+                      child: const Row(
+                        children: [
                           Padding(
                             padding: EdgeInsets.all(5.0),
                             child: Image(
@@ -229,10 +228,10 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                         borderRadius: BorderRadius.circular(
                           20,
                         ),
-                        color: Colors.grey[300],
+                        color: Colors.black12,
                       ),
-                      child: Row(
-                        children: const [
+                      child: const Row(
+                        children: [
                           Padding(
                             padding: EdgeInsets.all(5.0),
                             child: Image(
@@ -278,20 +277,15 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                               .child("Servece")
                               .once()
                               .then((snap) {
-                            if (snap.snapshot.value != "")
-                            {
-                                chosenProviderId = dList[index]["id"].toString();
-                                Navigator.pop(context, "providerChoosed");
-
-                            }
-                            else {
+                            if (snap.snapshot.value != "") {
+                              chosenProviderId = dList[index]["id"].toString();
+                              Navigator.pop(context, "providerChoosed");
+                            } else {
                               Fluttertoast.showToast(
                                   msg: "Choose your service frist, please... ",
-                              webShowClose: true
-                              );
+                                  webShowClose: true);
                             }
                           });
-
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -323,12 +317,14 @@ class _ServicesTabPageState extends State<ServicesTabPage> {
                                 height: 5,
                               ),
                               SmoothStarRating(
-                                rating: 3.5,
-                                color: Colors.black,
-                                borderColor: Colors.white70,
+                                rating: dList[index]['ratings'] == null
+                                    ? 0.0
+                                    : double.parse(dList[index]['ratings']),
+                                color: Colors.yellow,
+                                borderColor: Colors.black12,
                                 allowHalfRating: true,
                                 starCount: 5,
-                                size: 15,
+                                size: 18,
                               ),
                               const SizedBox(
                                 height: 5,

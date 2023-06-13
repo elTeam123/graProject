@@ -8,6 +8,7 @@ import 'package:onroad/global/global.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smooth_star_rating_nsafe/smooth_star_rating.dart';
 
 class ProviderInfo extends StatefulWidget {
   const ProviderInfo({super.key});
@@ -38,11 +39,11 @@ class _ProviderInfoState extends State<ProviderInfo> {
       return;
     }
     final ref =
-    FirebaseStorage.instance.ref().child('images/${DateTime.now()}.jpg');
+        FirebaseStorage.instance.ref().child('images/${DateTime.now()}.jpg');
     await ref.putFile(_image!);
     final url = await ref.getDownloadURL();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('image_url', url);
+    SharedPreferences providers = await SharedPreferences.getInstance();
+    await providers.setString('image_url', url);
     setState(() {
       _imageProviderUrl = url;
     });
@@ -50,7 +51,7 @@ class _ProviderInfoState extends State<ProviderInfo> {
         .ref()
         .child('provider')
         .child(currentFirebaseUser!.uid);
-    provider.push().set({
+    provider.set({
       '_imageProviderUrl': _imageProviderUrl,
     });
   }
@@ -62,9 +63,9 @@ class _ProviderInfoState extends State<ProviderInfo> {
   }
 
   Future<void> _loadProviderImageUrl() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences provider = await SharedPreferences.getInstance();
     setState(() {
-      _imageProviderUrl = prefs.getString('image_url');
+      _imageProviderUrl = provider.getString('image_url');
     });
   }
 
@@ -107,7 +108,8 @@ class _ProviderInfoState extends State<ProviderInfo> {
                                 pageOptions: [
                                   PhotoViewGalleryPageOptions(
                                     imageProvider: _imageProviderUrl != null
-                                        ? CachedNetworkImageProvider(_imageProviderUrl!)
+                                        ? CachedNetworkImageProvider(
+                                            _imageProviderUrl!)
                                         : null,
                                     heroAttributes:
                                         const PhotoViewHeroAttributes(
@@ -116,7 +118,7 @@ class _ProviderInfoState extends State<ProviderInfo> {
                                   ),
                                 ],
                                 loadingBuilder: (context, event) =>
-                                    const Center(
+                                const Center(
                                   child: CircularProgressIndicator(),
                                 ),
                               );
@@ -197,6 +199,17 @@ class _ProviderInfoState extends State<ProviderInfo> {
                     color: Colors.black,
                   ),
                 ),
+                const SizedBox(
+                  height: 4.5,
+                ),
+                // SmoothStarRating(
+                //   rating: onlineproviderData.ratings!,
+                //   color: Colors.black,
+                //   borderColor: Colors.white70,
+                //   allowHalfRating: true,
+                //   starCount: 5,
+                //   size: 15,
+                // ),
               ],
             ),
           ),

@@ -43,8 +43,8 @@ class _InfoState extends State<Info> {
         FirebaseStorage.instance.ref().child('images/${DateTime.now()}.jpg');
     await ref.putFile(_image!);
     final url = await ref.getDownloadURL();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('image_url', url);
+    SharedPreferences users = await SharedPreferences.getInstance();
+    await users.setString('image_url', url);
     setState(() {
       _imageUserUrl = url;
     });
@@ -52,7 +52,7 @@ class _InfoState extends State<Info> {
         .ref()
         .child('users')
         .child(currentFirebaseUser!.uid);
-    user.push().set({
+    user.set({
       '_imageUserUrl': _imageUserUrl,
     });
   }

@@ -63,6 +63,7 @@ dependencies:
   flutter_staggered_animations:
   animated_text_kit: ^4.2.2
   country_picker:
+  flutter_phone_direct_caller:
 
 dev_dependencies:
 

@@ -89,8 +89,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                       ),
                       Expanded(
                         child: Container(
-                          child: const Text(
-                            " ",
+                          child:  Text(widget.userProviderRequestDetails!.services!,
                             style: TextStyle(
                               fontSize: 16,
                             ),

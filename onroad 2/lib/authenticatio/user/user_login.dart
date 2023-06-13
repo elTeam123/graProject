@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:onroad/authenticatio/provider/forgot_password.dart';
 import 'package:onroad/authenticatio/user/signup_user.dart';
 import 'package:onroad/global/global.dart';

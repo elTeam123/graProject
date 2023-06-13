@@ -2,30 +2,23 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:onroad/authenticatio/user_or_providr.dart';
-import 'package:onroad/mainScreens/mainScreens_provider.dart';
+import 'package:onroad/global/profile_icon.dart';
 import 'package:onroad/mainScreens/main_screens.dart';
-import 'package:onroad/provider_TabPages/provider_profile/provider_editprofile.dart';
-import 'package:onroad/provider_TabPages/provider_profile/provider_icon.dart';
-import 'package:onroad/provider_TabPages/provider_profile/provider_info.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:onroad/user_TabPages/user_profile/user_editprofile.dart';
+import 'package:onroad/user_TabPages/user_profile/user_info.dart';
 class ProfileTabPage extends StatefulWidget {
   const ProfileTabPage({super.key});
 
-
   @override
-  State<ProfileTabPage> createState() => _ProviderProfileTabPage();
+  State<ProfileTabPage> createState() => _ProfileTabPageState();
 }
 
-class _ProviderProfileTabPage extends State<ProfileTabPage> {
+class _ProfileTabPageState extends State<ProfileTabPage> {
   String? name;
   String? image;
 
   final _mAuth = FirebaseAuth.instance;
-
 
 
   @override
@@ -64,7 +57,7 @@ class _ProviderProfileTabPage extends State<ProfileTabPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (c) => const ProviderEditProfile(),
+                  builder: (c) => const EditProfile(),
                 ),
               );
             },
@@ -80,61 +73,60 @@ class _ProviderProfileTabPage extends State<ProfileTabPage> {
           ),
         ],
       ),
-      body: Column(
-        children:
-        [
-          const ProviderInfo(),
-          const SizedBox(
-            height: 50.0,
-          ),
-          ProviderProfileMenuWidget(
-            title: 'Settings',
-            icon: Icons.settings,
-            textColor: Colors.black,
-            endIcon: true,
-            onPress: () {},
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          ProviderProfileMenuWidget(
-            title: 'Update',
-            icon: Icons.update,
-            textColor: Colors.black,
-            endIcon: true,
-            onPress: () {},
-          ),
-          const SizedBox(
-            height: 20.0,
-          ),
-          ProviderProfileMenuWidget(
-            title: 'Information',
-            icon: Icons.info_rounded,
-            textColor: Colors.black,
-            endIcon: true,
-            onPress: () {},
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          ProviderProfileMenuWidget(
-            title: 'Logout',
-            icon: Icons.logout,
-            textColor: Colors.red,
-            endIcon: false,
-            onPress: () async {
-              await _mAuth.signOut();
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const UserProvider()),
-                      (route) => false);
-              final SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.clear();
-              Get.offAll(const UserProvider());
-            },
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children:
+          [
+            const Info(),
+            const SizedBox(
+              height: 50.0,
+            ),
+            ProfileIcon(
+              title: 'Settings',
+              icon: Icons.settings,
+              textColor: Colors.black,
+              endIcon: true,
+              onPress: () {},
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ProfileIcon(
+              title: 'Update',
+              icon: Icons.update,
+              textColor: Colors.black,
+              endIcon: true,
+              onPress: () {},
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            ProfileIcon(
+              title: 'Information',
+              icon: Icons.info_rounded,
+              textColor: Colors.black,
+              endIcon: true,
+              onPress: () {},
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ProfileIcon(
+              title: 'Logout',
+              icon: Icons.logout,
+              textColor: Colors.red,
+              endIcon: false,
+              onPress: () async {
+                await _mAuth.signOut();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const UserProvider()),
+                        (route) => false);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

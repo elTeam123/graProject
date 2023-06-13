@@ -1,4 +1,3 @@
-
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,62 +7,15 @@ import 'package:flutter/material.dart';
 class ProviderEditProfile extends StatefulWidget {
   const ProviderEditProfile({super.key});
 
-
   @override
   State<ProviderEditProfile> createState() => _ProviderEditProfile();
 }
 
 class _ProviderEditProfile extends State<ProviderEditProfile> {
-
   final _formKey = GlobalKey<FormState>();
   final _fullNameController = TextEditingController();
   final _phoneNumberController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _loadUserData();
-  }
-
-  @override
-  void dispose() {
-    _fullNameController.dispose();
-    _phoneNumberController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _loadUserData() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final userData = await FirebaseFirestore.instance
-          .collection('provider')
-          .doc(user.uid)
-          .get();
-      setState(() {
-        _fullNameController.text = userData['full_name'] ?? '';
-        _phoneNumberController.text = userData['phone_number'] ?? '';
-      });
-    }
-  }
-
-  Future<void> _updateUserData() async {
-    if (_formKey.currentState!.validate()) {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await FirebaseFirestore.instance
-            .collection('provider')
-            .doc(user.uid)
-            .update({
-          'full_name': _fullNameController.text,
-          'phone_number': _phoneNumberController.text,
-        });
-        final scaffoldMessenger = ScaffoldMessenger.of(context);
-        scaffoldMessenger.showSnackBar(
-          const SnackBar(content: Text('Profile updated successfully')),
-        );
-      }
-    }
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,8 +51,7 @@ class _ProviderEditProfile extends State<ProviderEditProfile> {
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children:
-                [
+                children: [
                   ClipPath(
                     clipper: CustomShape(),
                     child: Container(
@@ -232,9 +183,7 @@ class _ProviderEditProfile extends State<ProviderEditProfile> {
                         width: 150.0,
                         height: 50.0,
                         child: MaterialButton(
-                          onPressed: () {
-                            _updateUserData;
-                          },
+                          onPressed: () {},
                           child: const Text(
                             'Save',
                             style: TextStyle(

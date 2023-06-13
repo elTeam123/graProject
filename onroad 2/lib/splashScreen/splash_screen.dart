@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:onroad/authenticatio/user_or_providr.dart';
@@ -72,7 +73,9 @@ class _MySplasScreenState extends State<MySplasScreen> {
     setState(() {
       finalEmail = obtainedEmail!;
     });
-    print(finalEmail);
+    if (kDebugMode) {
+      print(finalEmail);
+    }
   }
 
   @override

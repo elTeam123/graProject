@@ -382,9 +382,9 @@ class _NewSosScreenState extends State<NewSosScreen> {
                         const SizedBox(
                           width: 22,
                         ),
-                        Expanded(
+                         Expanded(
                           child: Text(
-                            'Check out and rescue ',
+                            widget.userProviderRequestDetails!.services!,
                             style: const TextStyle(
                               fontSize: 16,
                             ),
@@ -414,7 +414,7 @@ class _NewSosScreenState extends State<NewSosScreen> {
                               .child(widget.userProviderRequestDetails!.sosRequestId!).child("status").set(statusBtn);
                           setState(() {
                             buttonTitle = "Start Check" ;
-                            buttonColor = Colors.lightGreenAccent ;
+                            buttonColor = Colors. green[400];
 
                           });
                         }
@@ -449,13 +449,13 @@ class _NewSosScreenState extends State<NewSosScreen> {
                       ),
                       icon: const Icon(
                         Icons.directions_car,
-                        color: Colors.black26,
+                        color: Colors.black,
                         size: 25,
                       ),
                       label: Text(
                         buttonTitle!,
                         style: const TextStyle(
-                          color: Colors.black38,
+                          color: Colors.black,
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),

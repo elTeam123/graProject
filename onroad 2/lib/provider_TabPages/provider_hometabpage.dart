@@ -79,6 +79,7 @@ class _ProviderHomeTabPageState extends State<ProviderHomeTabPage> {
         onlineproviderData.lname = (snap.snapshot.value as Map)["lname"];
         onlineproviderData.phone = (snap.snapshot.value as Map)["phone"];
         onlineproviderData.email = (snap.snapshot.value as Map)["email"];
+        onlineproviderData.ratings = (snap.snapshot.value as Map)["ratings"];
       }
     });
     PushNotificationSystem pushNotificationSystem = PushNotificationSystem();

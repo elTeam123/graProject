@@ -420,7 +420,7 @@ class _SignUpScreenState extends State<SignUpScreenUser> {
                             MaterialPageRoute(builder: (c) => const LoginScreenUser()));
                       },
                       child: const Text(
-                        'Login Here',
+                        'Login',
                         style: TextStyle(
                           color: Colors.green,
                         ),
